@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import core.Task;
+import core.User;
 
 /**
  * 
