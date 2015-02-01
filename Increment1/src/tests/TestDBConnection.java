@@ -30,10 +30,10 @@ public class TestDBConnection {
 		    {
 		    	//Assumes that the users table only has one entry and verifies
 		    	//it has selected that statement
-		    	assertEquals(rs.getInt("user_id"), 1);
-		    	assertEquals(rs.getString("first_name"), "Bob");
-		    	assertEquals(rs.getString("last_name"), "Jenkins");
-		    	assertEquals(rs.getInt("is_owner"), 0);
+		    	assertEquals(rs.getString("user_id"), "b_jenkins");
+		    	assertEquals(rs.getString("user_pwd"), "1234");
+		    	assertEquals(rs.getString("f_name"), "Bob");
+		    	assertEquals(rs.getString("l_name"), "Jenkins");
 		    }
 		      rs.close();
 		      stmt.close();
