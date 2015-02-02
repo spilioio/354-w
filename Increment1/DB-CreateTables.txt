@@ -1,13 +1,29 @@
+DROP TABLE precedence;
+DROP TABLE tasks;
+DROP TABLE projects;
+DROP TABLE users;
+
+
 CREATE TABLE users (user_id TEXT PRIMARY KEY NOT NULL, user_pwd TEXT NOT NULL, f_name TEXT, l_name TEXT);
 
-CREATE TABLE projects (project_id INTEGER PRIMARY KEY AUTOINCREMENT, project_name TEXT, owner_id TEXT, is_done INTEGER CHECK(0 OR 1), FOREIGN KEY(owner_id) REFERENCES users(user_id));
+CREATE TABLE projects (project_id INTEGER PRIMARY KEY AUTOINCREMENT, project_name TEXT, owner_id TEXT, FOREIGN KEY(owner_id) REFERENCES users(user_id));
 
-CREATE TABLE tasks (task_id INTEGER PRIMARY KEY AUTOINCREMENT, task_name TEXT, description TEXT, duration INTEGER NOT NULL, project_id INTEGER, user_id TEXT, FOREIGN KEY(project_id) REFERENCES projects(project_id), FOREIGN KEY(user_id) REFERENCES users(user_id));
+CREATE TABLE tasks (task_id INTEGER PRIMARY KEY AUTOINCREMENT, task_name TEXT, description TEXT, duration INTEGER NOT NULL, project_id INTEGER, user_id TEXT, is_done INTEGER CHECK(0 OR 1), FOREIGN KEY(project_id) REFERENCES projects(project_id), FOREIGN KEY(user_id) REFERENCES users(user_id));
 
 CREATE TABLE precedence (task_id INTEGER, pre_req INTEGER, FOREIGN KEY(task_id) REFERENCES tasks(task_id), FOREIGN KEY(task_id) REFERENCES tasks(task_id));
 
 
-
-
 INSERT INTO users VALUES ('b_jenkins', '1234', 'Bob', 'Jenkins');
 SELECT * FROM users;
+
+INSERT INTO projects (project_name, owner_id) VALUES ('My first project', 'b_jenkins');
+SELECT * FROM projects;
+
+INSERT INTO tasks (task_name, description, duration, project_id, user_id, is_done) VALUES ('1st Task', 'This is my first task.', 2, 1, 'b_jenkins', 0);
+INSERT INTO tasks (task_name, description, duration, project_id, user_id, is_done) VALUES ('2nd Task', 'This is the second task and has to be done after T1', 4, 1, 'b_jenkins', 0);
+SELECT * FROM tasks;
+
+INSERT INTO precedence VALUES (2, 1);
+SELECT * FROM precedence;
+
+SELECT tasks.task_name, tasks.task_id, precedence.pre_req FROM tasks JOIN precedence ON tasks.task_id = precedence.task_id;
