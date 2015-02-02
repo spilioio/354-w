@@ -19,13 +19,15 @@ import core.User;
  * @version 1.0
  */
 public class UserTest {
-	private static User myUser = new User("f_bobier", "qwerty", "Fred", "Bob");
+	private User myUser;
 
 	@Test
 	public void testUserConstructor() {
+
 		// Create a user: userName (PK - unique), userPwd, fName, lName
 		// The password shouldn't be stored
-		
+		myUser = new User("f_bobier", "qwerty", "Fred", "Bob");
+
 		// Check to see that the user has been added to the database
 		Connection conn = null;
 		try {
@@ -33,7 +35,7 @@ public class UserTest {
 			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE user_id = 'f_bobier' AND user_pwd = 'qwerty';");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE user_id = f_bobier AND user_pwd = qwerty;");
 
 			while (rs.next()) {
 				assertEquals(rs.getString("user_id"), myUser.getName());
@@ -60,7 +62,7 @@ public class UserTest {
 			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE user_id = 'f_bobier';");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE user_id = f_bobier;");
 
 			while (rs.next()) {
 				assertEquals(rs.getString("user_id"), myUser.getName());
@@ -86,7 +88,7 @@ public class UserTest {
 			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE user_id = 'f_bobier';");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE user_id = f_bobier;");
 
 			assertEquals(rs.getRow(), 0);
 
