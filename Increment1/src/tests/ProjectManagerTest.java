@@ -16,31 +16,21 @@ import core.Project;
 import core.ProjectManager;
 import core.Task;
 
-/*
- * Run this class after TaskTest passes
- */
 public class ProjectManagerTest {
 	
 	public ProjectManager pm;
 	public Project p1, p2, p3, p4;
-	public Task t1, t2;
-	public ArrayList<Integer> preReq;
 	private Connection conn;
 	private Statement stmt;
 	private ResultSet rs;
 	
 	@BeforeClass
 	public void init() {
+		pm = new ProjectManager();
 		p1 = new Project("b_jenkins", "project1");
 		p2 = new Project("b_jenkins", "project2");
 		p3 = new Project("t_user", "project3");
 		p4 = new Project("t_user", "project4");
-		
-		preReq = new ArrayList<Integer>();
-		
-		//name, description, duration, project_id, owner_id, pre-reqs
-		t1 = new Task("a", "desc a", 4, 1, "b_jenkins", preReq);
-		t2 = new Task("b", "desc b", 4, 1, "b_jenkins", preReq);
 		
 		Connection conn = null;
 	    try {
