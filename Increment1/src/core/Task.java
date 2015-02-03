@@ -1,23 +1,145 @@
 package core;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.util.ArrayList;
+
 public class Task
 {
+	private String name, description, owner_id; 
+	private int task_id, duration, project_id, is_done;
+	private ArrayList<Integer> pre_reqs;
 	
-	public Task(int i, int j, int k, int l, String string)
+	public Task(int task_id, String name, String description, int duration, int project_id, String owner_id, ArrayList<Integer> pre_reqs)
 	{
-		// TODO Auto-generated constructor stub
+		this.task_id = task_id;
+		this.description = description;
+		this.duration = duration;
+		this.project_id = project_id;
+		this.owner_id = owner_id;
+		this.pre_reqs = pre_reqs;
+		is_done = 0;
+		
+		Connection conn = null;
+	    try {
+	    	// connect to db (file test.db must lay in the project dir)
+	    	// NOTE: it will be created if not exists
+	    	Class.forName("org.sqlite.JDBC");
+	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+	    	Statement stmt = conn.createStatement();
+	    	stmt.executeUpdate("INSERT INTO tasks VALUES ("+task_id+ ", '"+name+"', '"+description+"', "+duration+", "+project_id+", '"+owner_id+"', "+is_done+");");
+	    	for (int i = 0; i < pre_reqs.size(); i++)
+	    		stmt.executeUpdate("INSERT INTO precedence VALUES ("+task_id+ ", "+pre_reqs.get(i)+");");
+			stmt.close();
+			conn.close();
+	    }catch ( Exception e ) {
+	        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	        System.exit(0);
+	     }
+	     System.out.println("Task created successfully");
+	}
+	
+	public int getTaskId(){
+		return task_id;
+	}
+	
+	public ArrayList<Integer> getPrereq(){
+		return pre_reqs;
+	}
+	
+	public void setDescription(String description){
+		this.description = description;
+		
+		Connection conn = null;
+	    try {
+	    	// connect to db (file test.db must lay in the project dir)
+	    	// NOTE: it will be created if not exists
+	    	Class.forName("org.sqlite.JDBC");
+	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+	    	Statement stmt = conn.createStatement();
+	    	stmt.executeUpdate("UPDATE tasks SET description = '"+description+"' WHERE task_id = "+task_id+";");
+			stmt.close();
+			conn.close();
+	    }catch ( Exception e ) {
+	        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	        System.exit(0);
+	     }
+	     System.out.println("Task description updated successfully");
+	}
+	
+	public void addPrereq(int pre_req){
+		pre_reqs.add(pre_req);
+		
+		Connection conn = null;
+	    try {
+	    	// connect to db (file test.db must lay in the project dir)
+	    	// NOTE: it will be created if not exists
+	    	Class.forName("org.sqlite.JDBC");
+	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+	    	Statement stmt = conn.createStatement();
+	    	stmt.executeUpdate("INSERT INTO precedence VALUES ("+task_id+ ", "+pre_req+");");
+			stmt.close();
+			conn.close();
+	    }catch ( Exception e ) {
+	        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	        System.exit(0);
+	     }
+	     System.out.println("Task precedence updated successfully");
+	}
+	
+	public void finishedTask(){
+		is_done = 1;
+		Connection conn = null;
+	    try {
+	    	// connect to db (file test.db must lay in the project dir)
+	    	// NOTE: it will be created if not exists
+	    	Class.forName("org.sqlite.JDBC");
+	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+	    	Statement stmt = conn.createStatement();
+	    	stmt.executeUpdate("UPDATE tasks SET is_done = "+is_done+" WHERE task_id = "+task_id+";");
+			stmt.close();
+			conn.close();
+	    }catch ( Exception e ) {
+	        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	        System.exit(0);
+	     }
+	     System.out.println("Task set as done successfully");
+	}
+
+	public int isDone(){
+		return is_done;
+	}
+	
+	public void deleteTask(){
+		//delete from database
+		Connection conn = null;
+	    try {
+	    	// connect to db (file test.db must lay in the project dir)
+	    	// NOTE: it will be created if not exists
+	    	Class.forName("org.sqlite.JDBC");
+	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+	    	Statement stmt = conn.createStatement();
+	    	stmt.executeUpdate("DELETE FROM tasks WHERE task_id = "+task_id+";");
+	    	stmt.executeUpdate("DELETE FROM precedence WHERE task_id = "+task_id+";");
+			stmt.close();
+			conn.close();
+	    }catch ( Exception e ) {
+	        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	        System.exit(0);
+	     }
+	     System.out.println("Task deleted successfully");
 	}
 	
 	public String getName()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 	
 	public int getId()
 	{
 		// TODO Auto-generated method stub
-		return 0;
+		return task_id;
 	}
 	
 }
