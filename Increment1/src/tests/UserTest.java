@@ -6,21 +6,27 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
-import core.Task;
 import core.User;
 
 /**
  * 
- * @author Frédérique Bobier - 1952765
+ * @author Fr��d��rique Bobier - 1952765
  * @version 1.0
  */
-public class UserTest {
-	private static User myUser = new User("f_bobier", "qwerty", "Fred", "Bob");
 
+public class UserTest {
+	private static User myUser;
+
+	@Before
+	public void Initialize(){
+		myUser = new User("f_bobier", "qwerty", "Fred", "Bob");
+	}
+	
 	@Test
 	public void testUserConstructor() {
 		// Create a user: userName (PK - unique), userPwd, fName, lName
@@ -76,26 +82,8 @@ public class UserTest {
 		}
 	}
 
-	@Test
+	@After
 	public void testDeleteUser() {
 		myUser.deleteUser();
-
-		Connection conn = null;
-		try {
-			Class.forName("org.sqlite.JDBC");
-			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
-
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE user_id = 'f_bobier';");
-
-			assertEquals(rs.getRow(), 0);
-
-			rs.close();
-			stmt.close();
-			conn.close();
-		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
-		}
 	}
 }

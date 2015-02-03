@@ -24,7 +24,7 @@ public class TestDBConnection {
 	    
 	    	//Create a select statement from the users table and execute it
 		    Statement stmt = conn.createStatement();
-		    ResultSet rs = stmt.executeQuery("SELECT * FROM users;");
+		    ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE user_id = 'b_jenkins';");
 
 		    while(rs.next())
 		    {

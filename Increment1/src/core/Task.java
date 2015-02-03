@@ -14,6 +14,7 @@ public class Task
 	public Task(int task_id, String name, String description, int duration, int project_id, String owner_id, ArrayList<Integer> pre_reqs)
 	{
 		this.task_id = task_id;
+		this.name = name;
 		this.description = description;
 		this.duration = duration;
 		this.project_id = project_id;
@@ -38,10 +39,6 @@ public class Task
 	        System.exit(0);
 	     }
 	     System.out.println("Task created successfully");
-	}
-	
-	public int getTaskId(){
-		return task_id;
 	}
 	
 	public ArrayList<Integer> getPrereq(){
@@ -134,6 +131,26 @@ public class Task
 	public String getName()
 	{
 		return name;
+	}
+	
+	public String getDescription()
+	{
+		return this.description;
+	}
+	
+	public int getDuration()
+	{
+		return this.duration;
+	}
+	
+	public int getProjectID()
+	{
+		return this.project_id;
+	}
+	
+	public String getOwnerID()
+	{
+		return this.owner_id;
 	}
 	
 	public int getId()
