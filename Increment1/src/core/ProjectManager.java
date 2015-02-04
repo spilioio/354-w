@@ -185,7 +185,73 @@ public class ProjectManager
 			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 			Statement stmt = conn.createStatement();
 			
-			ResultSet rs = stmt.executeQuery("SELECT * FROM projects;");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM projects WHERE project_id = " + Integer.toString(p1.getId()) + ";");
+			while (rs.next())
+			{
+				p = new Project(rs.getString("owner_id"),
+						rs.getString("project_name"), rs.getInt("project_id"));
+			}
+			
+			stmt.close();
+			conn.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage()
+					+ " in getProjects()");
+			System.exit(0);
+		}
+		System.out.println("Project " + Integer.toString(p.getId())
+				+ " successfully fetched");
+		return p;
+	}
+	
+	public Project getProject(int p_id)
+	{
+		Project p = null;
+		Connection conn = null;
+		try
+		{
+			// connect to db (file test.db must lay in the project dir)
+			// NOTE: it will be created if not exists
+			Class.forName("org.sqlite.JDBC");
+			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+			Statement stmt = conn.createStatement();
+			
+			ResultSet rs = stmt.executeQuery("SELECT * FROM projects WHERE project_id = " + Integer.toString(p_id) + ";");
+			
+			while (rs.next())
+			{
+				p = new Project(rs.getString("owner_id"),
+						rs.getString("project_name"), rs.getInt("project_id"));
+			}
+			
+			stmt.close();
+			conn.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage()
+					+ " in getProjects()");
+			System.exit(0);
+		}
+		System.out.println("Project " + Integer.toString(p.getId())
+				+ " successfully fetched");
+		return p;
+	}
+	
+	public Project getProject(String p_name)
+	{
+		Project p = null;
+		Connection conn = null;
+		try
+		{
+			// connect to db (file test.db must lay in the project dir)
+			// NOTE: it will be created if not exists
+			Class.forName("org.sqlite.JDBC");
+			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+			Statement stmt = conn.createStatement();
+			
+			ResultSet rs = stmt.executeQuery("SELECT * FROM projects WHERE project_name = " + p_name + ";");
+			
 			while (rs.next())
 			{
 				p = new Project(rs.getString("owner_id"),

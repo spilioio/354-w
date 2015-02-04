@@ -30,6 +30,14 @@ public class User {
 	     System.out.println("Record created successfully");
 	}
 	
+
+	public User(String userName, String userPwd, String fname, String lname, boolean overrider){
+		this.userName = userName;
+		this.userPwd = userPwd;
+		this.fname = fname;
+		this.lname = lname;
+	}
+	
 	public void deleteUser(){
 		//delete from database
 		Connection conn = null;

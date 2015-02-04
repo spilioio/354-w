@@ -15,6 +15,7 @@ public class Project
 	{
 		this.owner_id = owner_id;
 		this.project_name = project_name;
+		System.out.println("PROJECT CREATED IN JAVA");
 	}
 	
 	public Project(String owner_id, String project_name, int project_id)

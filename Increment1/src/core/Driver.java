@@ -138,12 +138,15 @@ public class Driver
 						}
 						// Correct password has been input...
 						System.out.println("Password accepted, LOGGING IN!");
-						// TODO unto main management screen
-						managementFlow();
+						
+						userLoggedIn = new User(rs.getString("user_id"), rs.getString("user_pwd"), rs.getString("f_name"), rs.getString("l_name"), false);
 						
 						// Close variables
 						rs.close();
 						stmt.close();
+						
+						// unto main management screen
+						managementFlow();
 					} else
 					{
 						System.out
@@ -238,6 +241,7 @@ public class Driver
 				temp = in.next();
 				System.out.println("");
 				
+				System.out.println("temp = " + temp);
 				// Create new project object.
 				currentProject = new Project(userLoggedIn.getName(), temp);
 				
@@ -284,8 +288,7 @@ public class Driver
 		System.out.println("");
 		System.out.println("");
 		System.out.println("");
-		System.out
-				.println("1- Show All  2- Owned  3- By Name  4- By ID  5- Back");
+		System.out.println("1- Show All   2- Owned   3- By ID   4- Back");
 		System.out.println("");
 		System.out.print("Selection: ");
 		selection = in.nextInt();
@@ -387,11 +390,33 @@ public class Driver
 				break;
 			case 3:
 				
+				System.out.println("");
+				System.out.println("Please enter the project's id now: ");
+				System.out.println("");
+				selection = in.nextInt();
+				
+				// Get project by id
+				currentProject = manager.getProject(selection);
+				
+				if(currentProject != null)
+				{
+					System.out.println("");
+					System.out
+							.println("Selection confirmed! Entering edit UI..");
+					System.out.println("");
+					
+					manageSingleProjectFlow();
+				}
+				else
+				{
+					System.out.println("");
+					System.out
+							.println("No projects were found.");
+					System.out.println("");
+					browseProjectsFlow();
+				}
 				break;
 			case 4:
-				
-				break;
-			case 5:
 				// Go back
 				System.out.println("Returning to home screen");
 				
@@ -410,6 +435,9 @@ public class Driver
 	
 	private static void manageSingleProjectFlow()
 	{
+		
+		System.out.println("SINGLE MANAGE REACHED - EXITING");
+		System.exit(0);
 		// TODO
 		
 		// 5 choices:
