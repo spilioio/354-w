@@ -435,9 +435,6 @@ public class Driver
 	
 	private static void manageSingleProjectFlow()
 	{
-		
-		System.out.println("SINGLE MANAGE REACHED - EXITING");
-		System.exit(0);
 		// TODO
 		
 		// 5 choices:
@@ -446,6 +443,74 @@ public class Driver
 		// - view tasks associated with project
 		// - add new task to project
 		// - back to browseProjectsFlow()
+		// for storing user input
+		int selection = 0;
+		
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("          Single Project Manager");
+		System.out.println("Please make your selection by inputing the");
+		System.out.println("# of the task you want to perform followed");
+		System.out.println("by the return key.");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("1- Delete Project  2- Edit Project Owner/Name  3- View Tasks Associated To The Project  4- Add New Task To The Project  5- Back");
+		System.out.println("");
+		System.out.print("Selection: ");
+		selection = in.nextInt();
+		
+		switch (selection)
+		{
+			case 1:
+				// - delete project
+				System.out.println();
+				System.out.println("Deleting selected project...");
+				manager.delProj(currentProject.getId());
+				System.out.println("Project deleted Successfully");
+				//Should go to the main menu or something?
+				break;
+			case 2:
+				// - edit project owner/name
+				System.out.println();
+				System.out.println("Would you like to edit project owner (o) or project name (n)? (o/n?) [Press (b) to go back]");
+				
+				String usrchoice = in.next();
+				
+				boolean invalidchoice = true;
+				
+				while (invalidchoice){
+					if (usrchoice.equals("b"))
+						manageSingleProjectFlow();
+					else if (usrchoice.equals("o")){
+						//Connect to the DB and update
+					}else if (usrchoice.equals("n")){
+						//Connect to the DB and update
+					}
+				}
+				break;
+			case 3:
+				// - view tasks associated with project
+				break;
+			case 4:
+				// - add new task to project
+				break;
+			case 5:
+				// - back to browseProjectsFlow()
+				System.out.println("Returning to home screen");
+				
+				// Return to login flow
+				browseProjectsFlow();
+				break;
+			default:
+				// invalid input, restart flow
+				System.out.println("Invalid input, please try again.");
+				
+				// Restart flow
+				manageSingleProjectFlow();
+				return;
+		}
 	}
 	
 	private static void end()
