@@ -536,6 +536,8 @@ public class Driver
 							stmt.executeUpdate("UPDATE projects SET project_name = '"+newname+"' WHERE project_id = "+currentProject.getId()+";");
 							stmt.close();
 							
+							currentProject.setName(newname);
+							
 						} catch (Exception e)
 						{
 							System.err.println(e.getClass().getName() + ": "
