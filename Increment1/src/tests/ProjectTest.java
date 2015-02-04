@@ -21,19 +21,22 @@ import core.Task;
  */
 public class ProjectTest {
 	
-	public ProjectManager pm;
-	public Project p1;
+	public static ProjectManager pm;
+	public static Project p1;
 	public Task t1, t2, t3;
-	private Connection conn;
+	private static Connection conn;
 	private Statement stmt;
 	private ResultSet rs;
 	
 	@BeforeClass
-	public void init() {
+	public static void init() {
 		pm = new ProjectManager();
+		
+		pm.delAllProjects();
+		
 		p1 = new Project("b_jenkins", "project1");
 		
-		Connection conn = null;
+		conn = null;
 	    try {
 	    	// connect to db (file test.db must lay in the project dir)
 	    	// NOTE: it will be created if not exists
@@ -41,20 +44,22 @@ public class ProjectTest {
 	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 	    }
 	    catch(Exception e) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() + " in init()" );
 		      System.exit(0);
 	    }
 	}
 	
 	@Test
 	public void testCreateProject() {
+		
 		p1 = pm.addProject(p1);
 		
+		System.out.println(p1.getName() + " " + p1.getOwner());
 		/* test to see if the projects were added to the DB */
 		try {
 			stmt = conn.createStatement();
 			// ignore the project that's already in the DB (project_id 1)
-			rs = stmt.executeQuery("SELECT * FROM projects WHERE project_name = 'project1' && owner_id = 'b_jenkins';");
+			rs = stmt.executeQuery("SELECT * FROM projects WHERE project_name = 'project1' AND owner_id = 'b_jenkins';");
 
 			while (rs.next()) {
 				assertEquals(p1.getId(), rs.getInt("project_id"));
@@ -65,7 +70,7 @@ public class ProjectTest {
 		    stmt.close();
 		}
 		catch(Exception e) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() + " in testCreateProject()" );
 		      System.exit(0);
 	    }
 	}
@@ -83,7 +88,7 @@ public class ProjectTest {
 		try {
 			stmt = conn.createStatement();
 			
-			rs = stmt.executeQuery("SELECT * FROM projects WHERE project_name = 'p1' && owner_id = 't_user';");
+			rs = stmt.executeQuery("SELECT * FROM projects WHERE project_name = 'p1' AND owner_id = 't_user';");
 
 			while (rs.next()) {
 				assertEquals(p1.getId(), rs.getInt("project_id"));
@@ -94,7 +99,7 @@ public class ProjectTest {
 		    stmt.close();
 		}
 		catch(Exception e) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() + " in testEditProject()" );
 		      System.exit(0);
 	    }
 		
@@ -134,7 +139,7 @@ public class ProjectTest {
 		    stmt.close();
 		}
 		catch(Exception e) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() + " in testAddTask()" );
 		      System.exit(0);
 	    }
 		
@@ -161,7 +166,7 @@ public class ProjectTest {
 		try {
 			stmt = conn.createStatement();
 			// ignore the project that's already in the DB (project_id 1)
-			rs = stmt.executeQuery("SELECT * FROM projects WHERE project_name = 'p1' && owner_id = 't_user';");
+			rs = stmt.executeQuery("SELECT * FROM projects WHERE project_name = 'p1' AND owner_id = 't_user';");
 
 			while (rs.next()) {
 				result.add(new Project(rs.getString("owner_id"), rs.getString("project_name")));
@@ -170,21 +175,21 @@ public class ProjectTest {
 		    stmt.close();
 		}
 		catch(Exception e) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() + " in testDeleteProject()" );
 		      System.exit(0);
 	    }
 		
 		assertEquals(result.size(), 0);
-		assertFalse(allProjs.contains(p1));
+		assertFalse(result.contains(p1));
 	}
 	
 	@AfterClass
-	public void end() {
+	public static void end() {
 		try {
 		    conn.close();
 		}
 		catch(Exception e) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() + " in end()" );
 		      System.exit(0);
 	    }
 	}

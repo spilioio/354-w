@@ -14,25 +14,27 @@ import org.junit.Test;
 
 import core.Project;
 import core.ProjectManager;
-import core.Task;
 
 public class ProjectManagerTest {
 	
-	public ProjectManager pm;
-	public Project p1, p2, p3, p4;
-	private Connection conn;
+	public static ProjectManager pm;
+	public static Project p1, p2, p3, p4;
+	private static Connection conn;
 	private Statement stmt;
 	private ResultSet rs;
 	
 	@BeforeClass
-	public void init() {
+	public static void init() {
 		pm = new ProjectManager();
+		
+		pm.delAllProjects();
+		
 		p1 = new Project("b_jenkins", "project1");
 		p2 = new Project("b_jenkins", "project2");
 		p3 = new Project("t_user", "project3");
 		p4 = new Project("t_user", "project4");
 		
-		Connection conn = null;
+		conn = null;
 	    try {
 	    	// connect to db (file test.db must lay in the project dir)
 	    	// NOTE: it will be created if not exists
@@ -59,10 +61,10 @@ public class ProjectManagerTest {
 		try {
 			stmt = conn.createStatement();
 			// ignore the project that's already in the DB (project_id 1)
-			rs = stmt.executeQuery("SELECT * FROM projects WHERE project_id <> 1;");
+			rs = stmt.executeQuery("SELECT * FROM projects;");
 
 			while (rs.next()) {
-				result.add(new Project(rs.getString("owner_id"), rs.getString("project_name")));
+				result.add(new Project(rs.getString("owner_id"), rs.getString("project_name"), rs.getInt("project_id")));
 			}
 			rs.close();
 		    stmt.close();
@@ -103,7 +105,7 @@ public class ProjectManagerTest {
 		ArrayList<Project> proj1 = pm.getProjects("t_user"); /*
 													 * projects user_id t_user is
 													 * involved in created by or
-													 * has a task in project
+													 * has a task in project - NOTE: currently only owner is implemented
 													 */
 		
 		/* test getProjects() */
@@ -119,16 +121,16 @@ public class ProjectManagerTest {
 		assertTrue(allProjs.contains(p3));
 		assertEquals(allProjs.get(ind3).getName(), "project3");
 		assertTrue(allProjs.contains(p4));
-		assertEquals(allProjs.get(ind4).getName(), "project1");
+		assertEquals(allProjs.get(ind4).getName(), "project4");
 		
 		/* test getProjects(int) - user id */
-		int i1 = proj1.indexOf(p1);
-		int i2 = proj1.indexOf(p2);
+		int i1 = proj1.indexOf(p3);
+		int i2 = proj1.indexOf(p4);
 		
-		assertTrue(proj1.contains(p1));
-		assertEquals(allProjs.get(i1).getName(), "project1");
-		assertTrue(proj1.contains(p2));
-		assertEquals(allProjs.get(i2).getName(), "project1");
+		assertTrue(proj1.contains(p3));
+		assertEquals(proj1.get(i1).getName(), "project3");
+		assertTrue(proj1.contains(p4));
+		assertEquals(proj1.get(i2).getName(), "project4");
 	}
 	
 	@Test
@@ -147,7 +149,7 @@ public class ProjectManagerTest {
 		try {
 			stmt = conn.createStatement();
 			// ignore the project that's already in the DB (project_id 1)
-			rs = stmt.executeQuery("SELECT * FROM projects WHERE project_id <> 1;");
+			rs = stmt.executeQuery("SELECT * FROM projects;");
 
 			while (rs.next()) {
 				result.add(new Project(rs.getString("owner_id"), rs.getString("project_name")));
@@ -161,13 +163,13 @@ public class ProjectManagerTest {
 	    }
 		
 		assertEquals(result.size(), 0);
-		assertFalse(allProjs.contains(p1));
-		assertFalse(allProjs.contains(p2));
+		assertFalse(result.contains(p1));
+		assertFalse(result.contains(p2));
 		
 	}
 	
 	@AfterClass
-	public void end() {
+	public static void end() {
 		try {
 		    conn.close();
 		}

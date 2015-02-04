@@ -1,45 +1,59 @@
 package core;
 
-import java.util.ArrayList;
-
 public class Project
 {
+	private String owner_id, project_name;
+	private int project_id;
 	
-	public Project(int i, String string)
+	public Project(String owner_id, String project_name)
 	{
-		// TODO Auto-generated constructor stub
+		this.owner_id = owner_id;
+		this.project_name = project_name;
 	}
 	
-	public String getName()
+	public Project(String owner_id, String project_name, int project_id)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		this.owner_id = owner_id;
+		this.project_name = project_name;
+		this.project_id = project_id;
 	}
 	
-	public void setName(String string)
+	public void setId(int new_id)
 	{
-		// TODO Auto-generated method stub
-		
+		project_id = new_id;
 	}
 	
 	public int getId()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return project_id;
 	}
 	
-	public ArrayList<Task> getTasks()
+	public String getName()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return project_name;
 	}
 	
-	public Task getTask(int id)
+	public String getOwner()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return owner_id;
+	}
+
+	public void setName(String new_name)
+	{
+		project_name = new_name;
+	}
+
+	public void setOwner(String new_owner)
+	{
+		owner_id = new_owner;
 	}
 	
-	// This is a test comment to test EGit integration...
+	public boolean equals(Object otherProject)
+	{
+		Project p = (Project)otherProject;
+		if(p.getId() == project_id)
+			return true;
+		else return false;
+	}
 	
 }
