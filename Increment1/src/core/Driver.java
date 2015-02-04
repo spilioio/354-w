@@ -469,7 +469,7 @@ public class Driver
 				System.out.println("Deleting selected project...");
 				manager.delProj(currentProject.getId());
 				System.out.println("Project deleted Successfully");
-				//Should go to the main menu or something?
+				manageSingleProjectFlow();
 				break;
 			case 2:
 				// - edit project owner/name
@@ -481,13 +481,72 @@ public class Driver
 				boolean invalidchoice = true;
 				
 				while (invalidchoice){
-					if (usrchoice.equals("b"))
+					if (usrchoice.equals("b")){
 						manageSingleProjectFlow();
-					else if (usrchoice.equals("o")){
+						return;
+					}else if (usrchoice.equals("o")){
+						invalidchoice = false;
 						//Connect to the DB and update
+						System.out.println("Please give a valid username to set as new project owner:");
+						String owner = in.next();
+						Statement stmt;
+						ResultSet rs;
+						try
+						{
+							stmt = conn.createStatement();
+							rs = stmt
+									.executeQuery("SELECT * FROM users WHERE user_id = '"
+											+ owner + "';");
+							
+							if (rs.next())
+							{
+								currentProject.setOwner(owner);
+	
+								stmt.executeUpdate("UPDATE projects SET owner_id = '"+owner+"' WHERE project_id = "+currentProject.getId()+";");
+								System.out.println("Project Owner Successfully Updated!");
+								stmt.close();
+							} else
+							{
+								System.out
+										.println("User not found.");
+								
+								// Close variables
+								rs.close();
+								stmt.close();
+								
+								// User id not found
+								manageSingleProjectFlow();
+							}
+							
+						} catch (Exception e)
+						{
+							System.err.println(e.getClass().getName() + ": "
+									+ e.getMessage() + " in manageSingleProjectFlow()");
+							System.exit(0);
+						}
 					}else if (usrchoice.equals("n")){
+						invalidchoice = false;
 						//Connect to the DB and update
+						System.out.println("Please give a new project name: ");
+						String newname = in.next();
+						Statement stmt;
+						try
+						{
+							stmt = conn.createStatement();
+							stmt.executeUpdate("UPDATE projects SET project_name = '"+newname+"' WHERE project_id = "+currentProject.getId()+";");
+							stmt.close();
+							
+						} catch (Exception e)
+						{
+							System.err.println(e.getClass().getName() + ": "
+									+ e.getMessage() + " in manageSingleProjectFlow()");
+							System.exit(0);
+						}
 					}
+					System.out.println("Returning to home screen");
+					
+					// Return to login flow
+					browseProjectsFlow();
 				}
 				break;
 			case 3:
