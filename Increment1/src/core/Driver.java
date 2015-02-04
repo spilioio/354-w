@@ -134,6 +134,7 @@ public class Driver
 						// Correct password has been input...
 						System.out.println("Password accepted, LOGGING IN!");
 						// TODO unto main management screen
+						managementFlow();
 						
 						// Close variables
 						rs.close();
@@ -198,6 +199,45 @@ public class Driver
 		}
 	}
 	
+	private static void managementFlow()
+	{
+		int selection = 0;
+		
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("      Project Management Interface");
+		System.out.println("Please make your selection by inputing the");
+		System.out.println("# of the task you want to perform followed");
+		System.out.println("by the return key.");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("1- Browse projects  2- New project  3- Logout");
+		System.out.println("");
+		System.out.print("Selection: ");
+		selection = in.nextInt();
+		
+		switch(selection)
+		{
+			case 1:
+				// TODO browse projects
+				break;
+			case 2:
+				// TODO create new project
+				break;
+			case 3:
+				System.out.println("Logging out...");
+				loginFlow();
+				break;
+			default:
+				// invalid input, restart flow
+				System.out.println("Invalid input, please try again.");
+				managementFlow();
+				return;
+		}
+	}
+
 	private static void end()
 	{
 		try
