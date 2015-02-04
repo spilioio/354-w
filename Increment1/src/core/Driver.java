@@ -268,7 +268,7 @@ public class Driver
 	
 	private static void browseProjectsFlow()
 	{
-		// For temporarily store collections of projects 
+		// For temporarily store collections of projects
 		ArrayList<Project> aP;
 		
 		// for storing user input
@@ -284,7 +284,8 @@ public class Driver
 		System.out.println("");
 		System.out.println("");
 		System.out.println("");
-		System.out.println("1- Show All  2- Owned  3- By Name  4- By ID  5- Back");
+		System.out
+				.println("1- Show All  2- Owned  3- By Name  4- By ID  5- Back");
 		System.out.println("");
 		System.out.print("Selection: ");
 		selection = in.nextInt();
@@ -296,32 +297,43 @@ public class Driver
 				aP = manager.getProjects();
 				
 				// Display all projects
-				for(int i = 0; i < aP.size(); i++)
+				for (int i = 0; i < aP.size(); i++)
 				{
-					System.out.println(Integer.toString(i) + "- ID# " + Integer.toString(aP.get(i).getId())
-							+ " - Name: " + aP.get(i).getName() + " - Owner: " + aP.get(i).getOwner());
+					System.out.println(Integer.toString(i) + "- ID# "
+							+ Integer.toString(aP.get(i).getId()) + " - Name: "
+							+ aP.get(i).getName() + " - Owner: "
+							+ aP.get(i).getOwner());
 				}
 				
-				if(aP != null && aP.size() > 0)
+				if (aP != null && aP.size() > 0)
 				{
 					System.out.println("");
-					System.out.println("You may now select a project to edit using");
-					System.out.println("the corresponding # from the list, followe");
+					System.out
+							.println("You may now select a project to edit using");
+					System.out
+							.println("the corresponding # from the list, followe");
 					System.out.println("-d by the return key.");
 					System.out.println("");
 					
 					System.out.print("Selection: ");
 					selection = in.nextInt();
 					
-					if(selection < aP.size() && selection >= 0)
+					if (selection < aP.size() && selection >= 0)
 					{
-						// TODO goto individual project edit
+						currentProject = aP.get(selection);
+						
+						System.out.println("");
+						System.out
+								.println("Selection confirmed! Entering edit UI..");
+						System.out.println("");
+						
+						manageSingleProjectFlow();
 					}
-				}
-				else
+				} else
 				{
 					System.out.println("");
-					System.out.println("The project manager is currently empty, returning to main interface.");
+					System.out
+							.println("The project manager is currently empty, returning to main interface.");
 					System.out.println("");
 					managementFlow();
 				}
@@ -332,42 +344,51 @@ public class Driver
 				aP = manager.getProjects(userLoggedIn.getName());
 				
 				// Display projects
-				for(int i = 0; i < aP.size(); i++)
+				for (int i = 0; i < aP.size(); i++)
 				{
-					System.out.println(Integer.toString(i) + "- ID# " + Integer.toString(aP.get(i).getId())
-							+ " - Name: " + aP.get(i).getName() + " - Owner: " + aP.get(i).getOwner());
+					System.out.println(Integer.toString(i) + "- ID# "
+							+ Integer.toString(aP.get(i).getId()) + " - Name: "
+							+ aP.get(i).getName() + " - Owner: "
+							+ aP.get(i).getOwner());
 				}
 				
-				if(aP != null && aP.size() > 0)
+				if (aP != null && aP.size() > 0)
 				{
 					System.out.println("");
-					System.out.println("You may now select a project to edit using");
-					System.out.println("the corresponding # from the list, followe");
+					System.out
+							.println("You may now select a project to edit using");
+					System.out
+							.println("the corresponding # from the list, followe");
 					System.out.println("-d by the return key.");
 					System.out.println("");
 					
 					System.out.print("Selection: ");
 					selection = in.nextInt();
 					
-					if(selection < aP.size() && selection >= 0)
+					if (selection < aP.size() && selection >= 0)
 					{
-						// TODO goto individual project edit
+						currentProject = aP.get(selection);
+						
+						System.out.println("");
+						System.out
+								.println("Selection confirmed! Entering edit UI..");
+						System.out.println("");
+						
+						manageSingleProjectFlow();
 					}
-				}
-				else
+				} else
 				{
 					System.out.println("");
-					System.out.println("No projects were found, returning to main interface.");
+					System.out
+							.println("No projects were found, returning to main interface.");
 					System.out.println("");
 					managementFlow();
 				}
 				break;
 			case 3:
 				
-				
 				break;
 			case 4:
-				
 				
 				break;
 			case 5:
@@ -390,6 +411,13 @@ public class Driver
 	private static void manageSingleProjectFlow()
 	{
 		// TODO
+		
+		// 5 choices:
+		// - delete project
+		// - edit project owner/name
+		// - view tasks associated with project
+		// - add new task to project
+		// - back to browseProjectsFlow()
 	}
 	
 	private static void end()
