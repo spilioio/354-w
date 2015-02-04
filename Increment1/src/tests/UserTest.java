@@ -42,10 +42,10 @@ public class UserTest {
 			ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE user_id = 'f_bobier' AND user_pwd = 'qwerty';");
 
 			while (rs.next()) {
-				assertEquals(rs.getString("user_id"), myUser.getName());
-				assertEquals(rs.getString("user_pwd"), "qwerty");
-				assertEquals(rs.getString("f_name"), myUser.getFirstName());
-				assertEquals(rs.getString("l_name"), myUser.getLastName());
+				assertEquals(myUser.getName(), rs.getString("user_id"));
+				assertEquals("qwerty", rs.getString("user_pwd"));
+				assertEquals(myUser.getFirstName(), rs.getString("f_name"));
+				assertEquals(myUser.getLastName(), rs.getString("l_name"));
 			}
 			rs.close();
 			stmt.close();
@@ -69,9 +69,9 @@ public class UserTest {
 			ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE user_id = 'f_bobier';");
 
 			while (rs.next()) {
-				assertEquals(rs.getString("user_id"), myUser.getName());
-				assertEquals(rs.getString("f_name"), myUser.getFirstName());
-				assertEquals(rs.getString("l_name"), myUser.getLastName());
+				assertEquals(myUser.getName(), rs.getString("user_id"));
+				assertEquals(myUser.getFirstName(), rs.getString("f_name"));
+				assertEquals(myUser.getLastName(), rs.getString("l_name"));
 			}
 			rs.close();
 			stmt.close();

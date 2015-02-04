@@ -42,18 +42,18 @@ public class TaskTest {
 
 			rs = stmt.executeQuery("SELECT * FROM tasks WHERE tasks.task_id = 3;");
 			while (rs.next()) {
-				assertEquals(rs.getInt("task_id"), t1.getId());
-				assertEquals(rs.getString("task_name"), t1.getName());
-				assertEquals(rs.getString("description"), t1.getDescription());
-				assertEquals(rs.getInt("duration"), t1.getDuration());
-				assertEquals(rs.getInt("project_id"), t1.getProjectID());
-				assertEquals(rs.getString("user_id"), t1.getOwnerID());
+				assertEquals(t1.getId(), rs.getInt("task_id"));
+				assertEquals(t1.getName(), rs.getString("task_name"));
+				assertEquals(t1.getDescription(), rs.getString("description"));
+				assertEquals(t1.getDuration(), rs.getInt("duration"));
+				assertEquals(t1.getProjectID(), rs.getInt("project_id"));
+				assertEquals(t1.getOwnerID(), rs.getString("user_id"));
 			}
 			
 			rs = stmt.executeQuery("SELECT precedence.pre_req FROM tasks JOIN precedence ON tasks.task_id = precedence.task_id WHERE tasks.task_id = 3;");
 			int i = 0;
 			while (rs.next()) {
-				assertEquals(rs.getInt("pre_req"), (int)t1.getPrereq().get(i));
+				assertEquals((int)t1.getPrereq().get(i), rs.getInt("pre_req"));
 				i++;
 			}
 			
@@ -83,15 +83,15 @@ public class TaskTest {
 			
 			rs = stmt.executeQuery("SELECT * FROM tasks WHERE tasks.task_id = 3;");
 			while (rs.next()) {
-				assertEquals(rs.getInt("task_id"), t1.getId());
-				assertEquals(rs.getString("description"), t1.getDescription());
-				assertEquals(rs.getInt("is_done"), t1.isDone());
+				assertEquals(t1.getId(), rs.getInt("task_id"));
+				assertEquals(t1.getDescription(), rs.getString("description"));
+				assertEquals(t1.isDone(), rs.getInt("is_done"));
 			}
 			
 			rs = stmt.executeQuery("SELECT precedence.pre_req FROM tasks JOIN precedence ON tasks.task_id = precedence.task_id WHERE tasks.task_id = 3;");
 			int i = 0;
 			while (rs.next()) {
-				assertEquals(rs.getInt("pre_req"), (int)t1.getPrereq().get(i));
+				assertEquals((int)t1.getPrereq().get(i), rs.getInt("pre_req"));
 				i++;
 			}
 			

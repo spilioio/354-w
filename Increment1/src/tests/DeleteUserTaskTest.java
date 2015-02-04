@@ -30,7 +30,7 @@ public class DeleteUserTaskTest {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM users WHERE user_id = 'f_bobier';");
 
-			assertEquals(rs.getRow(), 0);
+			assertEquals(0, rs.getRow());
 
 			rs.close();
 			stmt.close();
@@ -54,9 +54,9 @@ public class DeleteUserTaskTest {
 			
 			//Make sure the task is deleted and that it is also deleted from the precedence table
 			rs = stmt.executeQuery("SELECT * FROM tasks WHERE task_id = 3;");
-			assertEquals(rs.getRow(), 0);
+			assertEquals(0, rs.getRow());
 			rs = stmt.executeQuery("SELECT * FROM precedence WHERE task_id = 3;");
-			assertEquals(rs.getRow(), 0);
+			assertEquals(0, rs.getRow());
 			
 			rs.close();
 			stmt.close();
