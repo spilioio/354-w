@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Driver
@@ -15,6 +16,10 @@ public class Driver
 	private static ProjectManager manager;
 	
 	private static Connection conn;
+	
+	private static User userLoggedIn;
+	
+	private static Project currentProject;
 	
 	public static void main(String[] args)
 	{
@@ -141,7 +146,8 @@ public class Driver
 						stmt.close();
 					} else
 					{
-						System.out.println("User not found. Restarting loggin process.");
+						System.out
+								.println("User not found. Restarting loggin process.");
 						
 						// Close variables
 						rs.close();
@@ -179,7 +185,7 @@ public class Driver
 				System.out.println("");
 				
 				// Add new user
-				new User(temp[0], temp[1], temp[2], temp[3]);
+				userLoggedIn = new User(temp[0], temp[1], temp[2], temp[3]);
 				
 				System.out.println("User successfully created! Please log in");
 				
@@ -218,26 +224,174 @@ public class Driver
 		System.out.print("Selection: ");
 		selection = in.nextInt();
 		
-		switch(selection)
+		switch (selection)
 		{
 			case 1:
 				// TODO browse projects
+				browseProjectsFlow();
 				break;
 			case 2:
-				// TODO create new project
+				// New account creation
+				String temp;
+				
+				System.out.println("Please enter a project name: ");
+				temp = in.next();
+				System.out.println("");
+				
+				// Create new project object.
+				currentProject = new Project(userLoggedIn.getName(), temp);
+				
+				// Add it to DB via project manager.
+				currentProject = manager.addProject(currentProject);
+				
+				System.out.println("New project successfully created!");
+				
+				// Take user directly to where he/she can edit the newly created
+				// project.
+				manageSingleProjectFlow();
 				break;
 			case 3:
 				System.out.println("Logging out...");
+				
+				// Return to login flow
 				loginFlow();
 				break;
 			default:
 				// invalid input, restart flow
 				System.out.println("Invalid input, please try again.");
+				
+				// Restart flow
 				managementFlow();
 				return;
 		}
 	}
-
+	
+	private static void browseProjectsFlow()
+	{
+		// For temporarily store collections of projects 
+		ArrayList<Project> aP;
+		
+		// for storing user input
+		int selection = 0;
+		
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("          Project Browser");
+		System.out.println("Please make your selection by inputing the");
+		System.out.println("# of the task you want to perform followed");
+		System.out.println("by the return key.");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("1- Show All  2- Owned  3- By Name  4- By ID  5- Back");
+		System.out.println("");
+		System.out.print("Selection: ");
+		selection = in.nextInt();
+		
+		switch (selection)
+		{
+			case 1:
+				// Get all projects
+				aP = manager.getProjects();
+				
+				// Display all projects
+				for(int i = 0; i < aP.size(); i++)
+				{
+					System.out.println(Integer.toString(i) + "- ID# " + Integer.toString(aP.get(i).getId())
+							+ " - Name: " + aP.get(i).getName() + " - Owner: " + aP.get(i).getOwner());
+				}
+				
+				if(aP != null && aP.size() > 0)
+				{
+					System.out.println("");
+					System.out.println("You may now select a project to edit using");
+					System.out.println("the corresponding # from the list, followe");
+					System.out.println("-d by the return key.");
+					System.out.println("");
+					
+					System.out.print("Selection: ");
+					selection = in.nextInt();
+					
+					if(selection < aP.size() && selection >= 0)
+					{
+						// TODO goto individual project edit
+					}
+				}
+				else
+				{
+					System.out.println("");
+					System.out.println("The project manager is currently empty, returning to main interface.");
+					System.out.println("");
+					managementFlow();
+				}
+				
+				break;
+			case 2:
+				// Get all projects owned by user
+				aP = manager.getProjects(userLoggedIn.getName());
+				
+				// Display projects
+				for(int i = 0; i < aP.size(); i++)
+				{
+					System.out.println(Integer.toString(i) + "- ID# " + Integer.toString(aP.get(i).getId())
+							+ " - Name: " + aP.get(i).getName() + " - Owner: " + aP.get(i).getOwner());
+				}
+				
+				if(aP != null && aP.size() > 0)
+				{
+					System.out.println("");
+					System.out.println("You may now select a project to edit using");
+					System.out.println("the corresponding # from the list, followe");
+					System.out.println("-d by the return key.");
+					System.out.println("");
+					
+					System.out.print("Selection: ");
+					selection = in.nextInt();
+					
+					if(selection < aP.size() && selection >= 0)
+					{
+						// TODO goto individual project edit
+					}
+				}
+				else
+				{
+					System.out.println("");
+					System.out.println("No projects were found, returning to main interface.");
+					System.out.println("");
+					managementFlow();
+				}
+				break;
+			case 3:
+				
+				
+				break;
+			case 4:
+				
+				
+				break;
+			case 5:
+				// Go back
+				System.out.println("Returning to home screen");
+				
+				// Return to login flow
+				managementFlow();
+				break;
+			default:
+				// invalid input, restart flow
+				System.out.println("Invalid input, please try again.");
+				
+				// Restart flow
+				browseProjectsFlow();
+				return;
+		}
+	}
+	
+	private static void manageSingleProjectFlow()
+	{
+		// TODO
+	}
+	
 	private static void end()
 	{
 		try
