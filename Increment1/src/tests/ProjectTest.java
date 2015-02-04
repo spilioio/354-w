@@ -32,7 +32,7 @@ public class ProjectTest {
 	public static void init() {
 		pm = new ProjectManager();
 		
-		pm.delAllProjects();
+		pm.clean();
 		
 		p1 = new Project("b_jenkins", "project1");
 		
@@ -113,17 +113,15 @@ public class ProjectTest {
 	@Test
 	public void testAddTask() {
 		ArrayList<Integer> preReq = new ArrayList<Integer>();
-		t1 = new Task("a", "desc a", 4, 1, "b_jenkins", preReq);
-
-		p1.addTask(t1);
+		t1 = new Task(0, "a", "desc a", 4, p1.getId(), "b_jenkins", preReq);
 		
 		/* test to see if the task was added to the DB */
 		try {
 			stmt = conn.createStatement();
 			String query = "SELECT * FROM tasks WHERE task_name = 'a' " +
-					"&& description = 'desc a' " +
-					"&& user_id = 'b_jenkins' " +
-					"&& project_id = " + 
+					"AND description = 'desc a' " +
+					"AND user_id = 'b_jenkins' " +
+					"AND project_id = " + 
 					p1.getId();
 			
 			rs = stmt.executeQuery(query);
@@ -131,9 +129,9 @@ public class ProjectTest {
 			while (rs.next()) {
 				assertEquals(t1.getId(), rs.getInt("task_id"));
 				assertEquals(t1.getName(), rs.getString("task_name"));
-				assertEquals(t1.getDesc(), rs.getString("description"));
-				assertEquals(t1.getProjId(), rs.getString("project_id"));
-				assertEquals(t1.getOwner(), rs.getString("user_id"));
+				assertEquals(t1.getDescription(), rs.getString("description"));
+				assertEquals(t1.getProjectID(), rs.getInt("project_id"));
+				assertEquals(t1.getOwnerID(), rs.getString("user_id"));
 			}
 			rs.close();
 		    stmt.close();
@@ -147,16 +145,14 @@ public class ProjectTest {
 		
 		int i1 = t.indexOf(t1);
 		assertTrue(t.contains(t1));
-		assertEquals(t.get(i1).getName(), "t1");
+		assertEquals(t.get(i1).getName(), "a");
 		
-		Task tk = p1.getTask(t1.getId());
-		assertEquals("t1", t1.getName());
+		assertEquals("a", t1.getName());
 		
 	}
 	
 	@Test
 	public void testDeleteProject() {
-		ArrayList<Project> allProjs = pm.getProjects();
 		
 		pm.delProj(p1); // delete by object
 

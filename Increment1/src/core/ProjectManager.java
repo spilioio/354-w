@@ -265,5 +265,30 @@ public class ProjectManager
 		System.out.println("Project with id# =" + Integer.toString(id)
 				+ " has been deleted successfully.");
 	}
+
+	public void clean()
+	{
+		Connection conn = null;
+		try
+		{
+			// connect to db (file test.db must lay in the project dir)
+			// NOTE: it will be created if not exists
+			Class.forName("org.sqlite.JDBC");
+			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+			Statement stmt = conn.createStatement();
+			
+			stmt.executeUpdate("DELETE FROM projects");
+			stmt.executeUpdate("DELETE FROM tasks");
+			
+			stmt.close();
+			conn.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage()
+					+ " in delAllProjects()");
+			System.exit(0);
+		}
+		System.out.println("ALL PROJECTS CLEANED");
+	}
 	
 }

@@ -41,6 +41,21 @@ public class Task
 	     System.out.println("Task created successfully");
 	}
 	
+	/** Used to create a task object without automatically adding it to DB */
+	public Task(int task_id, String name, String description, int duration,
+			int project_id, String owner_id, ArrayList<Integer> pre_reqs,
+			boolean overrider)
+	{
+		this.task_id = task_id;
+		this.name = name;
+		this.description = description;
+		this.duration = duration;
+		this.project_id = project_id;
+		this.owner_id = owner_id;
+		this.pre_reqs = pre_reqs;
+		is_done = 0;
+	}
+	
 	public ArrayList<Integer> getPrereq(){
 		return pre_reqs;
 	}
@@ -157,6 +172,14 @@ public class Task
 	{
 		// TODO Auto-generated method stub
 		return task_id;
+	}
+	
+	public boolean equals(Object otherTask)
+	{
+		Task t = (Task)otherTask;
+		if(t.getId() == task_id)
+			return true;
+		return false;
 	}
 	
 }
