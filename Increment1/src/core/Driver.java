@@ -97,6 +97,7 @@ public class Driver
 		
 		// User input
 		selection = in.nextInt();
+		in.nextLine();
 		System.out.println("");
 		System.out.println("");
 		
@@ -106,7 +107,7 @@ public class Driver
 			case 1:
 				System.out
 						.print("Please enter your user id followed by the\nreturn key: ");
-				tInput = in.next();
+				tInput = in.nextLine();
 				
 				Statement stmt;
 				ResultSet rs;
@@ -125,7 +126,7 @@ public class Driver
 						System.out.println("");
 						System.out
 								.print("Please enter your password followed by the\nreturn key: ");
-						tPass = in.next();
+						tPass = in.nextLine();
 						
 						while (!tPass.equals(rs.getString("user_pwd")))
 						{
@@ -135,12 +136,12 @@ public class Driver
 							System.out.println("");
 							System.out
 									.println("Try Again? (y for yes, any other for no)");
-							tPass = in.next();
+							tPass = in.nextLine();
 							if (tPass.equals("y"))
 							{
 								System.out
 										.print("Please enter your password followed by the\nreturn key: ");
-								tPass = in.next();
+								tPass = in.nextLine();
 							}
 							else
 							{
@@ -194,19 +195,19 @@ public class Driver
 				String temp[] = new String[4];
 				
 				System.out.println("Please enter a user id: ");
-				temp[0] = in.next();
+				temp[0] = in.nextLine();
 				System.out.println("");
 				
 				System.out.println("Select your password: ");
-				temp[1] = in.next();
+				temp[1] = in.nextLine();
 				System.out.println("");
 				
 				System.out.println("First name: ");
-				temp[2] = in.next();
+				temp[2] = in.nextLine();
 				System.out.println("");
 				
 				System.out.println("Last name: ");
-				temp[3] = in.next();
+				temp[3] = in.nextLine();
 				System.out.println("");
 				
 				// Add new user
@@ -253,7 +254,7 @@ public class Driver
 		System.out.println("");
 		System.out.print("Selection: ");
 		selection = in.nextInt();
-		
+		in.nextLine();
 		switch (selection)
 		{
 			case 1:
@@ -265,7 +266,7 @@ public class Driver
 				String temp;
 				
 				System.out.println("Please enter a project name: ");
-				temp = in.next();
+				temp = in.nextLine();
 				System.out.println("");
 				
 				System.out.println("temp = " + temp);
@@ -324,7 +325,7 @@ public class Driver
 		System.out.println("");
 		System.out.print("Selection: ");
 		selection = in.nextInt();
-		
+		in.nextLine();
 		switch (selection)
 		{
 			case 1:
@@ -352,7 +353,7 @@ public class Driver
 					
 					System.out.print("Selection: ");
 					selection = in.nextInt();
-					
+					in.nextLine();
 					if (selection < aP.size() && selection >= 0)
 					{
 						currentProject = aP.get(selection);
@@ -400,7 +401,7 @@ public class Driver
 					
 					System.out.print("Selection: ");
 					selection = in.nextInt();
-					
+					in.nextLine();
 					if (selection < aP.size() && selection >= 0)
 					{
 						currentProject = aP.get(selection);
@@ -428,7 +429,7 @@ public class Driver
 				System.out.println("Please enter the project's id now: ");
 				System.out.println("");
 				selection = in.nextInt();
-				
+				in.nextLine();
 				// Get project by id
 				currentProject = manager.getProject(selection);
 				
@@ -472,15 +473,6 @@ public class Driver
 	 */
 	private static void manageSingleProjectFlow()
 	{
-		// TODO
-		
-		// 5 choices:
-		// - delete project
-		// - edit project owner/name
-		// - view tasks associated with project
-		// - add new task to project
-		// - back to browseProjectsFlow()
-		// for storing user input
 		int selection = 0;
 		
 		System.out.println("");
@@ -498,7 +490,7 @@ public class Driver
 		System.out.println("");
 		System.out.print("Selection: ");
 		selection = in.nextInt();
-		
+		in.nextLine();
 		switch (selection)
 		{
 			case 1:
@@ -632,7 +624,7 @@ public class Driver
 					
 					System.out.print("Selection: ");
 					selection = in.nextInt();
-					
+					in.nextLine();
 					while (selection >= aT.size() || selection < 0)
 					{
 						System.out.println("");
@@ -642,6 +634,7 @@ public class Driver
 						
 						System.out.print("Selection: ");
 						selection = in.nextInt();
+						in.nextLine();
 					}
 					
 					// Set task to guaranteed good selection
@@ -679,7 +672,7 @@ public class Driver
 				String tName,
 				tDesc;
 				int tDuration;
-				in.nextLine();
+				
 				System.out.println("");
 				System.out.println("Please give the task a name:");
 				System.out.println("");
@@ -694,7 +687,7 @@ public class Driver
 				System.out.println("Please define the duration of the task:");
 				System.out.println("");
 				tDuration = in.nextInt();
-				
+				in.nextLine();
 				// Create the new task
 				currentTask = new Task((currentProject.getId() * 1000) + tId,
 						tName, tDesc, tDuration, currentProject.getId(),
@@ -751,7 +744,7 @@ public class Driver
 		System.out.println("");
 		System.out.print("Selection: ");
 		selection = in.nextInt();
-		
+		in.nextLine();
 		switch (selection)
 		{
 			case 1:
