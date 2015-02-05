@@ -82,7 +82,6 @@ public class Project
 			
 			while (rs.next())
 			{
-				System.out.println(Integer.toString(rs.getInt("task_id")));
 				a.add(new Task(rs.getInt("task_id"), rs.getString("task_name"), 
 						rs.getString("description"), rs.getInt("duration"), 
 						rs.getInt("project_id"), rs.getString("user_id"), null, false));

@@ -30,6 +30,7 @@ public class Task
 	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 	    	Statement stmt = conn.createStatement();
 	    	stmt.executeUpdate("INSERT INTO tasks VALUES ("+task_id+ ", '"+name+"', '"+description+"', "+duration+", "+project_id+", '"+owner_id+"', "+is_done+");");
+	    	if(pre_reqs != null)
 	    	for (int i = 0; i < pre_reqs.size(); i++)
 	    		stmt.executeUpdate("INSERT INTO precedence VALUES ("+task_id+ ", "+pre_reqs.get(i)+");");
 			stmt.close();

@@ -21,6 +21,8 @@ public class Driver
 	
 	private static Project currentProject;
 	
+	private static Task currentTask;
+	
 	public static void main(String[] args)
 	{
 		// Initialize shared variables
@@ -53,7 +55,8 @@ public class Driver
 			// NOTE: it will be created if not exists
 			Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage()
 					+ " in init()");
@@ -125,7 +128,8 @@ public class Driver
 								System.out
 										.print("Please enter your password followed by the\nreturn key: ");
 								tPass = in.next();
-							} else
+							}
+							else
 							{
 								// Close variables
 								rs.close();
@@ -139,7 +143,10 @@ public class Driver
 						// Correct password has been input...
 						System.out.println("Password accepted, LOGGING IN!");
 						
-						userLoggedIn = new User(rs.getString("user_id"), rs.getString("user_pwd"), rs.getString("f_name"), rs.getString("l_name"), false);
+						userLoggedIn = new User(rs.getString("user_id"),
+								rs.getString("user_pwd"),
+								rs.getString("f_name"), rs.getString("l_name"),
+								false);
 						
 						// Close variables
 						rs.close();
@@ -147,7 +154,8 @@ public class Driver
 						
 						// unto main management screen
 						managementFlow();
-					} else
+					}
+					else
 					{
 						System.out
 								.println("User not found. Restarting loggin process.");
@@ -160,7 +168,8 @@ public class Driver
 						loginFlow();
 					}
 					
-				} catch (Exception e)
+				}
+				catch (Exception e)
 				{
 					System.err.println(e.getClass().getName() + ": "
 							+ e.getMessage() + " in testCreateProject()");
@@ -332,7 +341,8 @@ public class Driver
 						
 						manageSingleProjectFlow();
 					}
-				} else
+				}
+				else
 				{
 					System.out.println("");
 					System.out
@@ -379,7 +389,8 @@ public class Driver
 						
 						manageSingleProjectFlow();
 					}
-				} else
+				}
+				else
 				{
 					System.out.println("");
 					System.out
@@ -398,7 +409,7 @@ public class Driver
 				// Get project by id
 				currentProject = manager.getProject(selection);
 				
-				if(currentProject != null)
+				if (currentProject != null)
 				{
 					System.out.println("");
 					System.out
@@ -410,8 +421,7 @@ public class Driver
 				else
 				{
 					System.out.println("");
-					System.out
-							.println("No projects were found.");
+					System.out.println("No projects were found.");
 					System.out.println("");
 					browseProjectsFlow();
 				}
@@ -456,7 +466,8 @@ public class Driver
 		System.out.println("");
 		System.out.println("");
 		System.out.println("");
-		System.out.println("1- Delete Project  2- Edit Project Owner/Name  3- View Tasks Associated To The Project  4- Add New Task To The Project  5- Back");
+		System.out
+				.println("1- Delete Project  2- Edit Project Owner/Name  3- View Tasks Associated To The Project  4- Add New Task To The Project  5- Back");
 		System.out.println("");
 		System.out.print("Selection: ");
 		selection = in.nextInt();
@@ -474,20 +485,26 @@ public class Driver
 			case 2:
 				// - edit project owner/name
 				System.out.println();
-				System.out.println("Would you like to edit project owner (o) or project name (n)? (o/n?) [Press (b) to go back]");
+				System.out
+						.println("Would you like to edit project owner (o) or project name (n)? (o/n?) [Press (b) to go back]");
 				
 				String usrchoice = in.next();
 				
 				boolean invalidchoice = true;
 				
-				while (invalidchoice){
-					if (usrchoice.equals("b")){
+				while (invalidchoice)
+				{
+					if (usrchoice.equals("b"))
+					{
 						manageSingleProjectFlow();
 						return;
-					}else if (usrchoice.equals("o")){
+					}
+					else if (usrchoice.equals("o"))
+					{
 						invalidchoice = false;
-						//Connect to the DB and update
-						System.out.println("Please give a valid username to set as new project owner:");
+						// Connect to the DB and update
+						System.out
+								.println("Please give a valid username to set as new project owner:");
 						String owner = in.next();
 						Statement stmt;
 						ResultSet rs;
@@ -501,14 +518,18 @@ public class Driver
 							if (rs.next())
 							{
 								currentProject.setOwner(owner);
-	
-								stmt.executeUpdate("UPDATE projects SET owner_id = '"+owner+"' WHERE project_id = "+currentProject.getId()+";");
-								System.out.println("Project Owner Successfully Updated!");
-								stmt.close();
-							} else
-							{
+								
+								stmt.executeUpdate("UPDATE projects SET owner_id = '"
+										+ owner
+										+ "' WHERE project_id = "
+										+ currentProject.getId() + ";");
 								System.out
-										.println("User not found.");
+										.println("Project Owner Successfully Updated!");
+								stmt.close();
+							}
+							else
+							{
+								System.out.println("User not found.");
 								
 								// Close variables
 								rs.close();
@@ -518,30 +539,39 @@ public class Driver
 								manageSingleProjectFlow();
 							}
 							
-						} catch (Exception e)
+						}
+						catch (Exception e)
 						{
 							System.err.println(e.getClass().getName() + ": "
-									+ e.getMessage() + " in manageSingleProjectFlow()");
+									+ e.getMessage()
+									+ " in manageSingleProjectFlow()");
 							System.exit(0);
 						}
-					}else if (usrchoice.equals("n")){
+					}
+					else if (usrchoice.equals("n"))
+					{
 						invalidchoice = false;
-						//Connect to the DB and update
+						// Connect to the DB and update
 						System.out.println("Please give a new project name: ");
 						String newname = in.next();
 						Statement stmt;
 						try
 						{
 							stmt = conn.createStatement();
-							stmt.executeUpdate("UPDATE projects SET project_name = '"+newname+"' WHERE project_id = "+currentProject.getId()+";");
+							stmt.executeUpdate("UPDATE projects SET project_name = '"
+									+ newname
+									+ "' WHERE project_id = "
+									+ currentProject.getId() + ";");
 							stmt.close();
 							
 							currentProject.setName(newname);
 							
-						} catch (Exception e)
+						}
+						catch (Exception e)
 						{
 							System.err.println(e.getClass().getName() + ": "
-									+ e.getMessage() + " in manageSingleProjectFlow()");
+									+ e.getMessage()
+									+ " in manageSingleProjectFlow()");
 							System.exit(0);
 						}
 					}
@@ -553,9 +583,103 @@ public class Driver
 				break;
 			case 3:
 				// - view tasks associated with project
+				ArrayList<Task> aT = currentProject.getTasks();
+				
+				if (aT != null && aT.size() > 0)
+				{
+					for (int i = 0; i < aT.size(); i++)
+					{
+						System.out.println(Integer.toString(i) + "| id: "
+								+ aT.get(i).getId() + " | name: "
+								+ aT.get(i).getName() + " | description: "
+								+ aT.get(i).getDescription() + " | duration: "
+								+ Integer.toString(aT.get(i).getDuration()));
+					}
+					System.out.println("");
+					System.out
+							.println("You may now select a task to edit using");
+					System.out
+							.println("the corresponding # from the list, foll");
+					System.out.println("-owed by the return key.");
+					System.out.println("");
+					
+					System.out.print("Selection: ");
+					selection = in.nextInt();
+					
+					while (selection >= aT.size() || selection < 0)
+					{
+						System.out.println("");
+						System.out
+								.println("Invalid selection, please try again.");
+						System.out.println("");
+						
+						System.out.print("Selection: ");
+						selection = in.nextInt();
+					}
+					
+					// Set task to guaranteed good selection
+					currentTask = aT.get(selection);
+					
+					// go to edit task flow
+					editTaskFlow();
+				}
+				else
+				{
+					// No tasks associated with this project
+					System.out.println("");
+					System.out.println("No tasks associated with this project");
+					System.out.println("Going back");
+					
+					manageSingleProjectFlow();
+					return;
+				}
+				
 				break;
 			case 4:
 				// - add new task to project
+				// task_id, name, description, duration, project_id, owner_id,
+				// pre-reqs
+				
+				// To figure out unique id
+				ArrayList<Task> aT2 = currentProject.getTasks();
+				int tId;
+				if (aT2 != null)
+					tId = aT2.size();
+				else
+					tId = 0;
+				
+				// Find out what user wants
+				String tName,
+				tDesc;
+				int tDuration;
+				in.nextLine();
+				System.out.println("");
+				System.out.println("Please give the task a name:");
+				System.out.println("");
+				tName = in.nextLine();
+				
+				System.out.println("");
+				System.out.println("Please describe the task:");
+				System.out.println("");
+				tDesc = in.nextLine();
+				
+				System.out.println("");
+				System.out.println("Please define the duration of the task:");
+				System.out.println("");
+				tDuration = in.nextInt();
+				
+				// Create the new task
+				currentTask = new Task((currentProject.getId() * 1000) + tId,
+						tName, tDesc, tDuration, currentProject.getId(),
+						userLoggedIn.getName(), null);
+				
+				System.out.println("");
+				System.out
+						.println("Success! Let's take a closer look at that task...");
+				System.out.println("");
+				
+				// Goto edit task flow
+				editTaskFlow();
 				break;
 			case 5:
 				// - back to browseProjectsFlow()
@@ -574,12 +698,19 @@ public class Driver
 		}
 	}
 	
+	private static void editTaskFlow()
+	{
+		System.out.println("REACHED EDIT TASK FLOW - EXITING");
+		System.exit(0);
+	}
+	
 	private static void end()
 	{
 		try
 		{
 			conn.close();
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage()
 					+ " in end()");
