@@ -7,6 +7,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * @author Laurence Werner 6063640
+ * */
 public class Driver
 {
 	/** To capture user input */
@@ -700,8 +703,56 @@ public class Driver
 	
 	private static void editTaskFlow()
 	{
-		System.out.println("REACHED EDIT TASK FLOW - EXITING");
-		System.exit(0);
+		int selection = 0;
+		String tInput;
+		
+		// Screen message
+		System.out.println("");
+		System.out.println("            Task edit menu");
+		System.out.println("");
+		System.out.println("Please make your selection by inputing the");
+		System.out.println("# of the task you want to perform followed");
+		System.out.println("by the return key.");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("1- Delete task\n2- Change name\n"
+				+ "3- Change description\n4- Change duration\n"
+				+ "5- Edit Pre-Required Tasks\n6- Go back");
+		System.out.println("");
+		System.out.print("Selection: ");
+		selection = in.nextInt();
+		
+		switch(selection)
+		{
+			case 1:
+				// Delete task
+				break;
+			case 2:
+				// Change task name
+				break;
+			case 3:
+				// Change task description
+				break;
+			case 4:
+				// Chanage task duration
+				break;
+			case 5:
+				// Go into the pre-req task editor
+				editTaskPreReqsFlow();
+				break;
+			case 6:
+				System.out.println("Returning to single project manager");
+				// Go back;
+				manageSingleProjectFlow();
+				return;
+		}
+		
+	}
+	
+	private static void editTaskPreReqsFlow()
+	{
+		// TODO
 	}
 	
 	private static void end()

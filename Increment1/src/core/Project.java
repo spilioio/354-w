@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+/**
+ * @author Laurence Werner 6063640
+ * */
 public class Project
 {
 	private String owner_id, project_name;
