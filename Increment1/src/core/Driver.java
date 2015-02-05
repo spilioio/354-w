@@ -8,6 +8,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
+ * A console based application who's purpose is to allow a user to interact with
+ * a ProjectManager and it's SQL Database.
+ * 
+ * The methods are organized into "flows", which each handle a specific subset of
+ * user interactions.
+ * 
  * @author Laurence Werner 6063640
  * */
 public class Driver
@@ -67,6 +73,10 @@ public class Driver
 		}
 	}
 	
+	/**
+	 * Everything pertaining to logging in and creating user accounts is handled
+	 * in this method. Can go the main management flow, or exit.
+	 */
 	private static void loginFlow()
 	{
 		int selection = 0;
@@ -220,6 +230,11 @@ public class Driver
 		}
 	}
 	
+	/**
+	 * Everything pertaining to general project management happens here. This
+	 * methods allows the user to access the browse projects "flow", create new
+	 * projects, and logout (or return to the login "flow").
+	 */
 	private static void managementFlow()
 	{
 		int selection = 0;
@@ -282,6 +297,11 @@ public class Driver
 		}
 	}
 	
+	/**
+	 * This method encompasses everything that is searching for a project, and
+	 * browsing through all the projects. This flow can take the user back to
+	 * the management flow, and to the edit a single project flow.
+	 */
 	private static void browseProjectsFlow()
 	{
 		// For temporarily store collections of projects
@@ -446,6 +466,10 @@ public class Driver
 		}
 	}
 	
+	/**
+	 * This method allows the user to edit all aspects of a single project. It
+	 * can go to the edit a single task flow, or back to the main manager.
+	 */
 	private static void manageSingleProjectFlow()
 	{
 		// TODO
@@ -701,6 +725,11 @@ public class Driver
 		}
 	}
 	
+	/**
+	 * INCOMPLETE - Allows users the ability to edit, delete or view specific
+	 * tasks, and allows access to the edit task prereq flow, which will allow
+	 * to edit the pre-requisites of a specific task.
+	 */
 	private static void editTaskFlow()
 	{
 		int selection = 0;
@@ -723,11 +752,16 @@ public class Driver
 		System.out.print("Selection: ");
 		selection = in.nextInt();
 		
-		switch(selection)
+		switch (selection)
 		{
 			case 1:
 				// Delete task
-				break;
+				currentTask.deleteTask();
+				System.out.println("Task deleted! Returning to project view.");
+				
+				// Go back;
+				manageSingleProjectFlow();
+				return;
 			case 2:
 				// Change task name
 				break;
@@ -742,7 +776,7 @@ public class Driver
 				editTaskPreReqsFlow();
 				break;
 			case 6:
-				System.out.println("Returning to single project manager");
+				System.out.println("Returning to single project manager.");
 				// Go back;
 				manageSingleProjectFlow();
 				return;
@@ -750,6 +784,7 @@ public class Driver
 		
 	}
 	
+	/** INCOMPLETE - Allows adding and deleting pre-requisite tasks for a specific task.*/
 	private static void editTaskPreReqsFlow()
 	{
 		// TODO
