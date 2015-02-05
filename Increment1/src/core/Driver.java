@@ -3,6 +3,7 @@ package core;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -210,10 +211,52 @@ public class Driver
 				temp[3] = in.nextLine();
 				System.out.println("");
 				
-				// Add new user
-				userLoggedIn = new User(temp[0], temp[1], temp[2], temp[3]);
-				
-				System.out.println("User successfully created! Please log in");
+				// TODO check if user already exists
+				try
+				{
+					stmt = conn.createStatement();
+					rs = stmt
+							.executeQuery("SELECT * FROM users WHERE user_id = '"
+									+ temp[0] + "';");
+					while(rs.next())
+					{
+						System.out.println("");
+						System.out.println("USERNAME ALREADY IN USE! TRY AGAIN!");
+						System.out.println("");
+						
+						System.out.println("Please enter a user id: ");
+						temp[0] = in.nextLine();
+						System.out.println("");
+						
+						System.out.println("Select your password: ");
+						temp[1] = in.nextLine();
+						System.out.println("");
+						
+						System.out.println("First name: ");
+						temp[2] = in.nextLine();
+						System.out.println("");
+						
+						System.out.println("Last name: ");
+						temp[3] = in.nextLine();
+						System.out.println("");
+						
+						rs = stmt
+								.executeQuery("SELECT * FROM users WHERE user_id = '"
+										+ temp[0] + "';");
+					}
+					
+					// Add new user (guaranteed non-unique)
+					userLoggedIn = new User(temp[0], temp[1], temp[2], temp[3]);
+					
+					System.out.println("User successfully created! Please log in");
+
+					rs.close();
+					stmt.close();
+				}
+				catch (SQLException e)
+				{
+					e.printStackTrace();
+				}
 				
 				// User id not found
 				loginFlow();
