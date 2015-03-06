@@ -15,7 +15,8 @@ import org.junit.Test;
 import core.Project;
 import core.ProjectManager;
 
-public class ProjectManagerTest {
+public class ProjectManagerTest
+{
 	
 	public static ProjectManager pm;
 	public static Project p1, p2, p3, p4;
@@ -24,7 +25,8 @@ public class ProjectManagerTest {
 	private ResultSet rs;
 	
 	@BeforeClass
-	public static void init() {
+	public static void init()
+	{
 		pm = new ProjectManager();
 		
 		pm.delAllProjects();
@@ -35,78 +37,87 @@ public class ProjectManagerTest {
 		p4 = new Project("t_user", "project4");
 		
 		conn = null;
-	    try {
-	    	// connect to db (file test.db must lay in the project dir)
-	    	// NOTE: it will be created if not exists
-	    	Class.forName("org.sqlite.JDBC");
-	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
-	    }
-	    catch(Exception e) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-		      System.exit(0);
-	    }
+		try
+		{
+			// connect to db (file test.db must lay in the project dir)
+			// NOTE: it will be created if not exists
+			Class.forName("org.sqlite.JDBC");
+			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
 	}
 	
 	@Test
-	public void testCreateProjects() {
-		// return project object with a project id after db insertion
-		p1 = new Project(p1);
-		p2 = new Project(p2);
-		p3 = new Project(p3);
-		p4 = new Project(p4);
+	public void testCreateProjects()
+	{
 		
 		ArrayList<Project> result = new ArrayList<Project>();
 		
 		/* test to see if the projects were added to the DB */
-		try {
+		try
+		{
 			stmt = conn.createStatement();
 			// ignore the project that's already in the DB (project_id 1)
 			rs = stmt.executeQuery("SELECT * FROM projects;");
-
-			while (rs.next()) {
-				result.add(new Project(rs.getString("owner_id"), rs.getString("project_name"), rs.getInt("project_id")));
+			
+			while (rs.next())
+			{
+				result.add(new Project(rs.getString("owner_id"), rs
+						.getString("project_name"), rs.getInt("project_id")));
 			}
 			rs.close();
-		    stmt.close();
+			stmt.close();
 		}
-		catch(Exception e) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-		      System.exit(0);
-	    }
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
 		
-		for ( Project p : result ) {
-			switch(p.getName()) {
-			case "project1":
-				assertEquals(p1.getId(), p.getId());
-				assertEquals(p1.getName(), p.getName());
-				assertEquals(p1.getOwner(), p.getOwner());
-				break;
-			case "project2":
-				assertEquals(p2.getId(), p.getId());
-				assertEquals(p2.getName(), p.getName());
-				assertEquals(p2.getOwner(), p.getOwner());
-				break;
-			case "project3":
-				assertEquals(p3.getId(), p.getId());
-				assertEquals(p3.getName(), p.getName());
-				assertEquals(p3.getOwner(), p.getOwner());
-				break;
-			case "project4":
-				assertEquals(p4.getId(), p.getId());
-				assertEquals(p4.getName(), p.getName());
-				assertEquals(p4.getOwner(), p.getOwner());
-				break;
-			default:
-				fail("projects not added in the DB");
+		for (Project p : result)
+		{
+			switch (p.getName())
+			{
+				case "project1":
+					assertEquals(p1.getId(), p.getId());
+					assertEquals(p1.getName(), p.getName());
+					assertEquals(p1.getOwner(), p.getOwner());
+					break;
+				case "project2":
+					assertEquals(p2.getId(), p.getId());
+					assertEquals(p2.getName(), p.getName());
+					assertEquals(p2.getOwner(), p.getOwner());
+					break;
+				case "project3":
+					assertEquals(p3.getId(), p.getId());
+					assertEquals(p3.getName(), p.getName());
+					assertEquals(p3.getOwner(), p.getOwner());
+					break;
+				case "project4":
+					assertEquals(p4.getId(), p.getId());
+					assertEquals(p4.getName(), p.getName());
+					assertEquals(p4.getOwner(), p.getOwner());
+					break;
+				default:
+					fail("projects not added in the DB");
 			}
 		}
 		
 		ArrayList<Project> allProjs = pm.getProjects(); // get all projects
 		ArrayList<Project> proj1 = pm.getProjects("t_user"); /*
-													 * projects user_id t_user is
-													 * involved in created by or
-													 * has a task in project - NOTE: currently only owner is implemented
-													 */
+															 * projects user_id
+															 * t_user is
+															 * involved in
+															 * created by or has
+															 * a task in project
+															 * - NOTE: currently
+															 * only owner is
+															 * implemented
+															 */
 		
 		/* test getProjects() */
 		int ind1 = allProjs.indexOf(p1);
@@ -143,29 +154,33 @@ public class ProjectManagerTest {
 		p3.delProj();
 		p4.delProj();
 		
-		/*pm.delProj(p1); // delete by object
-		pm.delProj(p2.getId()); // delete by id
-		pm.delProj(p3);
-		pm.delProj(p4);*/
+		/*
+		 * pm.delProj(p1); // delete by object pm.delProj(p2.getId()); // delete
+		 * by id pm.delProj(p3); pm.delProj(p4);
+		 */
 		
 		ArrayList<Project> result = new ArrayList<Project>();
 		
 		/* test to see if the projects were deleted to the DB */
-		try {
+		try
+		{
 			stmt = conn.createStatement();
 			// ignore the project that's already in the DB (project_id 1)
 			rs = stmt.executeQuery("SELECT * FROM projects;");
-
-			while (rs.next()) {
-				result.add(new Project(rs.getString("owner_id"), rs.getString("project_name")));
+			
+			while (rs.next())
+			{
+				result.add(new Project(rs.getString("owner_id"), rs
+						.getString("project_name")));
 			}
 			rs.close();
-		    stmt.close();
+			stmt.close();
 		}
-		catch(Exception e) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-		      System.exit(0);
-	    }
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
 		
 		assertEquals(result.size(), 0);
 		assertFalse(result.contains(p1));
@@ -174,14 +189,17 @@ public class ProjectManagerTest {
 	}
 	
 	@AfterClass
-	public static void end() {
-		try {
-		    conn.close();
+	public static void end()
+	{
+		try
+		{
+			conn.close();
 		}
-		catch(Exception e) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-		      System.exit(0);
-	    }
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
 	}
-
+	
 }

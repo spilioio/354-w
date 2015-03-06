@@ -52,9 +52,8 @@ public class ProjectTest {
 	@Test
 	public void testCreateProject() {
 		
-		p1 = new Project(p1);
-		
 		System.out.println(p1.getName() + " " + p1.getOwner());
+		
 		/* test to see if the projects were added to the DB */
 		try {
 			stmt = conn.createStatement();
@@ -76,12 +75,10 @@ public class ProjectTest {
 	}
 	
 	@Test
-	public void testEditProject() {
+	public void testEditProject()
+	{
 		p1.setName("p1");
 		p1.setOwner("t_user");
-		
-		// pm.setProj(p1.getId(), p1);
-		p1.setProjectToId(p1.getId());
 		
 		Project p = pm.getProject(p1);
 		

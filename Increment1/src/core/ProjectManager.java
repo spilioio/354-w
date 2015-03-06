@@ -251,7 +251,7 @@ public class ProjectManager
 		} catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage()
-					+ " in getProjects()");
+					+ " in getProject()");
 			System.exit(0);
 		}
 		System.out.println("Project " + Integer.toString(p.getId())
@@ -284,7 +284,7 @@ public class ProjectManager
 		} catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage()
-					+ " in getProjects()");
+					+ " in getProject(string)");
 			System.exit(0);
 		}
 		System.out.println("Project " + Integer.toString(p.getId())
@@ -320,7 +320,7 @@ public class ProjectManager
 		} catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage()
-					+ " in getProjects()");
+					+ " in getProjects(user id)");
 			System.exit(0);
 		}
 		System.out.println("All projects successfully fetched");

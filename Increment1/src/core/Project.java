@@ -16,11 +16,50 @@ public class Project
 	
 	public Project(String owner_id, String project_name)
 	{
-		this.owner_id = owner_id;
-		this.project_name = project_name;
-		System.out.println("PROJECT CREATED IN JAVA");
+		/*
+		 * this.owner_id = owner_id; this.project_name = project_name;
+		 * System.out.println("PROJECT CREATED IN JAVA");
+		 */
+		
+		Connection conn = null;
+		try
+		{
+			// connect to db (file test.db must lay in the project dir)
+			// NOTE: it will be created if not exists
+			Class.forName("org.sqlite.JDBC");
+			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+			Statement stmt = conn.createStatement();
+			
+			ResultSet rs = stmt.executeQuery("SELECT * FROM projects;");
+			
+			int id = 0;
+			while (rs.next())
+				id++;
+			
+			project_id = id;
+			this.project_name = project_name;
+			this.owner_id = owner_id;
+			
+			stmt.executeUpdate("INSERT INTO projects (project_id, project_name, owner_id) VALUES ("
+					+ project_id
+					+ ", '"
+					+ this.project_name
+					+ "', '"
+					+ this.owner_id + "');");
+			
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		System.out.println("Project created successfully");
+		
 	}
 	
+	/** Use this to instantiate a project from the DB */
 	public Project(String owner_id, String project_name, int project_id)
 	{
 		this.owner_id = owner_id;
@@ -47,27 +86,24 @@ public class Project
 			
 			ResultSet rs = stmt.executeQuery("SELECT * FROM projects;");
 			
-			System.out.println("AAAAAAAAAAAAAAA " + new_project.getName() + " " + new_project.getOwner());
-			
 			int id = 0;
 			while (rs.next())
 				id++;
-			
-			new_project.setId(id);
 			
 			project_id = id;
 			project_name = new_project.getName();
 			owner_id = new_project.getOwner();
 			
 			stmt.executeUpdate("INSERT INTO projects (project_id, project_name, owner_id) VALUES ("
-					+ new_project.getId()
+					+ project_id
 					+ ", '"
-					+ new_project.getName()
-					+ "', '" + new_project.getOwner() + "');");
+					+ project_name
+					+ "', '" + owner_id + "');");
 			
 			stmt.close();
 			conn.close();
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
@@ -75,10 +111,33 @@ public class Project
 		System.out.println("Project created successfully");
 	}
 	
-	public void setId(int new_id)
+	/*public void setId(int id)
 	{
-		project_id = new_id;
-	}
+		Connection conn = null;
+		try
+		{
+			// connect to db (file test.db must lay in the project dir)
+			// NOTE: it will be created if not exists
+			Class.forName("org.sqlite.JDBC");
+			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+			Statement stmt = conn.createStatement();
+			
+			stmt.executeUpdate("UPDATE projects SET project_id = '"
+					+ id + "' WHERE project_id = " + Integer.toString(project_id) + ";");
+			
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		System.out.println("Successfully modified Project with id# ="
+				+ Integer.toString(getId()));
+		
+		this.project_id = id;
+	}*/
 	
 	public int getId()
 	{
@@ -97,11 +156,59 @@ public class Project
 	
 	public void setName(String new_name)
 	{
+		Connection conn = null;
+		try
+		{
+			// connect to db (file test.db must lay in the project dir)
+			// NOTE: it will be created if not exists
+			Class.forName("org.sqlite.JDBC");
+			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+			Statement stmt = conn.createStatement();
+			
+			stmt.executeUpdate("UPDATE projects SET project_name = '"
+					+ new_name + "' WHERE project_id = " + Integer.toString(project_id)
+					+ ";");
+			
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage() + "B");
+			System.exit(0);
+		}
+		System.out.println("Successfully modified Project with id# ="
+				+ Integer.toString(getId()));
+		
 		project_name = new_name;
 	}
 	
 	public void setOwner(String new_owner)
 	{
+		Connection conn = null;
+		try
+		{
+			// connect to db (file test.db must lay in the project dir)
+			// NOTE: it will be created if not exists
+			Class.forName("org.sqlite.JDBC");
+			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+			Statement stmt = conn.createStatement();
+			
+			stmt.executeUpdate("UPDATE projects SET owner_id = '" + new_owner
+					+ "' WHERE project_id = " + Integer.toString(project_id)
+					+ ";");
+			
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage() + "A");
+			System.exit(0);
+		}
+		System.out.println("Successfully modified Project with id# ="
+				+ Integer.toString(getId()));
+		
 		owner_id = new_owner;
 	}
 	
@@ -132,16 +239,18 @@ public class Project
 			
 			while (rs.next())
 			{
-				a.add(new Task(rs.getInt("task_id"), rs.getString("task_name"), 
-						rs.getString("description"), rs.getInt("duration"), 
-						rs.getInt("project_id"), rs.getString("user_id"), null, false));
+				a.add(new Task(rs.getInt("task_id"), rs.getString("task_name"),
+						rs.getString("description"), rs.getInt("duration"), rs
+								.getInt("project_id"), rs.getString("user_id"),
+						null, false));
 			}
 			
 			a.trimToSize();
 			
 			stmt.close();
 			conn.close();
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage()
 					+ " in getProjects()");
@@ -177,10 +286,10 @@ public class Project
 			stmt.executeUpdate("DELETE FROM project_property WHERE project_id = "
 					+ Integer.toString(getId()) + ";");
 			
-			
 			stmt.close();
 			conn.close();
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage()
 					+ " in delProj()");
@@ -188,33 +297,6 @@ public class Project
 		}
 		System.out.println("Project " + getName()
 				+ " has been deleted successfully.");
-	}
-	
-	public void setProjectToId(int id)
-	{
-		Connection conn = null;
-		try
-		{
-			// connect to db (file test.db must lay in the project dir)
-			// NOTE: it will be created if not exists
-			Class.forName("org.sqlite.JDBC");
-			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
-			Statement stmt = conn.createStatement();
-			
-			stmt.executeUpdate("UPDATE projects SET project_name = '"
-					+ getName() + "', owner_id = '" + getOwner()
-					+ "' WHERE project_id = " + Integer.toString(id) + ";");
-			
-			stmt.close();
-			conn.close();
-		} catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage()
-					+ " in setProjectToId(int id)");
-			System.exit(0);
-		}
-		System.out.println("Successfully modified Project with id# ="
-				+ Integer.toString(getId()));
 	}
 	
 }

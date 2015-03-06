@@ -316,10 +316,6 @@ public class Driver
 				// Create new project object.
 				currentProject = new Project(userLoggedIn.getName(), temp);
 				
-				/*// Add it to DB via project manager.
-				currentProject = manager.addProject(currentProject);*/
-				currentProject = new Project(currentProject);
-				
 				System.out.println("New project successfully created!");
 				
 				// Take user directly to where he/she can edit the newly created
