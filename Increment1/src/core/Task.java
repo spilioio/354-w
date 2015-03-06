@@ -2,6 +2,7 @@ package core;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -32,7 +33,7 @@ public class Task
 	    	stmt.executeUpdate("INSERT INTO tasks VALUES ("+task_id+ ", '"+name+"', '"+description+"', "+duration+", "+project_id+", '"+owner_id+"', "+is_done+");");
 	    	if(pre_reqs != null)
 	    	for (int i = 0; i < pre_reqs.size(); i++)
-	    		stmt.executeUpdate("INSERT INTO precedence VALUES ("+task_id+ ", "+pre_reqs.get(i)+");");
+	    		stmt.executeUpdate("INSERT INTO precedence VALUES ("+task_id+ ", "+pre_reqs.get(i)+", "+project_id+");");
 			stmt.close();
 			conn.close();
 	    }catch ( Exception e ) {
@@ -91,7 +92,7 @@ public class Task
 	    	Class.forName("org.sqlite.JDBC");
 	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 	    	Statement stmt = conn.createStatement();
-	    	stmt.executeUpdate("INSERT INTO precedence VALUES ("+task_id+ ", "+pre_req+");");
+	    	stmt.executeUpdate("INSERT INTO precedence VALUES ("+task_id+ ", "+pre_req+", "+project_id+");");
 			stmt.close();
 			conn.close();
 	    }catch ( Exception e ) {
@@ -110,7 +111,7 @@ public class Task
 	    	Class.forName("org.sqlite.JDBC");
 	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 	    	Statement stmt = conn.createStatement();
-	    	stmt.executeUpdate("UPDATE tasks SET is_done = "+is_done+" WHERE task_id = "+task_id+";");
+	    	stmt.executeUpdate("UPDATE tasks SET is_done = "+is_done+" WHERE task_id = "+task_id+" AND project_id = "+project_id+";");
 			stmt.close();
 			conn.close();
 	    }catch ( Exception e ) {
@@ -133,8 +134,28 @@ public class Task
 	    	Class.forName("org.sqlite.JDBC");
 	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 	    	Statement stmt = conn.createStatement();
-	    	stmt.executeUpdate("DELETE FROM tasks WHERE task_id = "+task_id+";");
-	    	stmt.executeUpdate("DELETE FROM precedence WHERE task_id = "+task_id+";");
+	    	
+	    	ResultSet rs = stmt.executeQuery("SELECT * FROM precedence WHERE pre_req = " + task_id + "AND project_id = "+project_id+";");
+			while (rs.next())
+			{
+				ResultSet rs_1 = stmt.executeQuery("SELECT * FROM precedence WHERE task = " + task_id + "AND project_id = "+project_id+";");
+				while (rs_1.next()){
+					//Children tasks inherit precedence from task to delete
+					stmt.executeUpdate("INSERT INTO precedence VALUES("+rs.getInt("task_id")+", "+rs_1.getInt("pre_req")+ ", "+ rs.getInt("project_id")+");");
+				}
+			}
+			//delete this task
+			stmt.executeUpdate("DELETE FROM tasks WHERE task_id = "+task_id+" AND project_id = "+project_id+";");
+			
+			//delete all users assigned to this task
+			stmt.executeUpdate("DELETE FROM user_task WHERE task_id = "+task_id+" AND project_id = "+project_id+";");
+			
+			//delete all precedence from this task
+			stmt.executeUpdate("DELETE FROM precedence WHERE task_id = "+ task_id +" AND project_id = "+project_id+";");
+			
+			//delete all precedence referring to this task
+			stmt.executeUpdate("DELETE FROM precedence WHERE pre_req = "+ task_id +" AND project_id = "+project_id+";");
+	    	
 			stmt.close();
 			conn.close();
 	    }catch ( Exception e ) {

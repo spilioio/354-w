@@ -152,6 +152,43 @@ public class ProjectTest {
 	}
 	
 	@Test
+	public void testAddProjectProperties(){
+		//addProperty(String property)
+		String testProperty_1, testProperty_2;
+		testProperty_1 = "This is a first property!";
+		testProperty_2 = "This is a second property!";
+		
+		//**USE THE PROJECT_PROPERTY TABLE FROM THE DB
+		p1.addProperty(testProperty_1);
+		p1.addProperty(testProperty_2);
+		/* test to see if the projects were deleted to the DB */
+		try {
+			stmt = conn.createStatement();
+			
+			rs = stmt.executeQuery("SELECT * FROM project_property WHERE project_property.project_name = 'p1' && project_property.project_prop = "+testProperty_1+";");
+
+			while (rs.next()) {
+				assertEquals(p1.getId(), rs.getInt("project_id"));
+				assertEquals(testProperty_1, rs.getString("project_prop"));
+			}
+			
+			rs = stmt.executeQuery("SELECT * FROM project_property WHERE project_property.project_name = 'p1' && project_property.project_prop = "+testProperty_2+";");
+
+			while (rs.next()) {
+				assertEquals(p1.getId(), rs.getInt("project_id"));
+				assertEquals(testProperty_2, rs.getString("project_prop"));
+			}
+			
+			rs.close();
+		    stmt.close();
+		}
+		catch(Exception e) {
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() + " in testDeleteProject()" );
+		      System.exit(0);
+	    }
+	}
+	
+	@Test
 	public void testDeleteProject() {
 		
 		pm.delProj(p1); // delete by object

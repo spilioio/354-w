@@ -74,6 +74,11 @@ public class ProjectManager
 			Statement stmt = conn.createStatement();
 			
 			stmt.executeUpdate("DELETE FROM projects");
+			stmt.executeUpdate("DELETE FROM tasks");
+			stmt.executeUpdate("DELETE FROM precedence");
+			stmt.executeUpdate("DELETE FROM user_task");
+			stmt.executeUpdate("DELETE FROM project_property");
+			
 			
 			stmt.close();
 			conn.close();
@@ -99,6 +104,19 @@ public class ProjectManager
 			
 			stmt.executeUpdate("DELETE FROM projects WHERE project_id = "
 					+ Integer.toString(p1.getId()) + ";");
+			
+			stmt.executeUpdate("DELETE FROM tasks WHERE project_id = "
+					+ Integer.toString(p1.getId()) + ";");
+			
+			stmt.executeUpdate("DELETE FROM precedence WHERE project_id = "
+					+ Integer.toString(p1.getId()) + ";");
+			
+			stmt.executeUpdate("DELETE FROM user_task WHERE project_id = "
+					+ Integer.toString(p1.getId()) + ";");
+			
+			stmt.executeUpdate("DELETE FROM project_property WHERE project_id = "
+					+ Integer.toString(p1.getId()) + ";");
+			
 			
 			stmt.close();
 			conn.close();
@@ -321,6 +339,18 @@ public class ProjectManager
 			Statement stmt = conn.createStatement();
 			
 			stmt.executeUpdate("DELETE FROM projects WHERE project_id = "
+					+ Integer.toString(id) + ";");
+			
+			stmt.executeUpdate("DELETE FROM tasks WHERE project_id = "
+					+ Integer.toString(id) + ";");
+			
+			stmt.executeUpdate("DELETE FROM precedence WHERE project_id = "
+					+ Integer.toString(id) + ";");
+			
+			stmt.executeUpdate("DELETE FROM user_task WHERE project_id = "
+					+ Integer.toString(id) + ";");
+			
+			stmt.executeUpdate("DELETE FROM project_property WHERE project_id = "
 					+ Integer.toString(id) + ";");
 			
 			stmt.close();

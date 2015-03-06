@@ -104,6 +104,35 @@ public class TaskTest {
 		}
 	}
 	
+	@Test
+	public void testProjectMemberAssignment(){
+		//void setMember(String username)
+		//You should first check if the user exists and then assign it the task
+		//**USE THE USER_TASK TABLE FROM THE DB
+		String testUser = "hello";
+		t1.setMember(testUser);
+		
+		Connection conn = null;
+		try {
+			Class.forName("org.sqlite.JDBC");
+			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+
+			Statement stmt = conn.createStatement();
+			ResultSet rs;
+			
+			rs = stmt.executeQuery("SELECT * FROM user_task WHERE user_task.task_id = 3;");
+			while (rs.next()) {
+				assertEquals(testUser, rs.getString("user_id"));
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+	}
+	
 	@After
 	public void testDeleteTask() {
 		t1.deleteTask();
