@@ -135,10 +135,10 @@ public class Task
 	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 	    	Statement stmt = conn.createStatement();
 	    	
-	    	ResultSet rs = stmt.executeQuery("SELECT * FROM precedence WHERE pre_req = " + task_id + "AND project_id = "+project_id+";");
+	    	ResultSet rs = stmt.executeQuery("SELECT * FROM precedence WHERE pre_req = " + task_id + " AND project_id = "+project_id+";");
 			while (rs.next())
 			{
-				ResultSet rs_1 = stmt.executeQuery("SELECT * FROM precedence WHERE task = " + task_id + "AND project_id = "+project_id+";");
+				ResultSet rs_1 = stmt.executeQuery("SELECT * FROM precedence WHERE task = " + task_id + " AND project_id = "+project_id+";");
 				while (rs_1.next()){
 					//Children tasks inherit precedence from task to delete
 					stmt.executeUpdate("INSERT INTO precedence VALUES("+rs.getInt("task_id")+", "+rs_1.getInt("pre_req")+ ", "+ rs.getInt("project_id")+");");

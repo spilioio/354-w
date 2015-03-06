@@ -26,7 +26,7 @@ public class ProjectManager
 	 * @return Project used in input, with an id generated upon insertion into
 	 *         DB. At this point, the Project is guaranteed to be in DB.
 	 */
-	public Project addProject(Project new_project)
+	/*public Project addProject(Project new_project)
 	{
 		Connection conn = null;
 		try
@@ -60,7 +60,7 @@ public class ProjectManager
 		}
 		System.out.println("Project created successfully");
 		return new_project;
-	}
+	}*/
 	
 	public void delAllProjects()
 	{
@@ -91,7 +91,7 @@ public class ProjectManager
 		System.out.println("ALL PROJECTS CLEANED");
 	}
 	
-	public void delProj(Project p1)
+	/*public void delProj(Project p1)
 	{
 		Connection conn = null;
 		try
@@ -128,7 +128,7 @@ public class ProjectManager
 		}
 		System.out.println("Project " + p1.getName()
 				+ " has been deleted successfully.");
-	}
+	}*/
 	
 	public ArrayList<Project> getProjects()
 	{
@@ -218,7 +218,7 @@ public class ProjectManager
 		} catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage()
-					+ " in getProjects()");
+					+ " in getProjects(Project p1)");
 			System.exit(0);
 		}
 		System.out.println("Project " + Integer.toString(p.getId())

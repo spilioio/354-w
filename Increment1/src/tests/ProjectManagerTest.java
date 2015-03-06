@@ -50,10 +50,10 @@ public class ProjectManagerTest {
 	@Test
 	public void testCreateProjects() {
 		// return project object with a project id after db insertion
-		p1 = pm.addProject(p1);
-		p2 = pm.addProject(p2);
-		p3 = pm.addProject(p3);
-		p4 = pm.addProject(p4);
+		p1 = new Project(p1);
+		p2 = new Project(p2);
+		p3 = new Project(p3);
+		p4 = new Project(p4);
 		
 		ArrayList<Project> result = new ArrayList<Project>();
 		
@@ -136,12 +136,17 @@ public class ProjectManagerTest {
 	@Test
 	public void testDeleteProjects()
 	{
-		ArrayList<Project> allProjs = pm.getProjects();
+		// ArrayList<Project> allProjs = pm.getProjects();
 		
-		pm.delProj(p1); // delete by object
+		p1.delProj();
+		p2.delProj();
+		p3.delProj();
+		p4.delProj();
+		
+		/*pm.delProj(p1); // delete by object
 		pm.delProj(p2.getId()); // delete by id
 		pm.delProj(p3);
-		pm.delProj(p4);
+		pm.delProj(p4);*/
 		
 		ArrayList<Project> result = new ArrayList<Project>();
 		

@@ -52,7 +52,7 @@ public class ProjectTest {
 	@Test
 	public void testCreateProject() {
 		
-		p1 = pm.addProject(p1);
+		p1 = new Project(p1);
 		
 		System.out.println(p1.getName() + " " + p1.getOwner());
 		/* test to see if the projects were added to the DB */
@@ -80,7 +80,8 @@ public class ProjectTest {
 		p1.setName("p1");
 		p1.setOwner("t_user");
 		
-		pm.setProj(p1.getId(), p1);
+		// pm.setProj(p1.getId(), p1);
+		p1.setProjectToId(p1.getId());
 		
 		Project p = pm.getProject(p1);
 		
@@ -191,7 +192,8 @@ public class ProjectTest {
 	@Test
 	public void testDeleteProject() {
 		
-		pm.delProj(p1); // delete by object
+		p1.delProj();
+		// pm.delProj(p1); // delete by object
 
 		ArrayList<Project> result = new ArrayList<Project>();
 		
