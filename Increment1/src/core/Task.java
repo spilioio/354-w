@@ -9,18 +9,19 @@ import java.util.ArrayList;
 public class Task
 {
 	private String name, description, owner_id; 
-	private int task_id, duration, project_id, is_done;
+	private int task_id, start_time, end_time, project_id, is_done;
 	private ArrayList<Integer> pre_reqs;
 	
-	public Task(int task_id, String name, String description, int duration, int project_id, String owner_id, ArrayList<Integer> pre_reqs)
+	public Task(int task_id, String name, String description, int start_time, int end_time, int project_id, String owner_id)
 	{
+		pre_reqs = new ArrayList<Integer>();
 		this.task_id = task_id;
 		this.name = name;
 		this.description = description;
-		this.duration = duration;
+		this.start_time = start_time;
+		this.end_time = end_time;
 		this.project_id = project_id;
 		this.owner_id = owner_id;
-		this.pre_reqs = pre_reqs;
 		is_done = 0;
 		
 		Connection conn = null;
@@ -30,11 +31,8 @@ public class Task
 	    	Class.forName("org.sqlite.JDBC");
 	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 	    	Statement stmt = conn.createStatement();
-	    	stmt.executeUpdate("INSERT INTO tasks VALUES ("+task_id+ ", '"+name+"', '"+description+"', "+duration+", "+project_id+", '"+owner_id+"', "+is_done+");");
-	    	if(pre_reqs != null)
-	    	for (int i = 0; i < pre_reqs.size(); i++)
-	    		stmt.executeUpdate("INSERT INTO precedence VALUES ("+task_id+ ", "+pre_reqs.get(i)+", "+project_id+");");
-			stmt.close();
+	    	stmt.executeUpdate("INSERT INTO tasks VALUES ("+task_id+ ", '"+name+"', '"+description+"', "+start_time+", "+end_time+", "+project_id+", '"+owner_id+"', "+is_done+");");
+	    	stmt.close();
 			conn.close();
 	    }catch ( Exception e ) {
 	        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -44,18 +42,20 @@ public class Task
 	}
 	
 	/** Used to create a task object without automatically adding it to DB */
-	public Task(int task_id, String name, String description, int duration,
-			int project_id, String owner_id, ArrayList<Integer> pre_reqs,
-			boolean overrider)
+	public Task(int task_id, String name, String description, int start_time, int end_time,
+			int project_id, String owner_id,
+			int is_done)
 	{
 		this.task_id = task_id;
 		this.name = name;
 		this.description = description;
-		this.duration = duration;
+		this.start_time = start_time;
+		this.end_time = end_time;
 		this.project_id = project_id;
 		this.owner_id = owner_id;
-		this.pre_reqs = pre_reqs;
-		is_done = 0;
+		this.is_done = is_done;
+		
+		fetchAllPreReqs();
 	}
 	
 	public ArrayList<Integer> getPrereq(){
@@ -102,8 +102,41 @@ public class Task
 	     System.out.println("Task precedence updated successfully");
 	}
 	
+	public void fetchAllPreReqs(){
+		Connection conn = null;
+		try
+		{
+			// connect to db (file test.db must lay in the project dir)
+			// NOTE: it will be created if not exists
+			Class.forName("org.sqlite.JDBC");
+			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+			Statement stmt = conn.createStatement();
+			
+			ResultSet rs = stmt
+					.executeQuery("SELECT * FROM precedence WHERE task_id = "
+							+ Integer.toString(task_id) + " AND project_id = "+project_id+";");
+			
+			while (rs.next())
+			{
+				pre_reqs.add(rs.getInt("pre_req"));
+			}
+			
+			pre_reqs.trimToSize();
+			
+			stmt.close();
+			conn.close();
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage()
+					+ " in getProjects()");
+			System.exit(0);
+		}
+		System.out.println("All pre_reqs for task "+name+" successfully fetched");
+	}
+	
 	public void finishedTask(){
-		is_done = 1;
+		boolean can_finish = true;
 		Connection conn = null;
 	    try {
 	    	// connect to db (file test.db must lay in the project dir)
@@ -111,14 +144,26 @@ public class Task
 	    	Class.forName("org.sqlite.JDBC");
 	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 	    	Statement stmt = conn.createStatement();
-	    	stmt.executeUpdate("UPDATE tasks SET is_done = "+is_done+" WHERE task_id = "+task_id+" AND project_id = "+project_id+";");
-			stmt.close();
+	    	
+	    	ResultSet rs = stmt.executeQuery("SELECT * FROM tasks WHERE task_id = (SELECT precedence.pre_req FROM precedence WHERE task_id = "+task_id+" AND project_id = "+project_id+") AND project_id = "+project_id+";");
+			
+			while (rs.next())
+			{
+				can_finish = can_finish && (rs.getInt("is_done") == 1);
+			}
+	    	
+	    	if (can_finish){
+	    		is_done = 1;
+	    		stmt.executeUpdate("UPDATE tasks SET is_done = "+is_done+" WHERE task_id = "+task_id+" AND project_id = "+project_id+";");
+	    		System.out.println("Task set as done successfully");
+	    	}else 
+	    		System.out.println("Task cannot be set as done, all pre-requisites should be done before!");
+	    	stmt.close();
 			conn.close();
 	    }catch ( Exception e ) {
 	        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 	        System.exit(0);
 	     }
-	     System.out.println("Task set as done successfully");
 	}
 
 	public int isDone(){
@@ -138,7 +183,7 @@ public class Task
 	    	ResultSet rs = stmt.executeQuery("SELECT * FROM precedence WHERE pre_req = " + task_id + " AND project_id = "+project_id+";");
 			while (rs.next())
 			{
-				ResultSet rs_1 = stmt.executeQuery("SELECT * FROM precedence WHERE task = " + task_id + " AND project_id = "+project_id+";");
+				ResultSet rs_1 = stmt.executeQuery("SELECT * FROM precedence WHERE task_id = " + task_id + " AND project_id = "+project_id+";");
 				while (rs_1.next()){
 					//Children tasks inherit precedence from task to delete
 					stmt.executeUpdate("INSERT INTO precedence VALUES("+rs.getInt("task_id")+", "+rs_1.getInt("pre_req")+ ", "+ rs.getInt("project_id")+");");
@@ -175,9 +220,13 @@ public class Task
 		return this.description;
 	}
 	
-	public int getDuration()
+	public int getStartTime()
 	{
-		return this.duration;
+		return this.start_time;
+	}
+	
+	public int getEndTime(){
+		return this.end_time;
 	}
 	
 	public int getProjectID()

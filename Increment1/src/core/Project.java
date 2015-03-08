@@ -240,9 +240,8 @@ public class Project
 			while (rs.next())
 			{
 				a.add(new Task(rs.getInt("task_id"), rs.getString("task_name"),
-						rs.getString("description"), rs.getInt("duration"), rs
-								.getInt("project_id"), rs.getString("user_id"),
-						null, false));
+						rs.getString("description"), rs.getInt("start_time"), rs.getInt("end_time"), rs
+								.getInt("project_id"), rs.getString("user_id"), rs.getInt("is_done")));
 			}
 			
 			a.trimToSize();
@@ -253,7 +252,7 @@ public class Project
 		catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage()
-					+ " in getProjects()");
+					+ " in getTasks()");
 			System.exit(0);
 		}
 		System.out.println("All projects successfully fetched");

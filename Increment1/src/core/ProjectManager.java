@@ -156,7 +156,7 @@ public class ProjectManager
 		} catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage()
-					+ " in getProjects()");
+					+ " in getProjects() ln");
 			System.exit(0);
 		}
 		System.out.println("All projects successfully fetched");
@@ -183,7 +183,7 @@ public class ProjectManager
 		} catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage()
-					+ " in getProjects()");
+					+ " in getProjects() lm");
 			System.exit(0);
 		}
 		System.out.println("Successfully modified Project with id# ="

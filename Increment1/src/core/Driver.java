@@ -651,8 +651,9 @@ public class Driver
 						System.out.println(Integer.toString(i) + "| id: "
 								+ aT.get(i).getId() + " | name: "
 								+ aT.get(i).getName() + " | description: "
-								+ aT.get(i).getDescription() + " | duration: "
-								+ Integer.toString(aT.get(i).getDuration()));
+								+ aT.get(i).getDescription() + " | start_time: "
+								+ Integer.toString(aT.get(i).getStartTime()) + " | end_time: "
+										+ Integer.toString(aT.get(i).getEndTime()));
 					}
 					System.out.println("");
 					System.out
@@ -711,7 +712,7 @@ public class Driver
 				// Find out what user wants
 				String tName,
 				tDesc;
-				int tDuration;
+				int tStartTime, tEndTime;
 				
 				System.out.println("");
 				System.out.println("Please give the task a name:");
@@ -723,15 +724,25 @@ public class Driver
 				System.out.println("");
 				tDesc = in.nextLine();
 				
-				System.out.println("");
-				System.out.println("Please define the duration of the task:");
-				System.out.println("");
-				tDuration = in.nextInt();
-				in.nextLine();
+				boolean illegalValues = true;
+				do{
+					System.out.println("");
+					System.out.println("Please define the start_time of the task:");
+					System.out.println("");
+					tStartTime = in.nextInt();
+					in.nextLine();
+					
+					System.out.println("");
+					System.out.println("Please define the end_time of the task:");
+					System.out.println("");
+					tEndTime = in.nextInt();
+					in.nextLine();
+					illegalValues = (tStartTime < 0) || (tEndTime < 0) || (tStartTime > tEndTime);
+				}while (illegalValues);
 				// Create the new task
 				currentTask = new Task((currentProject.getId() * 1000) + tId,
-						tName, tDesc, tDuration, currentProject.getId(),
-						userLoggedIn.getName(), null);
+						tName, tDesc, tStartTime, tEndTime, currentProject.getId(),
+						userLoggedIn.getName());
 				
 				System.out.println("");
 				System.out
@@ -762,7 +773,17 @@ public class Driver
 	 * INCOMPLETE - Allows users the ability to edit, delete or view specific
 	 * tasks, and allows access to the edit task prereq flow, which will allow
 	 * to edit the pre-requisites of a specific task.
+	 * 
+	 * MAKE SURE THAT: pre_req.end_time < task.start_time
+	 * Guidelines: 
+	 * 1- Look in the DB for pre_req task and get its start time
+	 * 2- Look in the DB for the current task and get its end time
+	 * 3- Make sure that pre_req.end_time < task.start_time
+	 * 4- Update or ask the user for correct input
 	 */
+	
+	This has to be done by the programmers!;
+	
 	private static void editTaskFlow()
 	{
 		int selection = 0;

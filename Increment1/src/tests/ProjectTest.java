@@ -110,8 +110,8 @@ public class ProjectTest {
 	
 	@Test
 	public void testAddTask() {
-		ArrayList<Integer> preReq = new ArrayList<Integer>();
-		t1 = new Task(0, "a", "desc a", 4, p1.getId(), "b_jenkins", preReq);
+		//ArrayList<Integer> preReq = new ArrayList<Integer>();
+		t1 = new Task(10, "a", "desc a", 1, 4, p1.getId(), "b_jenkins");
 		
 		/* test to see if the task was added to the DB */
 		try {
@@ -149,17 +149,17 @@ public class ProjectTest {
 		
 	}
 	
-	@Test
+	/*@Test
 	public void testAddProjectProperties(){
 		//addProperty(String property)
 		String testProperty_1, testProperty_2;
 		testProperty_1 = "This is a first property!";
 		testProperty_2 = "This is a second property!";
 		
-		//**USE THE PROJECT_PROPERTY TABLE FROM THE DB
+		//USE THE PROJECT_PROPERTY TABLE FROM THE DB
 		p1.addProperty(testProperty_1);
 		p1.addProperty(testProperty_2);
-		/* test to see if the projects were deleted to the DB */
+		// test to see if the projects were deleted to the DB 
 		try {
 			stmt = conn.createStatement();
 			
@@ -184,7 +184,7 @@ public class ProjectTest {
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() + " in testDeleteProject()" );
 		      System.exit(0);
 	    }
-	}
+	}*/
 	
 	@Test
 	public void testDeleteProject() {

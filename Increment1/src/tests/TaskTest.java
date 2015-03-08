@@ -19,14 +19,17 @@ import core.Task;
  */
 public class TaskTest {
 
-	private static Task t1;
+	private static Task t1, t2, t3;
 	private static ArrayList<Integer> myTasks = new ArrayList<Integer>();
 
 	@Before
 	public void Initialize(){
-		myTasks.add(1);
-		//task_id, name, description, duration, project_id, owner_id, pre-reqs
-		t1 = new Task(3, "3rd Task", "Complete this after T1", 4, 1, "b_jenkins", myTasks);
+		//task_id, name, description, start_time, end_time, project_id, owner_id
+		t1 = new Task(1, "1st Task", "Complete this before t3", 0, 2, 0, "b_jenkins");
+		t2 = new Task(2, "2nd Task", "Complete this before t3", 0, 3, 0, "b_jenkins");
+		t3 = new Task(3, "3rd Task", "Complete this after t3 and T2", 3, 5, 0, "b_jenkins");
+		t3.addPrereq(1);
+		t3.addPrereq(2);
 	}
 	
 	@Test
@@ -40,20 +43,22 @@ public class TaskTest {
 			Statement stmt = conn.createStatement();
 			ResultSet rs;
 
-			rs = stmt.executeQuery("SELECT * FROM tasks WHERE tasks.task_id = 3;");
+			rs = stmt.executeQuery("SELECT * FROM tasks WHERE tasks.task_id = "+t3.getId()+";");
 			while (rs.next()) {
-				assertEquals(t1.getId(), rs.getInt("task_id"));
-				assertEquals(t1.getName(), rs.getString("task_name"));
-				assertEquals(t1.getDescription(), rs.getString("description"));
-				assertEquals(t1.getDuration(), rs.getInt("duration"));
-				assertEquals(t1.getProjectID(), rs.getInt("project_id"));
-				assertEquals(t1.getOwnerID(), rs.getString("user_id"));
+				assertEquals(t3.getId(), rs.getInt("task_id"));
+				assertEquals(t3.getName(), rs.getString("task_name"));
+				assertEquals(t3.getDescription(), rs.getString("description"));
+				assertEquals(t3.getStartTime(), rs.getInt("start_time"));
+				assertEquals(t3.getEndTime(), rs.getInt("end_time"));
+				assertEquals(t3.getProjectID(), rs.getInt("project_id"));
+				assertEquals(t3.getOwnerID(), rs.getString("user_id"));
 			}
 			
-			rs = stmt.executeQuery("SELECT precedence.pre_req FROM tasks JOIN precedence ON tasks.task_id = precedence.task_id WHERE tasks.task_id = 3;");
-			int i = 0;
+			//rs = stmt.executeQuery("SELECT precedence.pre_req FROM tasks JOIN precedence ON tasks.task_id = precedence.task_id WHERE tasks.task_id = 3;");
+			rs = stmt.executeQuery("SELECT * FROM precedence WHERE task_id = "+t3.getId()+" AND project_id = "+t3.getProjectID()+";");
+			int i = 1;
 			while (rs.next()) {
-				assertEquals((int)t1.getPrereq().get(i), rs.getInt("pre_req"));
+				assertEquals(i, rs.getInt("pre_req"));
 				i++;
 			}
 			
@@ -68,9 +73,11 @@ public class TaskTest {
 	
 	@Test
 	public void testEditTask() {
-		t1.setDescription("Complete this after T1 and T2.");
-		t1.addPrereq(2);
+		t3.setDescription("T2 and T1 have to be done first.");
+		//t3.addPrereq(2);
 		t1.finishedTask();
+		t2.finishedTask();
+		t3.finishedTask();
 		
 		// Check to see that both tasks has been added to the database
 		Connection conn = null;
@@ -81,17 +88,17 @@ public class TaskTest {
 			Statement stmt = conn.createStatement();
 			ResultSet rs;
 			
-			rs = stmt.executeQuery("SELECT * FROM tasks WHERE tasks.task_id = 3;");
+			rs = stmt.executeQuery("SELECT * FROM tasks WHERE tasks.task_id = "+t3.getId()+";");
 			while (rs.next()) {
-				assertEquals(t1.getId(), rs.getInt("task_id"));
-				assertEquals(t1.getDescription(), rs.getString("description"));
-				assertEquals(t1.isDone(), rs.getInt("is_done"));
+				assertEquals(t3.getId(), rs.getInt("task_id"));
+				assertEquals(t3.getDescription(), rs.getString("description"));
+				assertEquals(t3.isDone(), rs.getInt("is_done"));
 			}
 			
 			rs = stmt.executeQuery("SELECT precedence.pre_req FROM tasks JOIN precedence ON tasks.task_id = precedence.task_id WHERE tasks.task_id = 3;");
 			int i = 0;
 			while (rs.next()) {
-				assertEquals((int)t1.getPrereq().get(i), rs.getInt("pre_req"));
+				assertEquals((int)t3.getPrereq().get(i), rs.getInt("pre_req"));
 				i++;
 			}
 			
@@ -110,7 +117,7 @@ public class TaskTest {
 		//You should first check if the user exists and then assign it the task
 		//**USE THE USER_TASK TABLE FROM THE DB
 		String testUser = "hello";
-		t1.setMember(testUser);
+		t3.setMember(testUser);
 		
 		Connection conn = null;
 		try {
@@ -136,5 +143,7 @@ public class TaskTest {
 	@After
 	public void testDeleteTask() {
 		t1.deleteTask();
+		t2.deleteTask();
+		t3.deleteTask();
 	}
 }
