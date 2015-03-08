@@ -72,7 +72,7 @@ public class Task
 	    	Class.forName("org.sqlite.JDBC");
 	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 	    	Statement stmt = conn.createStatement();
-	    	stmt.executeUpdate("UPDATE tasks SET description = '"+description+"' WHERE task_id = "+task_id+";");
+	    	stmt.executeUpdate("UPDATE tasks SET description = '"+description+"' WHERE task_id = "+task_id+" AND project_id = "+project_id+";");
 			stmt.close();
 			conn.close();
 	    }catch ( Exception e ) {
@@ -80,6 +80,26 @@ public class Task
 	        System.exit(0);
 	     }
 	     System.out.println("Task description updated successfully");
+	}
+	
+	public void setName(String name){
+		this.name = name;
+		
+		Connection conn = null;
+	    try {
+	    	// connect to db (file test.db must lay in the project dir)
+	    	// NOTE: it will be created if not exists
+	    	Class.forName("org.sqlite.JDBC");
+	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+	    	Statement stmt = conn.createStatement();
+	    	stmt.executeUpdate("UPDATE tasks SET name = '"+name+"' WHERE task_id = "+task_id+" AND project_id = "+project_id+";");
+			stmt.close();
+			conn.close();
+	    }catch ( Exception e ) {
+	        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	        System.exit(0);
+	     }
+	     System.out.println("Task name updated successfully");
 	}
 	
 	public void addPrereq(int pre_req){
