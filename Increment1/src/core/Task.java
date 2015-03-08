@@ -92,7 +92,7 @@ public class Task
 	    	Class.forName("org.sqlite.JDBC");
 	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 	    	Statement stmt = conn.createStatement();
-	    	stmt.executeUpdate("UPDATE tasks SET name = '"+name+"' WHERE task_id = "+task_id+" AND project_id = "+project_id+";");
+	    	stmt.executeUpdate("UPDATE tasks SET task_name = '"+name+"' WHERE task_id = "+task_id+" AND project_id = "+project_id+";");
 			stmt.close();
 			conn.close();
 	    }catch ( Exception e ) {
@@ -123,6 +123,7 @@ public class Task
 	}
 	
 	public void fetchAllPreReqs(){
+		pre_reqs = new ArrayList<Integer>();
 		Connection conn = null;
 		try
 		{

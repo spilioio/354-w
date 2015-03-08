@@ -222,7 +222,7 @@ public class Project
 	
 	public ArrayList<Task> getTasks()
 	{
-		ArrayList<Task> a = new ArrayList<Task>(0);
+		ArrayList<Task> a = new ArrayList<Task>();
 		
 		Connection conn = null;
 		try
@@ -255,7 +255,7 @@ public class Project
 					+ " in getTasks()");
 			System.exit(0);
 		}
-		System.out.println("All projects successfully fetched");
+		System.out.println("All tasks successfully fetched");
 		return a;
 	}
 	

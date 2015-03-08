@@ -782,7 +782,7 @@ public class Driver
 	 * 4- Update or ask the user for correct input
 	 */
 	
-	This has to be done by the programmers!;
+	/* This has to be done by the programmers!; */
 	
 	private static void editTaskFlow()
 	{

@@ -109,7 +109,7 @@ public class TaskTest {
 			stmt.close();
 			conn.close();
 		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.err.println(e.getClass().getName() + ": " + e.getMessage() + " in testEditTask()");
 			System.exit(0);
 		}
 	}
