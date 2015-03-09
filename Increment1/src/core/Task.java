@@ -12,10 +12,10 @@ public class Task
 	private int task_id, start_time, end_time, project_id, is_done;
 	private ArrayList<Integer> pre_reqs;
 	
+	/** the task_id variable is irrelevant - TODO: remove this variable */
 	public Task(int task_id, String name, String description, int start_time, int end_time, int project_id, String owner_id)
 	{
 		pre_reqs = new ArrayList<Integer>();
-		this.task_id = task_id;
 		this.name = name;
 		this.description = description;
 		this.start_time = start_time;
@@ -30,8 +30,19 @@ public class Task
 	    	// NOTE: it will be created if not exists
 	    	Class.forName("org.sqlite.JDBC");
 	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+	    	
+	    	// TODO automate id assignment according to DB contents.
 	    	Statement stmt = conn.createStatement();
-	    	stmt.executeUpdate("INSERT INTO tasks VALUES ("+task_id+ ", '"+name+"', '"+description+"', "+start_time+", "+end_time+", "+project_id+", '"+owner_id+"', "+is_done+");");
+	    	ResultSet rs = stmt.executeQuery("SELECT * FROM tasks;");
+	   
+	    	int id = 0;
+			while (rs.next())
+				id++;
+	    	
+
+			this.task_id = task_id;
+			
+	    	stmt.executeUpdate("INSERT INTO tasks VALUES ("+id+ ", '"+name+"', '"+description+"', "+start_time+", "+end_time+", "+project_id+", '"+owner_id+"', "+is_done+");");
 	    	stmt.close();
 			conn.close();
 	    }catch ( Exception e ) {

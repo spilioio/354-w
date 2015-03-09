@@ -12,8 +12,8 @@ import java.util.Scanner;
  * A console based application who's purpose is to allow a user to interact with
  * a ProjectManager and it's SQL Database.
  * 
- * The methods are organized into "flows", which each handle a specific subset of
- * user interactions.
+ * The methods are organized into "flows", which each handle a specific subset
+ * of user interactions.
  * 
  * @author Laurence Werner 6063640
  * */
@@ -218,10 +218,11 @@ public class Driver
 					rs = stmt
 							.executeQuery("SELECT * FROM users WHERE user_id = '"
 									+ temp[0] + "';");
-					while(rs.next())
+					while (rs.next())
 					{
 						System.out.println("");
-						System.out.println("USERNAME ALREADY IN USE! TRY AGAIN!");
+						System.out
+								.println("USERNAME ALREADY IN USE! TRY AGAIN!");
 						System.out.println("");
 						
 						System.out.println("Please enter a user id: ");
@@ -248,8 +249,9 @@ public class Driver
 					// Add new user (guaranteed non-unique)
 					userLoggedIn = new User(temp[0], temp[1], temp[2], temp[3]);
 					
-					System.out.println("User successfully created! Please log in");
-
+					System.out
+							.println("User successfully created! Please log in");
+					
 					rs.close();
 					stmt.close();
 				}
@@ -651,9 +653,11 @@ public class Driver
 						System.out.println(Integer.toString(i) + "| id: "
 								+ aT.get(i).getId() + " | name: "
 								+ aT.get(i).getName() + " | description: "
-								+ aT.get(i).getDescription() + " | start_time: "
-								+ Integer.toString(aT.get(i).getStartTime()) + " | end_time: "
-										+ Integer.toString(aT.get(i).getEndTime()));
+								+ aT.get(i).getDescription()
+								+ " | start_time: "
+								+ Integer.toString(aT.get(i).getStartTime())
+								+ " | end_time: "
+								+ Integer.toString(aT.get(i).getEndTime()));
 					}
 					System.out.println("");
 					System.out
@@ -702,17 +706,16 @@ public class Driver
 				// pre-reqs
 				
 				// To figure out unique id
-				ArrayList<Task> aT2 = currentProject.getTasks();
-				int tId;
-				if (aT2 != null)
-					tId = aT2.size();
-				else
-					tId = 0;
+				/*
+				 * ArrayList<Task> aT2 = currentProject.getTasks(); int tId; if
+				 * (aT2 != null) tId = aT2.size(); else tId = 0;
+				 */
 				
 				// Find out what user wants
 				String tName,
 				tDesc;
-				int tStartTime, tEndTime;
+				int tStartTime,
+				tEndTime;
 				
 				System.out.println("");
 				System.out.println("Please give the task a name:");
@@ -725,24 +728,34 @@ public class Driver
 				tDesc = in.nextLine();
 				
 				boolean illegalValues = true;
-				do{
+				do
+				{
 					System.out.println("");
-					System.out.println("Please define the start_time of the task:");
+					System.out
+							.println("Please define the start_time of the task:");
 					System.out.println("");
 					tStartTime = in.nextInt();
 					in.nextLine();
 					
 					System.out.println("");
-					System.out.println("Please define the end_time of the task:");
+					System.out
+							.println("Please define the end_time of the task:");
 					System.out.println("");
 					tEndTime = in.nextInt();
 					in.nextLine();
-					illegalValues = (tStartTime < 0) || (tEndTime < 0) || (tStartTime > tEndTime);
-				}while (illegalValues);
+					illegalValues = (tStartTime < 0) || (tEndTime < 0)
+							|| (tStartTime > tEndTime);
+				}
+				while (illegalValues);
 				// Create the new task
-				currentTask = new Task((currentProject.getId() * 1000) + tId,
-						tName, tDesc, tStartTime, tEndTime, currentProject.getId(),
-						userLoggedIn.getName());
+				/*
+				 * currentTask = new Task((currentProject.getId() * 1000) + tId,
+				 * tName, tDesc, tStartTime, tEndTime, currentProject.getId(),
+				 * userLoggedIn.getName());
+				 */
+				
+				currentTask = new Task(0, tName, tDesc, tStartTime, tEndTime,
+						currentProject.getId(), userLoggedIn.getName());
 				
 				System.out.println("");
 				System.out
@@ -774,12 +787,10 @@ public class Driver
 	 * tasks, and allows access to the edit task prereq flow, which will allow
 	 * to edit the pre-requisites of a specific task.
 	 * 
-	 * MAKE SURE THAT: pre_req.end_time < task.start_time
-	 * Guidelines: 
-	 * 1- Look in the DB for pre_req task and get its start time
-	 * 2- Look in the DB for the current task and get its end time
-	 * 3- Make sure that pre_req.end_time < task.start_time
-	 * 4- Update or ask the user for correct input
+	 * MAKE SURE THAT: pre_req.end_time < task.start_time Guidelines: 1- Look in
+	 * the DB for pre_req task and get its start time 2- Look in the DB for the
+	 * current task and get its end time 3- Make sure that pre_req.end_time <
+	 * task.start_time 4- Update or ask the user for correct input
 	 */
 	
 	/* This has to be done by the programmers!; */
@@ -838,7 +849,10 @@ public class Driver
 		
 	}
 	
-	/** INCOMPLETE - Allows adding and deleting pre-requisite tasks for a specific task.*/
+	/**
+	 * INCOMPLETE - Allows adding and deleting pre-requisite tasks for a
+	 * specific task.
+	 */
 	private static void editTaskPreReqsFlow()
 	{
 		// TODO

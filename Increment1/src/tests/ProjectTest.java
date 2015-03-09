@@ -128,7 +128,7 @@ public class ProjectTest
 	public void testAddTask()
 	{
 		// ArrayList<Integer> preReq = new ArrayList<Integer>();
-		t1 = new Task(10, "a", "desc a", 1, 4, p1.getId(), "b_jenkins");
+		t1 = new Task(0, "a", "desc a", 1, 4, p1.getId(), "b_jenkins");
 		
 		/* test to see if the task was added to the DB */
 		try
@@ -233,6 +233,45 @@ public class ProjectTest
 		
 		assertEquals(result.size(), 0);
 		assertFalse(result.contains(p1));
+	}
+	
+	// - Create project
+	// - Add tasks
+	// - Gantt algorithm should yield ordered list of tasks
+	// - test will predict correct order by doing assertEquals on each position
+	// of the list.
+	// - Can also predict start time and end time of project (see first start time
+	// of ordered list, and last end time.)
+	@Test
+	public void testGANTTValues()
+	{
+		//task_id, name, description, start_time, end_time, project_id, owner_id
+		Task task0, task1, task2;
+		Project project0 = new Project("b_jenkins", "GANTT TEST PROJECT");
+		
+		task0 = new Task(0, "Task 0", "Complete this before Task 1", 0, 3, project0.getId(), "b_jenkins");
+		task1 = new Task(0, "Task 1", "Complete this before Task 2", 4, 6, project0.getId(), "b_jenkins");
+		task2 = new Task(0, "Task 2", "Final task", 8, 10, project0.getId(), "b_jenkins");
+		
+		Task[] taskCollection =  project0.GANTTAnalysis();
+		
+		// Is size the same?
+		assertEquals(taskCollection.length, 3);
+		
+		// Is the order correct?
+		assertEquals(taskCollection[0], task0);
+		assertEquals(taskCollection[1], task1);
+		assertEquals(taskCollection[2], task2);
+		
+		// Is the total time correct?
+		assertEquals(taskCollection[2].getStartTime() - 
+				taskCollection[0].getStartTime(), 10);
+		
+		// Is the start time correct?
+		assertEquals(taskCollection[0].getStartTime(), 0);
+		
+		// How about end time?
+		assertEquals(taskCollection[0].getEndTime(), 10);
 	}
 	
 	@AfterClass
