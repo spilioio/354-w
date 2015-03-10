@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import GUI.*;
+
 /**
  * A console based application who's purpose is to allow a user to interact with
  * a ProjectManager and it's SQL Database.
@@ -36,6 +38,8 @@ public class Driver
 	public static void main(String[] args)
 	{
 		// Initialize shared variables
+		MainWindow mainWin = new MainWindow();
+		mainWin.setVisible(true);
 		start();
 		
 		// Greeting message
@@ -44,7 +48,7 @@ public class Driver
 		System.out.println("               Welcome!");
 		
 		// Enter user login
-		loginFlow();
+		startUpFlow();
 		
 		// End sessions
 		end();
@@ -78,10 +82,11 @@ public class Driver
 	 * Everything pertaining to logging in and creating user accounts is handled
 	 * in this method. Can go the main management flow, or exit.
 	 */
-	private static void loginFlow()
+	private static void startUpFlow()
 	{
 		int selection = 0;
-		String tInput;
+		StartUpWindow startUp = new StartUpWindow();
+		startUp.setVisible(true);
 		
 		// Screen message
 		System.out.println("You need to login to continue...");
@@ -106,162 +111,10 @@ public class Driver
 		switch (selection)
 		{
 			case 1:
-				System.out
-						.print("Please enter your user id followed by the\nreturn key: ");
-				tInput = in.nextLine();
-				
-				Statement stmt;
-				ResultSet rs;
-				
-				try
-				{
-					stmt = conn.createStatement();
-					rs = stmt
-							.executeQuery("SELECT * FROM users WHERE user_id = '"
-									+ tInput + "';");
-					
-					if (rs.next())
-					{
-						String tPass;
-						// Ask for password
-						System.out.println("");
-						System.out
-								.print("Please enter your password followed by the\nreturn key: ");
-						tPass = in.nextLine();
-						
-						while (!tPass.equals(rs.getString("user_pwd")))
-						{
-							// Ask for password
-							System.out.println("");
-							System.out.println("INVALID PASSWORD!");
-							System.out.println("");
-							System.out
-									.println("Try Again? (y for yes, any other for no)");
-							tPass = in.nextLine();
-							if (tPass.equals("y"))
-							{
-								System.out
-										.print("Please enter your password followed by the\nreturn key: ");
-								tPass = in.nextLine();
-							}
-							else
-							{
-								// Close variables
-								rs.close();
-								stmt.close();
-								
-								// Restart login
-								loginFlow();
-								return;
-							}
-						}
-						// Correct password has been input...
-						System.out.println("Password accepted, LOGGING IN!");
-						
-						userLoggedIn = new User(rs.getString("user_id"),
-								rs.getString("user_pwd"),
-								rs.getString("f_name"), rs.getString("l_name"),
-								false);
-						
-						// Close variables
-						rs.close();
-						stmt.close();
-						
-						// unto main management screen
-						managementFlow();
-					}
-					else
-					{
-						System.out
-								.println("User not found. Restarting loggin process.");
-						
-						// Close variables
-						rs.close();
-						stmt.close();
-						
-						// User id not found
-						loginFlow();
-					}
-					
-				}
-				catch (Exception e)
-				{
-					System.err.println(e.getClass().getName() + ": "
-							+ e.getMessage() + " in testCreateProject()");
-					System.exit(0);
-				}
+				userLogInFlow();
 				break;
 			case 2:
-				// New account creation
-				String temp[] = new String[4];
-				
-				System.out.println("Please enter a user id: ");
-				temp[0] = in.nextLine();
-				System.out.println("");
-				
-				System.out.println("Select your password: ");
-				temp[1] = in.nextLine();
-				System.out.println("");
-				
-				System.out.println("First name: ");
-				temp[2] = in.nextLine();
-				System.out.println("");
-				
-				System.out.println("Last name: ");
-				temp[3] = in.nextLine();
-				System.out.println("");
-				
-				// TODO check if user already exists
-				try
-				{
-					stmt = conn.createStatement();
-					rs = stmt
-							.executeQuery("SELECT * FROM users WHERE user_id = '"
-									+ temp[0] + "';");
-					while (rs.next())
-					{
-						System.out.println("");
-						System.out
-								.println("USERNAME ALREADY IN USE! TRY AGAIN!");
-						System.out.println("");
-						
-						System.out.println("Please enter a user id: ");
-						temp[0] = in.nextLine();
-						System.out.println("");
-						
-						System.out.println("Select your password: ");
-						temp[1] = in.nextLine();
-						System.out.println("");
-						
-						System.out.println("First name: ");
-						temp[2] = in.nextLine();
-						System.out.println("");
-						
-						System.out.println("Last name: ");
-						temp[3] = in.nextLine();
-						System.out.println("");
-						
-						rs = stmt
-								.executeQuery("SELECT * FROM users WHERE user_id = '"
-										+ temp[0] + "';");
-					}
-					
-					// Add new user (guaranteed non-unique)
-					userLoggedIn = new User(temp[0], temp[1], temp[2], temp[3]);
-					
-					System.out
-							.println("User successfully created! Please log in");
-					
-					rs.close();
-					stmt.close();
-				}
-				catch (SQLException e)
-				{
-					e.printStackTrace();
-				}
-				
-				// User id not found
-				loginFlow();
+				createNewUserFlow();
 				
 				break;
 			case 3:
@@ -271,7 +124,7 @@ public class Driver
 			default:
 				// invalid input, restart flow
 				System.out.println("Invalid input, please try again.");
-				loginFlow();
+				startUpFlow();
 				return;
 		}
 	}
@@ -303,6 +156,7 @@ public class Driver
 		switch (selection)
 		{
 			case 1:
+				userLogInFlow();
 				// TODO browse projects
 				browseProjectsFlow();
 				break;
@@ -328,7 +182,7 @@ public class Driver
 				System.out.println("Logging out...");
 				
 				// Return to login flow
-				loginFlow();
+				startUpFlow();
 				break;
 			default:
 				// invalid input, restart flow
@@ -856,6 +710,175 @@ public class Driver
 	private static void editTaskPreReqsFlow()
 	{
 		// TODO
+	}
+	public static void createNewUserFlow(){
+		// New account creation
+		UserCreationWindow userCreation = new UserCreationWindow();
+		userCreation.setVisible(true);
+		
+		Statement stmt;
+		ResultSet rs;
+		String temp[] = new String[4];
+		
+		System.out.println("Please enter a user id: ");
+		temp[0] = in.nextLine();
+		System.out.println("");
+		
+		System.out.println("Select your password: ");
+		temp[1] = in.nextLine();
+		System.out.println("");
+		
+		System.out.println("First name: ");
+		temp[2] = in.nextLine();
+		System.out.println("");
+		
+		System.out.println("Last name: ");
+		temp[3] = in.nextLine();
+		System.out.println("");
+		
+		// TODO check if user already exists
+		try
+		
+		{
+			stmt = conn.createStatement();
+			rs = stmt
+					.executeQuery("SELECT * FROM users WHERE user_id = '"
+							+ temp[0] + "';");
+			while (rs.next())
+			{
+				System.out.println("");
+				System.out
+						.println("USERNAME ALREADY IN USE! TRY AGAIN!");
+				System.out.println("");
+				
+				System.out.println("Please enter a user id: ");
+				temp[0] = in.nextLine();
+				System.out.println("");
+				
+				System.out.println("Select your password: ");
+				temp[1] = in.nextLine();
+				System.out.println("");
+				
+				System.out.println("First name: ");
+				temp[2] = in.nextLine();
+				System.out.println("");
+				
+				System.out.println("Last name: ");
+				temp[3] = in.nextLine();
+				System.out.println("");
+				
+				rs = stmt
+						.executeQuery("SELECT * FROM users WHERE user_id = '"
+								+ temp[0] + "';");
+			}
+			
+			// Add new user (guaranteed non-unique)
+			userLoggedIn = new User(temp[0], temp[1], temp[2], temp[3]);
+			
+			System.out
+					.println("User successfully created! Please log in");
+			
+			rs.close();
+			stmt.close();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		// User id not found
+		startUpFlow();
+		
+	}
+	public static void userLogInFlow(){
+		String tInput;
+		LoginVerificationWindow loginVerif = new LoginVerificationWindow();
+		loginVerif.setVisible(true);
+		
+		System.out
+				.print("Please enter your user id followed by the\nreturn key: ");
+		tInput = in.nextLine();
+		
+		Statement stmt;
+		ResultSet rs;
+		
+		try
+		{
+			stmt = conn.createStatement();
+			rs = stmt
+					.executeQuery("SELECT * FROM users WHERE user_id = '"
+							+ tInput + "';");
+			
+			if (rs.next())
+			{
+				String tPass;
+				// Ask for password
+				System.out.println("");
+				System.out
+						.print("Please enter your password followed by the\nreturn key: ");
+				tPass = in.nextLine();
+				
+				while (!tPass.equals(rs.getString("user_pwd")))
+				{
+					// Ask for password
+					System.out.println("");
+					System.out.println("INVALID PASSWORD!");
+					System.out.println("");
+					System.out
+							.println("Try Again? (y for yes, any other for no)");
+					tPass = in.nextLine();
+					if (tPass.equals("y"))
+					{
+						System.out
+								.print("Please enter your password followed by the\nreturn key: ");
+						tPass = in.nextLine();
+					}
+					else
+					{
+						// Close variables
+						rs.close();
+						stmt.close();
+						
+						// Restart login
+						startUpFlow();
+						return;
+					}
+				}
+				// Correct password has been input...
+				System.out.println("Password accepted, LOGGING IN!");
+				
+				userLoggedIn = new User(rs.getString("user_id"),
+						rs.getString("user_pwd"),
+						rs.getString("f_name"), rs.getString("l_name"),
+						false);
+				
+				// Close variables
+				rs.close();
+				stmt.close();
+				
+				// unto main management screen
+				managementFlow();
+			}
+			else
+			{
+				System.out
+						.println("User not found. Restarting loggin process.");
+				
+				// Close variables
+				rs.close();
+				stmt.close();
+				
+				// User id not found
+				startUpFlow();
+			}
+			
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": "
+					+ e.getMessage() + " in testCreateProject()");
+			System.exit(0);
+		}
 	}
 	
 	private static void end()
