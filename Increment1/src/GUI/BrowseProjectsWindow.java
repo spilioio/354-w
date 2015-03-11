@@ -38,6 +38,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        buttonGANTT = new javax.swing.JButton();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
@@ -80,6 +81,12 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButton3);
+        
+        buttonGANTT.setText("Display GANTT Chart");
+        buttonGANTT.setFocusable(false);
+        buttonGANTT.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        buttonGANTT.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(buttonGANTT);
 
         jRadioButton1.setText("All Projects");
 
@@ -179,6 +186,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton buttonGANTT;
     private javax.swing.JList jList1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
