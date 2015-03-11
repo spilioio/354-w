@@ -58,10 +58,9 @@ public class StartUpWindow extends javax.swing.JFrame {
           				frame = frame.getParent(); 
           			while (!(frame instanceof JFrame));                                      
           			((JFrame) frame).dispose();
-          			//Driver.userLogInFlow();
+          			Driver.userLogInFlow();
         		 
         	  }
-          	
         });
         /**
          * action performed by Button 2 (Create New User)
@@ -76,11 +75,23 @@ public class StartUpWindow extends javax.swing.JFrame {
                     frame = frame.getParent(); 
                 while (!(frame instanceof JFrame));                                      
                 ((JFrame) frame).dispose();
-        		//Driver.createNewUserFlow();
+        		Driver.createNewUserFlow();
         	}
         	
         });
         jButton3 = new javax.swing.JButton();
+        jButton3.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent evt) {
+        		Container frame = jButton3.getParent(); 
+        		//close this window
+        		do 
+                    frame = frame.getParent(); 
+                while (!(frame instanceof JFrame));                                      
+                ((JFrame) frame).dispose();
+        		Driver.end();
+        	}
+        	
+        });
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);

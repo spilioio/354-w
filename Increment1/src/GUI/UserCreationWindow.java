@@ -1,5 +1,13 @@
 package GUI;
 
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+
+import core.Driver;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -37,6 +45,19 @@ public class UserCreationWindow extends javax.swing.JFrame {
         jPasswordField1 = new javax.swing.JPasswordField();
         jTextField2 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jButton1.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent evt) {
+        		Container frame = jButton1.getParent();
+      		  	//close this window
+        		do 
+        			frame = frame.getParent(); 
+        		while (!(frame instanceof JFrame));                                      
+        		((JFrame) frame).dispose();
+        		Driver.createNewUser(jTextField1.getText(), jPasswordField1.getPassword().toString(), jTextField3.getText(), jTextField2.getText());
+      		 
+      	  }
+        });
+        
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -142,18 +163,6 @@ public class UserCreationWindow extends javax.swing.JFrame {
 
     private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {                                                
         // TODO add your handling code here:
-    }
-    private String[] jButton1ActionPerformed(java.awt.event.ActionEvent evt){
-    	String[] user = new String[4];
-    	//User Name
-    	user[0] = jTextField1.getText();
-    	//Password
-    	user[1] = jPasswordField1.getPassword().toString();
-    	//First name
-    	user[2] = jTextField2.getText();
-    	//Last name
-    	user[3] = jTextField3.getText();
-    	return user;
     }
 
     /**

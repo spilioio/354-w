@@ -1,5 +1,13 @@
 package GUI;
 
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+
+import core.Driver;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -33,6 +41,18 @@ public class LoginVerificationWindow extends javax.swing.JFrame {
         jPasswordField1 = new javax.swing.JPasswordField();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jButton1.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent evt) {
+        		Container frame = jButton1.getParent();
+      		  	//close this window
+        		do 
+        			frame = frame.getParent(); 
+        		while (!(frame instanceof JFrame));                                      
+        		((JFrame) frame).dispose();
+        		Driver.userLoginVerification(jTextField1.getText(), jPasswordField1.getPassword().toString());
+      		 
+      	  }
+        });
         jButton2 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
@@ -42,9 +62,9 @@ public class LoginVerificationWindow extends javax.swing.JFrame {
 
         jLabel2.setText("Password:");
 
-        jPasswordField1.setText("jPasswordField1");
+        jPasswordField1.setText("");
 
-        jTextField1.setText("jTextField1");
+        jTextField1.setText("");
 
         jButton1.setText("Confirm");
 
