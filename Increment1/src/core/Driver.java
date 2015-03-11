@@ -158,13 +158,13 @@ public class Driver
 	 * browsing through all the projects. This flow can take the user back to
 	 * the management flow, and to the edit a single project flow.
 	 */
-	//TODO THE FLOW FOR THIS PART IS NOT DONE YET AND I REMOVED CASE 1
 	private static void browseProjectsFlow()
 	{
+		BrowseProjectsWindow browseProjects = new BrowseProjectsWindow();
+		browseProjects.setVisible(true);
+		
+	
 		// For temporarily store collections of projects
-		BrowseProjectsWindow browseProject = new BrowseProjectsWindow();
-		browseProject.setVisible(true);
-		browseProject.updateListDisplay(getAllProjectStrings());
 		ArrayList<Project> aP;
 		
 		// for storing user input
@@ -187,9 +187,6 @@ public class Driver
 		in.nextLine();
 		switch (selection)
 		{
-			case 1:
-				
-				break;
 			case 2:
 				// Get all projects owned by user
 				aP = manager.getProjects(userLoggedIn.getName());
@@ -672,7 +669,6 @@ public class Driver
 	public static void userLoginVerification(String usrID, String pwd){
 		
 	
-		System.out.println("started userLoginVerification()");
 		
 		Statement stmt;
 		ResultSet rs;
@@ -716,12 +712,14 @@ public class Driver
 						rs.getString("f_name"), rs.getString("l_name"),
 						false);
 				
+				// unto main management screen
+				browseProjectsFlow();
+				
 				// Close variables
 				rs.close();
 				stmt.close();
 					
-				// unto main management screen
-				managementFlow();
+				
 				}
 			}
 			//No matching user in database
@@ -795,6 +793,9 @@ public class Driver
 		
 	}
 
+	
+	//gets all projects from the project manager and returns
+	//as an arrayList of strings representing the projects
 	public static ArrayList<String> getAllProjectStrings(){
 		
 		ArrayList<Project> aP;

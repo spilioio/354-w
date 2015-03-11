@@ -53,7 +53,8 @@ public class UserCreationWindow extends javax.swing.JFrame {
         			frame = frame.getParent(); 
         		while (!(frame instanceof JFrame));                                      
         		((JFrame) frame).dispose();
-        		Driver.createNewUser(jTextField1.getText(), jPasswordField1.getPassword().toString(), jTextField3.getText(), jTextField2.getText());
+        		String pwd = new String(jPasswordField1.getPassword());
+        		Driver.createNewUser(jTextField1.getText(), pwd , jTextField3.getText(), jTextField2.getText());
       		 
       	  }
         });

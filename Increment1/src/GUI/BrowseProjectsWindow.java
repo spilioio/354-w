@@ -2,7 +2,11 @@ package GUI;
 
 import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+
 import core.Driver;
+import core.Project;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -21,6 +25,8 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
      */
     public BrowseProjectsWindow() {
         initComponents();
+        
+       
     }
 
     /**
@@ -33,7 +39,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        //jList1 = new javax.swing.JList<String>();
         jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -52,13 +58,14 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        final DefaultListModel model = new DefaultListModel();
+        model.addElement("one");
+        model.addElement("two");
+        JList jList1 = new JList(model);
        
         jScrollPane1.setViewportView(jList1);
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
+
+        
         
         
 
@@ -172,12 +179,11 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
             }
         });
     }
-    public void updateListDisplay(final ArrayList<String> strings){
+    public void updateListDisplay(){
+    	 final DefaultListModel model = new DefaultListModel();
+         model.addElement("one");
+         model.addElement("two");
     	
-    	 jList1.setModel(new javax.swing.AbstractListModel() {
-             public int getSize() { return strings.size(); }
-             public Object getElementAt(int i) { return strings.get(i); }
-         });
     	
     }
     
