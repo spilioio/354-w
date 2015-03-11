@@ -6,14 +6,12 @@ import java.sql.Statement;
 
 public class User {
 	private String userName, userPwd, fname, lname;
-	private String userID;
 	
 	public User(String userName, String userPwd, String fname, String lname){
 		this.userName = userName;
 		this.userPwd = userPwd;
 		this.fname = fname;
 		this.lname = lname;
-		this.userID = fname.charAt(0) + "_" + lname;
 		//Add the user to the database
 		Connection conn = null;
 	    try {
@@ -130,11 +128,4 @@ public class User {
 	     }
 	     System.out.println("Record password updated successfully");
 	}
-
-
-	public String getUserID() {
-		return this.userID;
-	}
-
-
 }

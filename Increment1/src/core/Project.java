@@ -302,7 +302,7 @@ public class Project
 				+ " has been deleted successfully.");
 	}
 	
-	public Task[] GANTTAnalysis(){
+	public Task[] performGANTTAnalysis(){
 		return this.ganttChart.GANTTAnalysis(this);
 	}
 	

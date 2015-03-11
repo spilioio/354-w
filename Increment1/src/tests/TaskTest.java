@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import org.junit.*;
 
 import core.Task;
-import core.User;
 
 /**
  * 
@@ -26,12 +25,12 @@ public class TaskTest {
 	@Before
 	public void Initialize(){
 		//task_id, name, description, start_time, end_time, project_id, owner_id
-		t1 = new Task(4, "1st Task", "Complete this before t3", 0, 2, 1, "b_jenkins");
-		t2 = new Task(5, "2nd Task", "Complete this before t3", 0, 3, 1, "b_jenkins");
-		t3 = new Task(6, "3rd Task", "Complete this after T1 and T2", 3, 5, 1, "b_jenkins");
-		t4 = new Task(7, "4th Task", "Illegal pre-req task of t3", 1, 4, 1, "b_jenkins");
-		t3.addPrereq(4);
-		t3.addPrereq(5);
+		t1 = new Task(1, "1st Task", "Complete this before t3", 0, 2, 0, "b_jenkins");
+		t2 = new Task(2, "2nd Task", "Complete this before t3", 0, 3, 0, "b_jenkins");
+		t3 = new Task(3, "3rd Task", "Complete this after T1 and T2", 3, 5, 0, "b_jenkins");
+		t4 = new Task(4, "4th Task", "Illegal pre-req task of t3", 1, 4, 0, "b_jenkins");
+		t3.addPrereq(1);
+		t3.addPrereq(2);
 	}
 	
 	@Test
@@ -45,7 +44,7 @@ public class TaskTest {
 			Statement stmt = conn.createStatement();
 			ResultSet rs;
 
-			rs = stmt.executeQuery("SELECT * FROM tasks WHERE task_id = "+t3.getId()+";");
+			rs = stmt.executeQuery("SELECT * FROM tasks WHERE tasks.task_id = "+t3.getId()+";");
 			while (rs.next()) {
 				assertEquals(t3.getId(), rs.getInt("task_id"));
 				assertEquals(t3.getName(), rs.getString("task_name"));
@@ -60,7 +59,7 @@ public class TaskTest {
 			rs = stmt.executeQuery("SELECT * FROM precedence WHERE task_id = "+t3.getId()+" AND project_id = "+t3.getProjectID()+";");
 			int i = 1;
 			while (rs.next()) {
-				assertEquals(i+3, rs.getInt("pre_req"));
+				assertEquals(i, rs.getInt("pre_req"));
 				i++;
 			}
 			
@@ -91,7 +90,7 @@ public class TaskTest {
 			Statement stmt = conn.createStatement();
 			ResultSet rs;
 			
-			rs = stmt.executeQuery("SELECT * FROM tasks WHERE task_id = "+t3.getId()+";");
+			rs = stmt.executeQuery("SELECT * FROM tasks WHERE tasks.task_id = "+t3.getId()+";");
 			while (rs.next()) {
 				assertEquals(t3.getId(), rs.getInt("task_id"));
 				assertEquals(t3.getDescription(), rs.getString("description"));
@@ -99,10 +98,10 @@ public class TaskTest {
 				assertEquals(t3.isDone(), rs.getInt("is_done"));
 			}
 			
-			rs = stmt.executeQuery("SELECT precedence.pre_req FROM tasks JOIN precedence ON tasks.task_id = precedence.task_id WHERE task_id = 3;");
+			rs = stmt.executeQuery("SELECT precedence.pre_req FROM tasks JOIN precedence ON tasks.task_id = precedence.task_id WHERE tasks.task_id = 3;");
 			int i = 0;
 			while (rs.next()) {
-				assertEquals((int)t3.getPrereq().get(i+3), rs.getInt("pre_req"));
+				assertEquals((int)t3.getPrereq().get(i), rs.getInt("pre_req"));
 				i++;
 			}
 			
@@ -130,7 +129,7 @@ public class TaskTest {
 			Statement stmt = conn.createStatement();
 			ResultSet rs;
 			
-			rs = stmt.executeQuery("SELECT * FROM tasks WHERE task_id = "+t1.getId()+" AND project_id = "+t1.getId()+";");
+			rs = stmt.executeQuery("SELECT * FROM tasks WHERE tasks.task_id = "+t1.getId()+" AND project_id = "+t1.getId()+";");
 			while (rs.next()) {
 				assertNotEquals(testTime, rs.getInt("end_time"));
 			}
@@ -158,7 +157,7 @@ public class TaskTest {
 			Statement stmt = conn.createStatement();
 			ResultSet rs;
 			
-			rs = stmt.executeQuery("SELECT * FROM tasks WHERE task_id = "+t3.getId()+" AND project_id = "+t3.getId()+";");
+			rs = stmt.executeQuery("SELECT * FROM tasks WHERE tasks.task_id = "+t3.getId()+" AND project_id = "+t3.getId()+";");
 			while (rs.next()) {
 				assertNotEquals(testTime, rs.getInt("start_time"));
 			}
@@ -194,7 +193,7 @@ public class TaskTest {
 			while(rs.next()){
 				i++;
 			}
-			assertNotEquals(0, i);
+			assertEquals(0, i);
 			
 			rs.close();
 			stmt.close();
@@ -210,7 +209,7 @@ public class TaskTest {
 		//void setMember(String username)
 		//You should first check if the user exists and then assign it the task
 		//**USE THE USER_TASK TABLE FROM THE DB
-		User testUser = new User("testUser", "1234", "test", "user");
+		String testUser = "hello";
 		t3.setMember(testUser);
 		
 		Connection conn = null;
