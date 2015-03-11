@@ -11,6 +11,7 @@ public class Task
 	private String name, description, owner_id; 
 	private int task_id, start_time, end_time, project_id, is_done;
 	private ArrayList<Integer> pre_reqs;
+	private ArrayList<User> participants;
 	
 	/** the task_id variable is irrelevant - TODO: remove this variable */
 	public Task(int task_id, String name, String description, int start_time, int end_time, int project_id, String owner_id)
@@ -283,6 +284,66 @@ public class Task
 		if(t.getId() == task_id)
 			return true;
 		return false;
+	}
+	
+	public void setEndTime(int time){
+		this.end_time = time;
+		
+		Connection conn = null;
+	    try {
+	    	// connect to db (file test.db must lay in the project dir)
+	    	// NOTE: it will be created if not exists
+	    	Class.forName("org.sqlite.JDBC");
+	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+	    	Statement stmt = conn.createStatement();
+	    	stmt.executeUpdate("UPDATE tasks SET end_time = '"+time+"' WHERE task_id = "+task_id+" AND project_id = "+project_id+";");
+			stmt.close();
+			conn.close();
+	    }catch ( Exception e ) {
+	        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	        System.exit(0);
+	     }
+	     System.out.println("Task end time updated successfully");
+	}
+
+	public void setStartTime(int time) {
+		this.start_time = time;
+		
+		Connection conn = null;
+	    try {
+	    	// connect to db (file test.db must lay in the project dir)
+	    	// NOTE: it will be created if not exists
+	    	Class.forName("org.sqlite.JDBC");
+	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+	    	Statement stmt = conn.createStatement();
+	    	stmt.executeUpdate("UPDATE tasks SET start_time = '"+time+"' WHERE task_id = "+task_id+" AND project_id = "+project_id+";");
+			stmt.close();
+			conn.close();
+	    }catch ( Exception e ) {
+	        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	        System.exit(0);
+	     }
+	     System.out.println("Task start time updated successfully");		
+	}
+
+	public void setMember(User user) {
+		this.participants.add(user);
+		
+		Connection conn = null;
+	    try {
+	    	// connect to db (file test.db must lay in the project dir)
+	    	// NOTE: it will be created if not exists
+	    	Class.forName("org.sqlite.JDBC");
+	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+	    	Statement stmt = conn.createStatement();
+	    	stmt.executeUpdate("UPDATE user_task SET user = '"+user.getUserID()+"' WHERE task_id = "+task_id+" AND project_id = "+project_id+";");
+			stmt.close();
+			conn.close();
+	    }catch ( Exception e ) {
+	        System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	        System.exit(0);
+	     }
+	     System.out.println("Member added to task successfully");		
 	}
 	
 }
