@@ -20,6 +20,7 @@ public class Controller {
 	
 	public Controller(){
 		in = new Scanner(System.in);
+		this.start();
 	}
 	
 	public void start() {
