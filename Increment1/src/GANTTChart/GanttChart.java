@@ -47,7 +47,7 @@ public class GanttChart {
 	 * @param project
 	 * Creates the GANTT Chart for a given project, returns a taskList for the JUnit test
 	 */
-	public void GANTTAnalysis(Project project){
+	public Task[] GANTTAnalysis(Project project){
 		mainFrame = new JFrame("GANTT CHART for " + project.getName());
 		
 		GridLayout mainLayout = new GridLayout(1,2);
@@ -77,9 +77,9 @@ public class GanttChart {
 		mainFrame.pack();
 		
 		
-	//	Task[] taskList = (Task[]) project.getTasks().toArray();
+		Task[] taskList = (Task[]) project.getTasks().toArray();
 		
-	//	return taskList;	
+		return taskList;	
 	}
 	
 	/**

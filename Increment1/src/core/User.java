@@ -5,13 +5,15 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 
 public class User {
-	private String userName, userPwd, fname, lname;
+	private String userName, userPwd, fname, lname, userID;
 	
 	public User(String userName, String userPwd, String fname, String lname){
 		this.userName = userName;
 		this.userPwd = userPwd;
 		this.fname = fname;
 		this.lname = lname;
+		fname = fname.toLowerCase();
+		this.userID = fname.substring(0, 1) + "_" + lname;
 		//Add the user to the database
 		Connection conn = null;
 	    try {
@@ -127,5 +129,10 @@ public class User {
 	        System.exit(0);
 	     }
 	     System.out.println("Record password updated successfully");
+	}
+
+
+	public String getUserID() {
+		return this.userID;
 	}
 }

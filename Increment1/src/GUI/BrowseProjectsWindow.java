@@ -1,8 +1,12 @@
 package GUI;
 
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JList;
 
 import core.Driver;
@@ -26,6 +30,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
     public BrowseProjectsWindow() {
         initComponents();
         
+        
        
     }
 
@@ -39,7 +44,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        //jList1 = new javax.swing.JList<String>();
+        jList1 = new javax.swing.JList();
         jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -53,15 +58,20 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         bg.add(jRadioButton2);
         bg.add(jRadioButton3);
         jRadioButton1.setSelected(true);
+       // allProjects = Driver.getAllProjects();
 
         
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        final DefaultListModel model = new DefaultListModel();
-        model.addElement("one");
-        model.addElement("two");
-        JList jList1 = new JList(model);
+        
+        
+        
+        jList1.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+       
        
         jScrollPane1.setViewportView(jList1);
 
@@ -75,12 +85,39 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        
+        //JButton1 Action Create project
+        jButton1.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent evt) {
+        		Container frame = jButton1.getParent();
+      		  	//close this window
+        		do 
+        			frame = frame.getParent(); 
+        		while (!(frame instanceof JFrame));                                      
+        		((JFrame) frame).dispose();
+        		Driver.createProject(); 
+      	  }
+        });
         jToolBar1.add(jButton1);
+        
 
         jButton2.setText("Open Project");
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton2.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent evt) {
+        		Container frame = jButton2.getParent();
+      		  	//close this window
+        		do 
+        			frame = frame.getParent(); 
+        		while (!(frame instanceof JFrame));                                      
+        		((JFrame) frame).dispose();
+        		//TODO get project object from selected list item
+        		//Driver.openProject(project); 
+      	  }
+        });
+        
         jToolBar1.add(jButton2);
 
         jButton3.setText("Delete Project");
@@ -137,6 +174,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
                 .addGap(3, 3, 3)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE))
         );
+        
 
         pack();
     }// </editor-fold>                        
@@ -178,12 +216,17 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
                 new BrowseProjectsWindow().setVisible(true);
             }
         });
-    }
-    public void updateListDisplay(){
-    	 final DefaultListModel model = new DefaultListModel();
-         model.addElement("one");
-         model.addElement("two");
+    	BrowseProjectsWindow bP = new BrowseProjectsWindow();
+    	bP.setVisible(true);
     	
+    }
+    public void updateListDisplay(ArrayList<Project> aP){
+    	
+    	 final DefaultListModel model = new DefaultListModel();
+    	 for(int i = 0; i < aP.size(); i++){
+    		 model.addElement(aP.get(i));
+    	 }
+    	 jList1.setModel(model);
     	
     }
     
@@ -200,5 +243,6 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.ButtonGroup bg;
+    private ArrayList<Project> allProjects;
     // End of variables declaration                   
 }

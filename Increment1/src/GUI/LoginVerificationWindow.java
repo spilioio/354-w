@@ -41,6 +41,8 @@ public class LoginVerificationWindow extends javax.swing.JFrame {
         jPasswordField1 = new javax.swing.JPasswordField();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        
+        //Process Button Push
         jButton1.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent evt) {
         		Container frame = jButton1.getParent();

@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import GUI.*;
 
 /**
@@ -38,6 +41,8 @@ public class Driver
 	
 	public static void main(String[] args)
 	{
+		
+
 		// Initialize shared variables
 		MainWindow mainWin = new MainWindow();
 		mainWin.setVisible(true);
@@ -47,6 +52,8 @@ public class Driver
 		System.out.println("TEAM W   +++   PROJECT MANAGEMENT SOFTWARE");
 		System.out.println("");
 		System.out.println("               Welcome!");
+		
+		
 		
 		// Enter user login
 		startUpFlow();
@@ -60,6 +67,7 @@ public class Driver
 		in = new Scanner(System.in);
 		manager = new ProjectManager();
 		
+
 		// Connection to DB
 		conn = null;
 		try
@@ -93,7 +101,7 @@ public class Driver
 	 * methods allows the user to access the browse projects "flow", create new
 	 * projects, and logout (or return to the login "flow").
 	 */
-	private static void managementFlow()
+	/*private static void managementFlow()
 	{
 		int selection = 0;
 		
@@ -120,7 +128,7 @@ public class Driver
 				browseProjectsFlow();
 				break;
 			case 2:
-				// New account creation
+				// New Project creation
 				String temp;
 				
 				System.out.println("Please enter a project name: ");
@@ -151,7 +159,7 @@ public class Driver
 				managementFlow();
 				return;
 		}
-	}
+	}*/
 	
 	/**
 	 * This method encompasses everything that is searching for a project, and
@@ -231,7 +239,6 @@ public class Driver
 					System.out
 							.println("No projects were found, returning to main interface.");
 					System.out.println("");
-					managementFlow();
 				}
 				break;
 			case 3:
@@ -266,7 +273,6 @@ public class Driver
 				System.out.println("Returning to home screen");
 				
 				// Return to login flow
-				managementFlow();
 				break;
 			default:
 				// invalid input, restart flow
@@ -772,14 +778,14 @@ public class Driver
 				createNewUserFlow();
 				
 			}
-			
+			//TODO review this not sure how flow should proceed after adding a user
 			// Add new user to database (guaranteed non-unique) and make it active user
 			userLoggedIn = new User(userName, password, fName, lName);
 			
 			System.out
 					.println("User successfully created! Please log in");
 			
-			managementFlow();
+			startUpFlow();
 			rs.close();
 			stmt.close();
 		}
@@ -796,23 +802,37 @@ public class Driver
 	
 	//gets all projects from the project manager and returns
 	//as an arrayList of strings representing the projects
-	public static ArrayList<String> getAllProjectStrings(){
+	public static ArrayList<Project> getAllProjects(){
 		
 		ArrayList<Project> aP;
-		ArrayList<String> pS = new ArrayList<String>();
-		
+
 		// Get all projects
 		aP = manager.getProjects();
+		return aP;
+	}
+	public static ArrayList<Project> getAllUserProjects(){
+		ArrayList<Project> aP;
 		
-		// Display all projects
-		for (int i = 0; i < aP.size(); i++)
-		{
-			pS.add(Integer.toString(i) + "- ID# "
-					+ Integer.toString(aP.get(i).getId()) + " - Name: "
-					+ aP.get(i).getName() + " - Owner: "
-					+ aP.get(i).getOwner());
-		}
-		return pS;
-		
+		// Get all projects owned by user
+		aP = manager.getProjects(userLoggedIn.getName());
+		return aP;
+	}
+	
+	public static void createProject(){
+		JFrame frame = new JFrame("Create New Project");
+
+	    // prompt the user to enter their name
+	    String name = JOptionPane.showInputDialog("please enter a name for the Project you want to create");
+
+	    // Create new project object.
+		currentProject = new Project(userLoggedIn.getName(), name);
+		System.out.println("New project successfully created!");
+		frame.dispose();
+		openProject(currentProject);
+	       
+	}
+	public static void openProject(Project project){
+		BrowseTasksWindow tasks = new BrowseTasksWindow();
+		tasks.setVisible(true);
 	}
 }

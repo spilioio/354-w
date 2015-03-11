@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import org.junit.*;
 
 import core.Task;
+import core.User;
 
 /**
  * 
@@ -209,7 +210,7 @@ public class TaskTest {
 		//void setMember(String username)
 		//You should first check if the user exists and then assign it the task
 		//**USE THE USER_TASK TABLE FROM THE DB
-		String testUser = "hello";
+		User testUser = new User("t_jenkins", "1234","tom", "jenkins");
 		t3.setMember(testUser);
 		
 		Connection conn = null;
