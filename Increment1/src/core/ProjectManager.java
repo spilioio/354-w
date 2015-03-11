@@ -132,7 +132,7 @@ public class ProjectManager
 	
 	public ArrayList<Project> getProjects()
 	{
-		ArrayList<Project> a = new ArrayList<Project>(0);
+		ArrayList<Project> a = new ArrayList<Project>();
 		
 		Connection conn = null;
 		try
