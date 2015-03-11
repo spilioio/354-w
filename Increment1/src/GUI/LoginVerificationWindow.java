@@ -49,7 +49,8 @@ public class LoginVerificationWindow extends javax.swing.JFrame {
         			frame = frame.getParent(); 
         		while (!(frame instanceof JFrame));                                      
         		((JFrame) frame).dispose();
-        		Driver.userLoginVerification(jTextField1.getText(), jPasswordField1.getPassword().toString());
+        		String pwd = new String(jPasswordField1.getPassword());
+        		Driver.userLoginVerification(jTextField1.getText(), pwd);
       		 
       	  }
         });

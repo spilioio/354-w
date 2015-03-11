@@ -51,8 +51,6 @@ public class Driver
 		// Enter user login
 		startUpFlow();
 		
-		// End sessions
-		end();
 	}
 	
 	/** Run this method once before use. */
@@ -85,51 +83,9 @@ public class Driver
 	 */
 	private static void startUpFlow()
 	{
-		int selection = 0;
 		StartUpWindow startUp = new StartUpWindow();
 		startUp.setVisible(true);
 		
-		// Screen message
-		System.out.println("You need to login to continue...");
-		System.out.println("");
-		System.out.println("Please make your selection by inputing the");
-		System.out.println("# of the task you want to perform followed");
-		System.out.println("by the return key.");
-		System.out.println("");
-		System.out.println("");
-		System.out.println("");
-		System.out.println("1- Login     2- Create account     3- Exit");
-		System.out.println("");
-		System.out.print("Selection: ");
-		
-		// User input
-		selection = in.nextInt();
-		in.nextLine();
-		System.out.println("");
-		System.out.println("");
-		
-		
-		
-		// Handle input cases
-		switch (selection)
-		{
-			case 1:
-				userLogInFlow();
-				break;
-			case 2:
-				createNewUserFlow();
-				
-				break;
-			case 3:
-				// exit
-				end();
-				break;
-			default:
-				// invalid input, restart flow
-				System.out.println("Invalid input, please try again.");
-				startUpFlow();
-				return;
-		}
 	}
 	
 	/**
@@ -750,6 +706,7 @@ public class Driver
 					// Restart login
 					userLogInFlow();
 				}
+				else {
 				
 				// Correct password has been input...
 				System.out.println("Password accepted, LOGGING IN!");
@@ -765,7 +722,9 @@ public class Driver
 					
 				// unto main management screen
 				managementFlow();
+				}
 			}
+			//No matching user in database
 			else
 			{	
 				System.out
