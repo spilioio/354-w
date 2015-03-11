@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import GANTTChart.*;
+
 /**
  * @author Laurence Werner 6063640
  * */
@@ -13,6 +15,7 @@ public class Project
 {
 	private String owner_id, project_name;
 	private int project_id;
+	private GanttChart ganttChart;
 	
 	public Project(String owner_id, String project_name)
 	{
@@ -39,6 +42,7 @@ public class Project
 			project_id = id;
 			this.project_name = project_name;
 			this.owner_id = owner_id;
+			this.ganttChart = new GanttChart();
 			
 			stmt.executeUpdate("INSERT INTO projects (project_id, project_name, owner_id) VALUES ("
 					+ project_id
@@ -296,6 +300,10 @@ public class Project
 		}
 		System.out.println("Project " + getName()
 				+ " has been deleted successfully.");
+	}
+	
+	public Task[] performGANTTAnalysis(){
+		return this.ganttChart.GANTTAnalysis(this);
 	}
 	
 }
