@@ -691,15 +691,12 @@ public class Driver
 			rs = stmt
 					.executeQuery("SELECT * FROM users WHERE user_id = '"
 							+ userName + "';");
-			//TODO:
 			//if UserName already exist display userCreationFailed
 			// window and loop back to userCreationWindow
-			if (rs.next())
+			while (rs.next())
 			{
-				System.out.println("");
-				System.out
-						.println("USERNAME ALREADY IN USE! TRY AGAIN!");
-				System.out.println("");
+				
+				JOptionPane.showMessageDialog(null, "Sorry, user name already exists. Please try again");
 				
 				//go back to user creation
 				createNewUserFlow();
@@ -720,9 +717,7 @@ public class Driver
 		{
 			e.printStackTrace();
 		}
-		
-		// User id not found
-		startUpFlow();
+		createNewUserFlow();
 		
 	}
 

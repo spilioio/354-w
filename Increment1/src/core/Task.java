@@ -8,13 +8,14 @@ import java.util.ArrayList;
 
 public class Task
 {
+	private static int task_id = 100;
 	private String name, description, owner_id; 
-	private int task_id, start_time, end_time, project_id, is_done;
+	private int start_time, end_time, project_id, is_done;
 	private ArrayList<Integer> pre_reqs;
 	private ArrayList<User> members;
 	
-	/** the task_id variable is irrelevant - TODO: remove this variable */
-	public Task(int task_id, String name, String description, int start_time, int end_time, int project_id, String owner_id)
+	
+	public Task(int task_idOLD, String name, String description, int start_time, int end_time, int project_id, String owner_id)
 	{
 		pre_reqs = new ArrayList<Integer>();
 		this.name = name;
@@ -36,12 +37,11 @@ public class Task
 	    	Statement stmt = conn.createStatement();
 	    	ResultSet rs = stmt.executeQuery("SELECT * FROM tasks;");
 	   
-	    	int id = 0;
-			while (rs.next())
-				id++;
-	    	
+	    	int id = task_id;
+			while (rs.next()){
+				task_id++;
+			}
 
-			this.task_id = task_id;
 			
 	    	stmt.executeUpdate("INSERT INTO tasks VALUES ("+id+ ", '"+name+"', '"+description+"', "+start_time+", "+end_time+", "+project_id+", '"+owner_id+"', "+is_done+");");
 	    	stmt.close();
@@ -54,11 +54,12 @@ public class Task
 	}
 	
 	/** Used to create a task object without automatically adding it to DB */
-	public Task(int task_id, String name, String description, int start_time, int end_time,
+	public Task(int task_idOLD, String name, String description, int start_time, int end_time,
 			int project_id, String owner_id,
 			int is_done)
 	{
-		this.task_id = task_id;
+		task_idOLD = task_id;
+		task_id++;
 		this.name = name;
 		this.description = description;
 		this.start_time = start_time;
