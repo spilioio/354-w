@@ -3,6 +3,7 @@ package core;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -12,6 +13,8 @@ import GANTTChart.GanttChart;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class User {
 	private String userName, userPwd, fname, lname, userID;
@@ -187,26 +190,32 @@ public class User {
 		JPanel headerPanel = new JPanel();
 		headerPanel.setBackground(Color.GRAY);
 		JPanel footerPanel = new JPanel();
+		footerPanel.setBackground(Color.GRAY);
+		JPanel centerPanel = new JPanel();
 		
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		mainFrame.setVisible(true);
 		headerPanel.setVisible(true);
+		centerPanel.setVisible(true);
 		footerPanel.setVisible(true);
 		
-		GridLayout mainLayout = new GridLayout(2,1);
+		GridLayout mainLayout = new GridLayout(3,1);
 		GridLayout headerLayout = new GridLayout(1, 3);
-		GridLayout footerLayout = new GridLayout(this.getAssignedTasks().size()+1, 2);
+		GridLayout footerLayout = new GridLayout(3,1);
+		GridLayout centerLayout = new GridLayout(this.getAssignedTasks().size()+1, 2); 
 		
 		mainFrame.setLayout(mainLayout);
 		headerPanel.setLayout(headerLayout);
+		centerPanel.setLayout(centerLayout);
 		footerPanel.setLayout(footerLayout);
 		
+		// Center Panel Format
 		JLabel taskIDLabel = new JLabel("Task ID");
 		JLabel taskNameLabel = new JLabel("Name");
 		
-		footerPanel.add(taskIDLabel);
-		footerPanel.add(taskNameLabel);
+		centerPanel.add(taskIDLabel);
+		centerPanel.add(taskNameLabel);
 		
 		for(int i = 0; i < this.getAssignedTasks().size(); i++){
 			Task task = this.assignedTasks.get(i);
@@ -220,10 +229,11 @@ public class User {
 				nameLabel.setBackground(Color.DARK_GRAY);
 			}
 
-			footerPanel.add(idLabel);
-			footerPanel.add(nameLabel);
+			centerPanel.add(idLabel);
+			centerPanel.add(nameLabel);
 		}
 		
+		// Header Panel Format
 		JLabel userIDLabel = new JLabel(this.userID);
 		JLabel fnameLabel = new JLabel(this.fname);
 		JLabel lnameLabel = new JLabel(this.lname);
@@ -232,7 +242,34 @@ public class User {
 		headerPanel.add(fnameLabel);
 		headerPanel.add(lnameLabel);
 		
+		// Footer Panel Format
+		JButton addTaskToUserButton = new JButton("Assign Task");
+		final JTextField taskIDTextField = new JTextField("Task ID");
+		final JTextField projectIDTextField = new JTextField("Project ID");
+		addTaskToUserButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0){
+				String task_id = taskIDTextField.getText();
+				String project_id = projectIDTextField.getText();
+								
+				try {
+					Connection conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
+					Statement statement = conn.createStatement();
+					statement.executeUpdate("INSERT INTO user_task VALUES ('"+userID+ "', '"+task_id+"', '"+project_id+"')");
+					statement.close();
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}	
+				
+			}
+		});
+		
+		footerPanel.add(addTaskToUserButton);
+		footerPanel.add(taskIDTextField);
+		footerPanel.add(projectIDTextField);
+		
 		mainFrame.add(headerPanel);
+		mainFrame.add(centerPanel);
 		mainFrame.add(footerPanel);
 		
 		mainFrame.pack();

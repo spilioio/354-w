@@ -10,9 +10,8 @@ public class baseForm {
 	
 	protected JFrame mainFrame;
 	protected JPanel mainPanel;
-	protected JPanel headerButtonPanel;
-	protected JPanel headerRadioPanel;
-	protected JPanel displayPanel;
+	protected JPanel headerPanel;
+	protected JPanel footerPanel;
 	
 	protected String formName;
 	
@@ -26,43 +25,17 @@ public class baseForm {
 				
 	}
 	
-	public void createHeaderButtonPanel(){
-		this.headerButtonPanel = new JPanel();
-		
-		ArrayList<JButton> buttonList = new ArrayList<JButton>();
 	
-		buttonList.add(new JButton("Create " + this.formName));
-		buttonList.add(new JButton("Open " + this.formName));
-		buttonList.add(new JButton("Open " + this.formName));
-		
-		for(int i = 0; i < buttonList.size(); i++){
-			buttonList.get(i).setLocation(i*30,10);
-			headerButtonPanel.add(buttonList.get(i));
-		}
-		
-	}
-	
-	public void createRadioPanel(){
-		ButtonGroup radioButtons = new ButtonGroup();
-		
-		ArrayList<JRadioButton> radioList = new ArrayList<JRadioButton>();
-		
-		radioList.add(new JRadioButton("All " + this.formName));
-		radioList.add(new JRadioButton("My " + this.formName));
-		radioList.add(new JRadioButton("ID"));
-		
-		for(int i = 0; i < radioList.size(); i++){
-			radioList.get(i).setLocation(i*30,10);
-			//this.headerRadioPanel.add(radioList.get(i));
-		}
-				
-	}
 	
 	public void createMainPanel(){
-		this.createHeaderButtonPanel();
-		this.createRadioPanel();
-		this.mainPanel.add(headerButtonPanel);
-		//this.mainPanel.add(headerRadioPanel);
+		headerPanel.setVisible(true);
+		footerPanel.setVisible(true);
+		mainPanel.setVisible(true);
+		mainFrame.setVisible(true);
+		
+		this.mainPanel.add(headerPanel);
+		this.mainPanel.add(footerPanel);
+		this.mainFrame.add(mainPanel);
 	}
 	
 	   public static void main(String args[]) {
