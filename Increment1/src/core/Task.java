@@ -285,12 +285,12 @@ public class Task
 			return true;
 		return false;
 	}
-<<<<<<< HEAD
+
 	public String toString(){
 		String task = new String("ID:" + task_id + "   Task Name: " + name + "  Description: " +
 				"  StartTime :" + start_time + "  End Time: " + end_time + "  Owner: " + owner_id);
 		return task;
-=======
+	}
 
 	public void setEndTime(int time) {	
 		this.end_time = time;
@@ -355,7 +355,7 @@ public class Task
 	
 	public void setPreReqs(Task task){
 		this.pre_reqs.add(task.getId());
->>>>>>> origin/master
+
 	}
 	
 }
