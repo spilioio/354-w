@@ -534,7 +534,7 @@ public class Driver
 				// Change task description
 				break;
 			case 4:
-				// Chanage task duration
+				// Change task duration
 				break;
 			case 5:
 				// Go into the pre-req task editor

@@ -1,8 +1,12 @@
 package GUI;
 
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 
 import core.Driver;
 import core.Project;
@@ -60,6 +64,15 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButton1);
+        //JButton1 Action Create Task
+        jButton1.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent evt) {
+        		                                     
+        		Driver.createTask();
+        		projectTasks = Driver.getCurrentProject().getTasks();
+        		updateListDisplay(projectTasks);
+      	  }
+        });
 
         jButton2.setText("Edit Task");
         jButton2.setFocusable(false);
