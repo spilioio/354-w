@@ -49,41 +49,45 @@ public class GanttChart {
 	 * Creates the GANTT Chart for a given project, returns a taskList for the JUnit test
 	 */
 	public Task[] GANTTAnalysis(Project project){
-		mainFrame = new JFrame("GANTT CHART for " + project.getName());
+		if(taskArray.size() > 0){
+			mainFrame = new JFrame("GANTT CHART for " + project.getName());
+			
+			GridLayout mainLayout = new GridLayout(1,2);
+			mainFrame.setLayout(mainLayout);
+			
+			detailsPanel = new JPanel();
+			detailsPanel.setVisible(true);
+			
+			diagramPanel = new JPanel();
+			diagramPanel.setVisible(true);
 		
-		GridLayout mainLayout = new GridLayout(1,2);
-		mainFrame.setLayout(mainLayout);
-		
-		detailsPanel = new JPanel();
-		detailsPanel.setVisible(true);
-		
-		diagramPanel = new JPanel();
-		diagramPanel.setVisible(true);
-	
-		this.createDetailPanel(project, detailsPanel);
-		this.createDiagramPanel(project, diagramPanel);
-		
-		mainFrame.add(detailsPanel);
-		mainFrame.add(diagramPanel);
-		
-		detailsPanel.setSize(detailsPanelX, detailsPanelY);
-		detailsPanel.setLocation(0,0);
-		
-		diagramPanel.setSize(diagramPanelX, diagramPanelY);
-		diagramPanel.setLocation(detailsPanelX, 0); // Need to move the diagramPanel over by the size of the detailsPanel
-		
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.setSize(mainFrameX, mainFrameY);
-		mainFrame.setVisible(true);
-		mainFrame.pack();
-		
-		
-		Task[] taskList = new Task[project.getTasks().size()];
-		for(int i = 0; i < project.getTasks().size(); i++){
-			taskList[i] = project.getTasks().get(i);
+			this.createDetailPanel(project, detailsPanel);
+			this.createDiagramPanel(project, diagramPanel);
+			
+			mainFrame.add(detailsPanel);
+			mainFrame.add(diagramPanel);
+			
+			detailsPanel.setSize(detailsPanelX, detailsPanelY);
+			detailsPanel.setLocation(0,0);
+			
+			diagramPanel.setSize(diagramPanelX, diagramPanelY);
+			diagramPanel.setLocation(detailsPanelX, 0); // Need to move the diagramPanel over by the size of the detailsPanel
+			
+			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			mainFrame.setSize(mainFrameX, mainFrameY);
+			mainFrame.setVisible(true);
+			mainFrame.pack();
+			
+			
+			Task[] taskList = new Task[project.getTasks().size()];
+			for(int i = 0; i < project.getTasks().size(); i++){
+				taskList[i] = project.getTasks().get(i);
+			}
+			
+			return taskList;
+		} else {
+			return null;
 		}
-		
-		return taskList;	
 	}
 	
 	/**
