@@ -29,9 +29,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
      */
     public BrowseProjectsWindow() {
         initComponents();
-        
-        
-       
+    
     }
 
     /**
@@ -58,7 +56,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         bg.add(jRadioButton2);
         bg.add(jRadioButton3);
         jRadioButton1.setSelected(true);
-       // allProjects = Driver.getAllProjects();
+        allProjects = Driver.getAllProjects();
 
         
 
@@ -66,11 +64,8 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         
         
         
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
+
+        updateListDisplay(allProjects);
        
        
         jScrollPane1.setViewportView(jList1);
@@ -105,6 +100,8 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        
+        
         jButton2.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent evt) {
         		Container frame = jButton2.getParent();
@@ -114,7 +111,9 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         		while (!(frame instanceof JFrame));                                      
         		((JFrame) frame).dispose();
         		//TODO get project object from selected list item
-        		//Driver.openProject(project); 
+        		Project temp = (Project)jList1.getSelectedValue();
+        		Driver.setCurrentProject(temp);
+        		Driver.openProject(temp); 
       	  }
         });
         
@@ -223,10 +222,13 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
     public void updateListDisplay(ArrayList<Project> aP){
     	
     	 final DefaultListModel model = new DefaultListModel();
-    	 for(int i = 0; i < aP.size(); i++){
-    		 model.addElement(aP.get(i));
+    	 if (aP.size() != 0){
+	    	 for(int i = 0; i < aP.size(); i++){
+	    		 model.addElement(aP.get(i));
+	    	 }
+	    	 jList1.setModel(model);
     	 }
-    	 jList1.setModel(model);
+    	 
     	
     }
     

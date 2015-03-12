@@ -42,6 +42,14 @@ public class Driver
 	public static void main(String[] args)
 	{
 		
+		//THIS IS FOR TESTING
+		Project project = new Project("bob", "myProj", 1);
+
+		Task[] task = new Task[3];
+	    task[0] = new Task(1, "CAT", "CATSSSS", 1, 5, 1, "bob");
+	    task[1] = new Task(2, "DOG", "DOGS", 1, 8, 1, "bob");
+	    task[2] = new Task(3, "Hamster", "Rodents", 5, 7, 1, "bob");
+		
 
 		// Initialize shared variables
 		MainWindow mainWin = new MainWindow();
@@ -96,70 +104,7 @@ public class Driver
 		
 	}
 	
-	/**
-	 * Everything pertaining to general project management happens here. This
-	 * methods allows the user to access the browse projects "flow", create new
-	 * projects, and logout (or return to the login "flow").
-	 */
-	/*private static void managementFlow()
-	{
-		int selection = 0;
-		
-		System.out.println("");
-		System.out.println("");
-		System.out.println("");
-		System.out.println("      Project Management Interface");
-		System.out.println("Please make your selection by inputing the");
-		System.out.println("# of the task you want to perform followed");
-		System.out.println("by the return key.");
-		System.out.println("");
-		System.out.println("");
-		System.out.println("");
-		System.out.println("1- Browse projects  2- New project  3- Logout");
-		System.out.println("");
-		System.out.print("Selection: ");
-		selection = in.nextInt();
-		in.nextLine();
-		switch (selection)
-		{
-			case 1:
-				userLogInFlow();
-				// TODO browse projects
-				browseProjectsFlow();
-				break;
-			case 2:
-				// New Project creation
-				String temp;
-				
-				System.out.println("Please enter a project name: ");
-				temp = in.nextLine();
-				System.out.println("");
-				
-				System.out.println("temp = " + temp);
-				// Create new project object.
-				currentProject = new Project(userLoggedIn.getName(), temp);
-				
-				System.out.println("New project successfully created!");
-				
-				// Take user directly to where he/she can edit the newly created
-				// project.
-				manageSingleProjectFlow();
-				break;
-			case 3:
-				System.out.println("Logging out...");
-				
-				// Return to login flow
-				startUpFlow();
-				break;
-			default:
-				// invalid input, restart flow
-				System.out.println("Invalid input, please try again.");
-				
-				// Restart flow
-				managementFlow();
-				return;
-		}
-	}*/
+	
 	
 	/**
 	 * This method encompasses everything that is searching for a project, and
@@ -172,116 +117,96 @@ public class Driver
 		browseProjects.setVisible(true);
 		
 	
-		// For temporarily store collections of projects
-		ArrayList<Project> aP;
-		
-		// for storing user input
-		int selection = 0;
-		
-		System.out.println("");
-		System.out.println("");
-		System.out.println("");
-		System.out.println("          Project Browser");
-		System.out.println("Please make your selection by inputing the");
-		System.out.println("# of the task you want to perform followed");
-		System.out.println("by the return key.");
-		System.out.println("");
-		System.out.println("");
-		System.out.println("");
-		System.out.println("1- Show All   2- Owned   3- By ID   4- Back");
-		System.out.println("");
-		System.out.print("Selection: ");
-		selection = in.nextInt();
-		in.nextLine();
-		switch (selection)
-		{
-			case 2:
-				// Get all projects owned by user
-				aP = manager.getProjects(userLoggedIn.getName());
-				
-				// Display projects
-				for (int i = 0; i < aP.size(); i++)
-				{
-					System.out.println(Integer.toString(i) + "- ID# "
-							+ Integer.toString(aP.get(i).getId()) + " - Name: "
-							+ aP.get(i).getName() + " - Owner: "
-							+ aP.get(i).getOwner());
-				}
-				
-				if (aP != null && aP.size() > 0)
-				{
-					System.out.println("");
-					System.out
-							.println("You may now select a project to edit using");
-					System.out
-							.println("the corresponding # from the list, followe");
-					System.out.println("-d by the return key.");
-					System.out.println("");
-					
-					System.out.print("Selection: ");
-					selection = in.nextInt();
-					in.nextLine();
-					if (selection < aP.size() && selection >= 0)
-					{
-						currentProject = aP.get(selection);
-						
-						System.out.println("");
-						System.out
-								.println("Selection confirmed! Entering edit UI..");
-						System.out.println("");
-						
-						manageSingleProjectFlow();
-					}
-				}
-				else
-				{
-					System.out.println("");
-					System.out
-							.println("No projects were found, returning to main interface.");
-					System.out.println("");
-				}
-				break;
-			case 3:
-				
-				System.out.println("");
-				System.out.println("Please enter the project's id now: ");
-				System.out.println("");
-				selection = in.nextInt();
-				in.nextLine();
-				// Get project by id
-				currentProject = manager.getProject(selection);
-				
-				if (currentProject != null)
-				{
-					System.out.println("");
-					System.out
-							.println("Selection confirmed! Entering edit UI..");
-					System.out.println("");
-					
-					manageSingleProjectFlow();
-				}
-				else
-				{
-					System.out.println("");
-					System.out.println("No projects were found.");
-					System.out.println("");
-					browseProjectsFlow();
-				}
-				break;
-			case 4:
-				// Go back
-				System.out.println("Returning to home screen");
-				
-				// Return to login flow
-				break;
-			default:
-				// invalid input, restart flow
-				System.out.println("Invalid input, please try again.");
-				
-				// Restart flow
-				browseProjectsFlow();
-				return;
-		}
+
+//		switch (selection)
+//		{
+//			case 2:
+//				// Get all projects owned by user
+//				aP = manager.getProjects(userLoggedIn.getName());
+//				
+//				// Display projects
+//				for (int i = 0; i < aP.size(); i++)
+//				{
+//					System.out.println(Integer.toString(i) + "- ID# "
+//							+ Integer.toString(aP.get(i).getId()) + " - Name: "
+//							+ aP.get(i).getName() + " - Owner: "
+//							+ aP.get(i).getOwner());
+//				}
+//				
+//				if (aP != null && aP.size() > 0)
+//				{
+//					System.out.println("");
+//					System.out
+//							.println("You may now select a project to edit using");
+//					System.out
+//							.println("the corresponding # from the list, followe");
+//					System.out.println("-d by the return key.");
+//					System.out.println("");
+//					
+//					System.out.print("Selection: ");
+//					selection = in.nextInt();
+//					in.nextLine();
+//					if (selection < aP.size() && selection >= 0)
+//					{
+//						currentProject = aP.get(selection);
+//						
+//						System.out.println("");
+//						System.out
+//								.println("Selection confirmed! Entering edit UI..");
+//						System.out.println("");
+//						
+//						manageSingleProjectFlow();
+//					}
+//				}
+//				else
+//				{
+//					System.out.println("");
+//					System.out
+//							.println("No projects were found, returning to main interface.");
+//					System.out.println("");
+//				}
+//				break;
+//			case 3:
+//				
+//				System.out.println("");
+//				System.out.println("Please enter the project's id now: ");
+//				System.out.println("");
+//				selection = in.nextInt();
+//				in.nextLine();
+//				// Get project by id
+//				currentProject = manager.getProject(selection);
+//				
+//				if (currentProject != null)
+//				{
+//					System.out.println("");
+//					System.out
+//							.println("Selection confirmed! Entering edit UI..");
+//					System.out.println("");
+//					
+//					manageSingleProjectFlow();
+//				}
+//				else
+//				{
+//					System.out.println("");
+//					System.out.println("No projects were found.");
+//					System.out.println("");
+//					browseProjectsFlow();
+//				}
+//				break;
+//			case 4:
+//				// Go back
+//				System.out.println("Returning to home screen");
+//				
+//				// Return to login flow
+//				break;
+//			default:
+//				// invalid input, restart flow
+//				System.out.println("Invalid input, please try again.");
+//				
+//				// Restart flow
+//				browseProjectsFlow();
+//				return;
+//		}
 	}
 	
 	/**
@@ -720,6 +645,8 @@ public class Driver
 				
 				// unto main management screen
 				browseProjectsFlow();
+				//BrowseProjectsWindow browseProjects = new BrowseProjectsWindow();
+				//browseProjects.setVisible(true);
 				
 				// Close variables
 				rs.close();
@@ -834,5 +761,23 @@ public class Driver
 	public static void openProject(Project project){
 		BrowseTasksWindow tasks = new BrowseTasksWindow();
 		tasks.setVisible(true);
+	}
+	public static void createTask(){
+		
+		JFrame frame = new JFrame("Create New Task");
+		String name =  JOptionPane.showInputDialog("Task Name:");
+		String desc = JOptionPane.showInputDialog("enter a brief description");
+		int start = Integer.parseInt( JOptionPane.showInputDialog("enter the start time of the task(int)"));
+		int end = Integer.parseInt(JOptionPane.showInputDialog("Enter the end time of the task(int)"));
+		//Create a new task and add it to Database
+		new Task(0, name, desc, start, end, currentProject.getId(), userLoggedIn.getName());
+		
+	}
+	public static Project getCurrentProject(){
+		return currentProject;
+	}
+	public static void setCurrentProject(Project p){
+		currentProject = p;
+		
 	}
 }

@@ -284,5 +284,10 @@ public class Task
 			return true;
 		return false;
 	}
+	public String toString(){
+		String task = new String("ID:" + task_id + "   Task Name: " + name + "  Description: " +
+				"  StartTime :" + start_time + "  End Time: " + end_time + "  Owner: " + owner_id);
+		return task;
+	}
 	
 }
