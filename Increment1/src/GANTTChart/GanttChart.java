@@ -1,16 +1,24 @@
 package GANTTChart;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.sql.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
+
+import GUI.BrowseProjectsWindow;
+import GUI.MainWindow;
 import core.*;
 
 public class GanttChart {
 	
-	private ArrayList<Task> taskArray;
-	private ArrayList<GanttNode> nodeArray;
+	private ArrayList<Task> taskArray = new ArrayList<Task>();
+	private ArrayList<GanttNode> nodeArray = new ArrayList<GanttNode>();
 	
 	// Values to adjust the distance between GANTT Chart components
 	private final int factorX = 100;
@@ -22,37 +30,58 @@ public class GanttChart {
 	
 	// Values to control the size of the diagram/detailsPanels
 	private final int diagramPanelX = 500;
-	private final int diagramPanelY = 500;	
-	private final int detailsPanelX = 500;
-	private final int detailsPanelY = 500;
+	private final int diagramPanelY = 300;	
+	private final int detailsPanelX = 300;
+	private final int detailsPanelY = 300;
+	private final int mainFrameX = diagramPanelX + detailsPanelX;
+	private final int mainFrameY = diagramPanelY + detailsPanelY;
 	
 	// The three components that make up the GANTT display
 	private JFrame mainFrame;
 	private JPanel detailsPanel;
 	private JPanel diagramPanel;
 	
+	
+	
 	/**
 	 * @author Destin Joyal 9576649
 	 * @param project
-	 * Creates the GANTT Chart for a given project
+	 * Creates the GANTT Chart for a given project, returns a taskList for the JUnit test
 	 */
 	public Task[] GANTTAnalysis(Project project){
-		mainFrame = new JFrame(project.getName());
+		mainFrame = new JFrame("GANTT CHART for " + project.getName());
+		
+		GridLayout mainLayout = new GridLayout(1,2);
+		mainFrame.setLayout(mainLayout);
+		
 		detailsPanel = new JPanel();
-		detailsPanel.setSize(detailsPanelX, detailsPanelY);		
+		detailsPanel.setVisible(true);
 		
 		diagramPanel = new JPanel();
-		diagramPanel.setSize(diagramPanelX, diagramPanelY);
-		diagramPanel.setLocation(detailsPanelX, 0); // Need to move the diagramPanel over by the size of the detailsPanel
+		diagramPanel.setVisible(true);
 	
 		this.createDetailPanel(project, detailsPanel);
 		this.createDiagramPanel(project, diagramPanel);
 		
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.pack();
-		mainFrame.setVisible(true);
+		mainFrame.add(detailsPanel);
+		mainFrame.add(diagramPanel);
 		
-		Task[] taskList = (Task[]) project.getTasks().toArray();
+		detailsPanel.setSize(detailsPanelX, detailsPanelY);
+		detailsPanel.setLocation(0,0);
+		
+		diagramPanel.setSize(diagramPanelX, diagramPanelY);
+		diagramPanel.setLocation(detailsPanelX, 0); // Need to move the diagramPanel over by the size of the detailsPanel
+		
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setSize(mainFrameX, mainFrameY);
+		mainFrame.setVisible(true);
+		mainFrame.pack();
+		
+		
+		Task[] taskList = new Task[project.getTasks().size()];
+		for(int i = 0; i < project.getTasks().size(); i++){
+			taskList[i] = project.getTasks().get(i);
+		}
 		
 		return taskList;	
 	}
@@ -64,9 +93,26 @@ public class GanttChart {
 	 * Creates a detailsPanel and attaches it to the GANTT chart's mainPanel. This panel contains task detail information.
 	 */
 	public void createDetailPanel(Project project, JPanel detailsPanel){
+		// Set the layout for the detailPanel
+		GridLayout mainLayout = new GridLayout(2, 4);
+		detailsPanel.setLayout(mainLayout);
+		
 		// Build the labels for the detailPanel header
+		JPanel headerPanel = new JPanel();
+		JPanel footerPanel = new JPanel();
+		
+		GridLayout footerLayout = new GridLayout(project.getTasks().size(), 4);
+		GridLayout headerLayout = new GridLayout(1, 4);
+		headerPanel.setLayout(headerLayout);
+		footerPanel.setLayout(footerLayout);
+		
+		headerPanel.setVisible(true);
+		footerPanel.setVisible(true);
+		footerPanel.setBackground(Color.WHITE);
+		
 		JLabel[] headerLabels = new JLabel[4];
 		for(int i = 0; i < headerLabels.length; i++){
+			headerLabels[i] = new JLabel();
 			switch (i){
 			case 0:
 				headerLabels[i].setText("ID");
@@ -83,7 +129,7 @@ public class GanttChart {
 			}
 			headerLabels[i].setSize(labelX, labelY);
 			headerLabels[i].setLocation(i*labelX, 0);
-			detailsPanel.add(headerLabels[i]);
+			headerPanel.add(headerLabels[i]);
 		}
 		
 		// Populate the details panel with data
@@ -92,16 +138,48 @@ public class GanttChart {
 			Task currentTask = taskArray.get(i);
 			nodeArray.add(new GanttNode(currentTask));
 			JLabel[] detailLabels = new JLabel[4];
+			
+			// Create buttons for all array entries
+			for(int j = 0; j < detailLabels.length; j++){
+				detailLabels[j] = new JLabel();
+			}
+			
+			// Populate the array with data
 			detailLabels[0].setText(String.valueOf(currentTask.getId()));
 			detailLabels[1].setText(currentTask.getName());
-			detailLabels[2].setText(currentTask.getPrereq().toString());
-			detailLabels[3].setText(String.valueOf(currentTask.getStartTime()-currentTask.getEndTime()));
+			detailLabels[2].setText(this.stringifyPrereqs(taskArray));
+			detailLabels[3].setText(String.valueOf(Math.abs(currentTask.getStartTime()-currentTask.getEndTime())));
+			
+			// Put the labels somewhere and size them
 			for(int j = 0; j < detailLabels.length; j++){
-				detailLabels[i].setSize(labelX, labelY);
-				detailLabels[i].setLocation(j*labelX, i*labelY + labelY);
-				detailsPanel.add(detailLabels[i]);
+				detailLabels[j].setSize(labelX, labelY);
+				detailLabels[j].setLocation(j*labelX, i*labelY + labelY);
+				footerPanel.add(detailLabels[j]);
 			}
 		}
+		
+		detailsPanel.add(headerPanel);
+		detailsPanel.add(footerPanel);
+	}
+	/**
+	 * @author Destin Joyal 9576649
+	 * @param taskList
+	 * @return
+	 * Creates a string of all the taskIDs of prereqs for a task
+	 */
+	public String stringifyPrereqs(ArrayList<Task> taskList){
+		String prereqList = "";
+		for(int i = 0; i < taskList.size(); i++){
+			ArrayList<Integer> tempList = taskList.get(i).getPrereq();
+			for(int j = 0; j < tempList.size(); j++){
+				if(j == taskList.size() - 1){
+					prereqList += String.valueOf(tempList.get(j));
+				} else {
+					prereqList += String.valueOf(tempList.get(j)) + ", ";
+				}
+			}
+		}
+		return prereqList;
 	}
 	
 	/**
@@ -113,22 +191,60 @@ public class GanttChart {
 	public void createDiagramPanel(Project project, JPanel diagramPanel){
 		int headerDivisions = this.getProjectLength(project);
 		
-		for(int i = 0; i < headerDivisions; i++){
+		GridLayout mainLayout = new GridLayout(2, 1);
+		GridLayout headerLayout = new GridLayout(1, headerDivisions);
+		GridBagLayout footerLayout = new GridBagLayout();
+		GridBagConstraints constraints = new GridBagConstraints();
+		
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.insets = new Insets(0,0,2,0);
+				
+		JPanel headerPanel = new JPanel();
+		JPanel footerPanel = new JPanel();
+		
+		headerPanel.setVisible(true);
+		footerPanel.setVisible(true);
+		
+		diagramPanel.setLayout(mainLayout);
+		headerPanel.setLayout(headerLayout);
+		footerPanel.setLayout(footerLayout);
+		
+		// Set up the headerPanel (contains the time labels at the top of the screen)
+		for(int i = 0; i <= headerDivisions; i++){
 			JLabel durationMarker = new JLabel();
-			durationMarker.setText(String.valueOf(i));
+			durationMarker.setText(String.valueOf(i+1));
 			durationMarker.setLocation(i * detailsPanelX, 0);
-			diagramPanel.add(durationMarker);
+			headerPanel.add(durationMarker);
+			constraints.gridx = i;
+			footerPanel.add(new JLabel(), constraints);
 		}
 		
+		// Set up the footerPanel (contains the actual GANTT chart)
 		for(int i = 0; i < nodeArray.size(); i++){
 			GanttNode currentNode = nodeArray.get(i);
+			
 			Task currentTask = currentNode.getTask();
-			int duration = currentTask.getStartTime() - currentTask.getEndTime();
+			
+			int duration = currentTask.getEndTime() - currentTask.getStartTime();
+			
 			JPanel nodeFrame = currentNode.buildGANTTContainer(currentTask);
-			nodeFrame.setLocation(currentNode.getLevel() * this.factorX, i * this.factorY);
-			nodeFrame.setSize(duration, this.factorY);
-			diagramPanel.add(nodeFrame);
+			nodeFrame.setBackground(Color.GRAY);
+			nodeFrame.setVisible(true);
+			
+			constraints.gridwidth = duration;
+			constraints.gridy = i + 1;
+			constraints.gridx = currentNode.getTask().getStartTime() - 1;
+			constraints.fill = constraints.HORIZONTAL;
+			
+			footerPanel.add(nodeFrame, constraints);
 		}
+		
+		diagramPanel.add(headerPanel);
+		diagramPanel.add(footerPanel);
 	}
 	
 	/**
@@ -155,7 +271,25 @@ public class GanttChart {
 			}
 		}
 		// Subtracts the values to find the project's total duration
-		return (max - min);	
+		return Math.abs(max - min);	
+	}
+	
+	public static void main(String[] args)
+	{
+		
+		Project project = new Project("bob", "myProj", 1);
+		
+		Task[] task = new Task[3];
+		task[0] = new Task(1, "CAT", "CATSSSS", 1, 5, 1, "bob");
+		task[1] = new Task(2, "DOG", "DOGS", 1, 8, 1, "bob");
+		task[2] = new Task(3, "Hamster", "Rodents", 5, 7, 1, "bob");
+		task[2].setPreReqs(task[0]);
+		GanttChart chart = new GanttChart();
+		chart.GANTTAnalysis(project);
+		for(int i = 0; i < task.length; i++){
+			task[i].deleteTask();
+		}
+		
 	}
 
 }

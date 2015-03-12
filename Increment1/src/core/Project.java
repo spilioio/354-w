@@ -302,9 +302,11 @@ public class Project
 				+ " has been deleted successfully.");
 	}
 	
-	public Task[] performGANTTAnalysis(){
+	public Task[] GANTTAnalysis(){
 		return this.ganttChart.GANTTAnalysis(this);
 	}
+
+	
 	public String toString(){
 		String project = new String("- ID# " + project_id + " - Name: " + project_name + " - Owner: " + owner_id);
 		return project;					
