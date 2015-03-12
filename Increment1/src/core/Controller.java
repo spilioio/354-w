@@ -1,81 +1,32 @@
 package core;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import GUI.BrowseProjectsWindow;
+import GUI.LoginVerificationWindow;
+import GUI.StartUpWindow;
+import GUI.UserCreationWindow;
 
-import GUI.*;
-
-/**
- * A console based application who's purpose is to allow a user to interact with
- * a ProjectManager and it's SQL Database.
- * 
- * The methods are organized into "flows", which each handle a specific subset
- * of user interactions.
- * 
- * @author Laurence Werner 6063640
- * */
-public class Driver
-{
-	/** To capture user input */
-	private static Scanner in;
+public class Controller {
 	
-	/** The project manager object */
-	private static ProjectManager manager;
+	private Connection conn;
+	private Scanner in; 
+	private ProjectManager manager;
+	private User userLoggedIn;
+	private Project currentProject;
+	private Task currentTask;
 	
-	private static Connection conn;
-	
-	private static User userLoggedIn;
-	
-	private static Project currentProject;
-	
-	private static Task currentTask;
-	
-	
-	public static void main(String[] args)
-	{
-		
-		//THIS IS FOR TESTING
-		Project project = new Project("bob", "myProj", 1);
-
-		Task[] task = new Task[3];
-	    task[0] = new Task(1, "CAT", "CATSSSS", 1, 5, 1, "bob");
-	    task[1] = new Task(2, "DOG", "DOGS", 1, 8, 1, "bob");
-	    task[2] = new Task(3, "Hamster", "Rodents", 5, 7, 1, "bob");
-		
-
-		// Initialize shared variables
-		MainWindow mainWin = new MainWindow();
-		mainWin.setVisible(true);
-		start();
-		
-		// Greeting message
-		System.out.println("TEAM W   +++   PROJECT MANAGEMENT SOFTWARE");
-		System.out.println("");
-		System.out.println("               Welcome!");
-		
-		
-		
-		// Enter user login
-		startUpFlow();
-		
+	public Controller(){
+		in = new Scanner(System.in);
+		this.start();
 	}
 	
-	/** Run this method once before use. */
-	private static void start()
-	{
+	public void start() {
 		// Local variables
-		in = new Scanner(System.in);
 		manager = new ProjectManager();
 		
-
 		// Connection to DB
 		conn = null;
 		try
@@ -93,127 +44,237 @@ public class Driver
 		}
 	}
 	
-	/**
-	 * Initial Start up display can branch to userLogIn, 
-	 * createNewUser or exit
-	 */
-	private static void startUpFlow()
-	{
+	public void startUpFlow() {
+		int selection = 0;
 		StartUpWindow startUp = new StartUpWindow();
 		startUp.setVisible(true);
 		
-	}
-	
-	
-	
-	/**
-	 * This method encompasses everything that is searching for a project, and
-	 * browsing through all the projects. This flow can take the user back to
-	 * the management flow, and to the edit a single project flow.
-	 */
-	private static void browseProjectsFlow()
-	{
-		BrowseProjectsWindow browseProjects = new BrowseProjectsWindow();
-		browseProjects.setVisible(true);
+		// Screen message
+		System.out.println("You need to login to continue...");
+		System.out.println("");
+		System.out.println("Please make your selection by inputing the");
+		System.out.println("# of the task you want to perform followed");
+		System.out.println("by the return key.");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("1- Login     2- Create account     3- Exit");
+		System.out.println("");
+		System.out.print("Selection: ");
 		
-	
-
-//		switch (selection)
-//		{
-//			case 2:
-//				// Get all projects owned by user
-//				aP = manager.getProjects(userLoggedIn.getName());
-//				
-//				// Display projects
-//				for (int i = 0; i < aP.size(); i++)
-//				{
-//					System.out.println(Integer.toString(i) + "- ID# "
-//							+ Integer.toString(aP.get(i).getId()) + " - Name: "
-//							+ aP.get(i).getName() + " - Owner: "
-//							+ aP.get(i).getOwner());
-//				}
-//				
-//				if (aP != null && aP.size() > 0)
-//				{
-//					System.out.println("");
-//					System.out
-//							.println("You may now select a project to edit using");
-//					System.out
-//							.println("the corresponding # from the list, followe");
-//					System.out.println("-d by the return key.");
-//					System.out.println("");
-//					
-//					System.out.print("Selection: ");
-//					selection = in.nextInt();
-//					in.nextLine();
-//					if (selection < aP.size() && selection >= 0)
-//					{
-//						currentProject = aP.get(selection);
-//						
-//						System.out.println("");
-//						System.out
-//								.println("Selection confirmed! Entering edit UI..");
-//						System.out.println("");
-//						
-//						manageSingleProjectFlow();
-//					}
-//				}
-//				else
-//				{
-//					System.out.println("");
-//					System.out
-//							.println("No projects were found, returning to main interface.");
-//					System.out.println("");
-//				}
-//				break;
-//			case 3:
-//				
-//				System.out.println("");
-//				System.out.println("Please enter the project's id now: ");
-//				System.out.println("");
-//				selection = in.nextInt();
-//				in.nextLine();
-//				// Get project by id
-//				currentProject = manager.getProject(selection);
-//				
-//				if (currentProject != null)
-//				{
-//					System.out.println("");
-//					System.out
-//							.println("Selection confirmed! Entering edit UI..");
-//					System.out.println("");
-//					
-//					manageSingleProjectFlow();
-//				}
-//				else
-//				{
-//					System.out.println("");
-//					System.out.println("No projects were found.");
-//					System.out.println("");
-//					browseProjectsFlow();
-//				}
-//				break;
-//			case 4:
-//				// Go back
-//				System.out.println("Returning to home screen");
-//				
-//				// Return to login flow
-//				break;
-//			default:
-//				// invalid input, restart flow
-//				System.out.println("Invalid input, please try again.");
-//				
-//				// Restart flow
-//				browseProjectsFlow();
-//				return;
-//		}
+		// User input
+		selection = in.nextInt();
+		in.nextLine();
+		System.out.println("");
+		System.out.println("");
+		
+		
+		
+		// Handle input cases
+		switch (selection)
+		{
+			case 1:
+				userLogInFlow();
+				break;
+			case 2:
+				createNewUserFlow();
+				
+				break;
+			case 3:
+				// exit
+				end();
+				break;
+			default:
+				// invalid input, restart flow
+				System.out.println("Invalid input, please try again.");
+				startUpFlow();
+				return;
+		}
 	}
 	
-	/**
-	 * This method allows the user to edit all aspects of a single project. It
-	 * can go to the edit a single task flow, or back to the main manager.
-	 */
-	private static void manageSingleProjectFlow()
+	public void managementFlow()
+	{
+		int selection = 0;
+		
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("      Project Management Interface");
+		System.out.println("Please make your selection by inputing the");
+		System.out.println("# of the task you want to perform followed");
+		System.out.println("by the return key.");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("1- Browse projects  2- New project  3- Logout");
+		System.out.println("");
+		System.out.print("Selection: ");
+		selection = in.nextInt();
+		in.nextLine();
+		switch (selection)
+		{
+			case 1:
+				userLogInFlow();
+				// TODO browse projects
+				browseProjectsFlow();
+				break;
+			case 2:
+				// New account creation
+				String temp;
+				
+				System.out.println("Please enter a project name: ");
+				temp = in.nextLine();
+				System.out.println("");
+				
+				System.out.println("temp = " + temp);
+				// Create new project object.
+				currentProject = new Project(userLoggedIn.getName(), temp);
+				
+				System.out.println("New project successfully created!");
+				
+				// Take user directly to where he/she can edit the newly created
+				// project.
+				manageSingleProjectFlow();
+				break;
+			case 3:
+				System.out.println("Logging out...");
+				
+				// Return to login flow
+				startUpFlow();
+				break;
+			default:
+				// invalid input, restart flow
+				System.out.println("Invalid input, please try again.");
+				
+				// Restart flow
+				managementFlow();
+				return;
+		}
+	}
+	
+	public void browseProjectsFlow()
+	{
+		// For temporarily store collections of projects
+		BrowseProjectsWindow browseProject = new BrowseProjectsWindow();
+		browseProject.setVisible(true);
+		browseProject.updateListDisplay(getAllProjectStrings());
+		ArrayList<Project> aP;
+		
+		// for storing user input
+		int selection = 0;
+		
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("          Project Browser");
+		System.out.println("Please make your selection by inputing the");
+		System.out.println("# of the task you want to perform followed");
+		System.out.println("by the return key.");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("1- Show All   2- Owned   3- By ID   4- Back");
+		System.out.println("");
+		System.out.print("Selection: ");
+		selection = in.nextInt();
+		in.nextLine();
+		switch (selection)
+		{
+			case 1:
+				
+				break;
+			case 2:
+				// Get all projects owned by user
+				aP = manager.getProjects(userLoggedIn.getName());
+				
+				// Display projects
+				for (int i = 0; i < aP.size(); i++)
+				{
+					System.out.println(Integer.toString(i) + "- ID# "
+							+ Integer.toString(aP.get(i).getId()) + " - Name: "
+							+ aP.get(i).getName() + " - Owner: "
+							+ aP.get(i).getOwner());
+				}
+				
+				if (aP != null && aP.size() > 0)
+				{
+					System.out.println("");
+					System.out
+							.println("You may now select a project to edit using");
+					System.out
+							.println("the corresponding # from the list, followe");
+					System.out.println("-d by the return key.");
+					System.out.println("");
+					
+					System.out.print("Selection: ");
+					selection = in.nextInt();
+					in.nextLine();
+					if (selection < aP.size() && selection >= 0)
+					{
+						currentProject = aP.get(selection);
+						
+						System.out.println("");
+						System.out
+								.println("Selection confirmed! Entering edit UI..");
+						System.out.println("");
+						
+						manageSingleProjectFlow();
+					}
+				}
+				else
+				{
+					System.out.println("");
+					System.out
+							.println("No projects were found, returning to main interface.");
+					System.out.println("");
+					managementFlow();
+				}
+				break;
+			case 3:
+				
+				System.out.println("");
+				System.out.println("Please enter the project's id now: ");
+				System.out.println("");
+				selection = in.nextInt();
+				in.nextLine();
+				// Get project by id
+				currentProject = manager.getProject(selection);
+				
+				if (currentProject != null)
+				{
+					System.out.println("");
+					System.out
+							.println("Selection confirmed! Entering edit UI..");
+					System.out.println("");
+					
+					manageSingleProjectFlow();
+				}
+				else
+				{
+					System.out.println("");
+					System.out.println("No projects were found.");
+					System.out.println("");
+					browseProjectsFlow();
+				}
+				break;
+			case 4:
+				// Go back
+				System.out.println("Returning to home screen");
+				
+				// Return to login flow
+				managementFlow();
+				break;
+			default:
+				// invalid input, restart flow
+				System.out.println("Invalid input, please try again.");
+				
+				// Restart flow
+				browseProjectsFlow();
+				return;
+		}
+	}
+	
+	public void manageSingleProjectFlow()
 	{
 		int selection = 0;
 		
@@ -495,7 +556,7 @@ public class Driver
 	
 	/* This has to be done by the programmers!; */
 	
-	private static void editTaskFlow()
+	public void editTaskFlow()
 	{
 		int selection = 0;
 		String tInput;
@@ -553,12 +614,12 @@ public class Driver
 	 * INCOMPLETE - Allows adding and deleting pre-requisite tasks for a
 	 * specific task.
 	 */
-	private static void editTaskPreReqsFlow()
+	public void editTaskPreReqsFlow()
 	{
 		// TODO
 	}
 	
-	public static void createNewUserFlow(){
+	public void createNewUserFlow(){
 		// New account creation
 		UserCreationWindow userCreation = new UserCreationWindow();
 		userCreation.setVisible(true);
@@ -569,13 +630,13 @@ public class Driver
 	 * The main calls this flow to initiate userLogin and open
 	 * the User log in window.
 	 */
-	public static void userLogInFlow(){
+	public void userLogInFlow(){
 		
 		LoginVerificationWindow loginVerif = new LoginVerificationWindow();
 		loginVerif.setVisible(true);
 	}
 	
-	public static void end()
+	public void end()
 	{
 		try
 		{
@@ -597,9 +658,10 @@ public class Driver
 	*  It compares the values of the userName and Password fields to
 	*  those stores in the database.
 	*/
-	public static void userLoginVerification(String usrID, String pwd){
+	public void userLoginVerification(String usrID, String pwd){
 		
 	
+		System.out.println("started userLoginVerification()");
 		
 		Statement stmt;
 		ResultSet rs;
@@ -633,7 +695,6 @@ public class Driver
 					// Restart login
 					userLogInFlow();
 				}
-				else {
 				
 				// Correct password has been input...
 				System.out.println("Password accepted, LOGGING IN!");
@@ -643,19 +704,13 @@ public class Driver
 						rs.getString("f_name"), rs.getString("l_name"),
 						false);
 				
-				// unto main management screen
-				browseProjectsFlow();
-				//BrowseProjectsWindow browseProjects = new BrowseProjectsWindow();
-				//browseProjects.setVisible(true);
-				
 				// Close variables
 				rs.close();
 				stmt.close();
 					
-				
-				}
+				// unto main management screen
+				managementFlow();
 			}
-			//No matching user in database
 			else
 			{	
 				System.out
@@ -679,7 +734,7 @@ public class Driver
 				
 	}
 	
-	public static void createNewUser(String userName, String password, String fName, String lName){
+	public void createNewUser(String userName, String password, String fName, String lName){
 
 		Statement stmt;
 		ResultSet rs;
@@ -705,14 +760,14 @@ public class Driver
 				createNewUserFlow();
 				
 			}
-			//TODO review this not sure how flow should proceed after adding a user
+			
 			// Add new user to database (guaranteed non-unique) and make it active user
 			userLoggedIn = new User(userName, password, fName, lName);
 			
 			System.out
 					.println("User successfully created! Please log in");
 			
-			startUpFlow();
+			managementFlow();
 			rs.close();
 			stmt.close();
 		}
@@ -726,58 +781,24 @@ public class Driver
 		
 	}
 
-	
-	//gets all projects from the project manager and returns
-	//as an arrayList of strings representing the projects
-	public static ArrayList<Project> getAllProjects(){
+	public ArrayList<String> getAllProjectStrings(){
 		
 		ArrayList<Project> aP;
-
+		ArrayList<String> pS = new ArrayList<String>();
+		
 		// Get all projects
 		aP = manager.getProjects();
-		return aP;
-	}
-	public static ArrayList<Project> getAllUserProjects(){
-		ArrayList<Project> aP;
 		
-		// Get all projects owned by user
-		aP = manager.getProjects(userLoggedIn.getName());
-		return aP;
+		// Display all projects
+		for (int i = 0; i < aP.size(); i++)
+		{
+			pS.add(Integer.toString(i) + "- ID# "
+					+ Integer.toString(aP.get(i).getId()) + " - Name: "
+					+ aP.get(i).getName() + " - Owner: "
+					+ aP.get(i).getOwner());
+		}
+		return pS;
+		
 	}
-	
-	public static void createProject(){
-		JFrame frame = new JFrame("Create New Project");
 
-	    // prompt the user to enter their name
-	    String name = JOptionPane.showInputDialog("please enter a name for the Project you want to create");
-
-	    // Create new project object.
-		currentProject = new Project(userLoggedIn.getName(), name);
-		System.out.println("New project successfully created!");
-		frame.dispose();
-		openProject(currentProject);
-	       
-	}
-	public static void openProject(Project project){
-		BrowseTasksWindow tasks = new BrowseTasksWindow();
-		tasks.setVisible(true);
-	}
-	public static void createTask(){
-		
-		JFrame frame = new JFrame("Create New Task");
-		String name =  JOptionPane.showInputDialog("Task Name:");
-		String desc = JOptionPane.showInputDialog("enter a brief description");
-		int start = Integer.parseInt( JOptionPane.showInputDialog("enter the start time of the task(int)"));
-		int end = Integer.parseInt(JOptionPane.showInputDialog("Enter the end time of the task(int)"));
-		//Create a new task and add it to Database
-		new Task(0, name, desc, start, end, currentProject.getId(), userLoggedIn.getName());
-		
-	}
-	public static Project getCurrentProject(){
-		return currentProject;
-	}
-	public static void setCurrentProject(Project p){
-		currentProject = p;
-		
-	}
 }

@@ -1,5 +1,13 @@
 package GUI;
 
+import java.util.ArrayList;
+
+import javax.swing.DefaultListModel;
+
+import core.Driver;
+import core.Project;
+import core.Task;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -17,6 +25,7 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
      */
     public BrowseTasksWindow() {
         initComponents();
+        
     }
 
     /**
@@ -34,14 +43,14 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        projectTasks = Driver.getCurrentProject().getTasks();
+        
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        
+        updateListDisplay(projectTasks);
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
+       
         jScrollPane1.setViewportView(jList1);
 
         jToolBar1.setRollover(true);
@@ -116,6 +125,18 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void updateListDisplay(ArrayList<Task> tP){
+    	
+   	 final DefaultListModel model = new DefaultListModel();
+   	 if(tP.size() != 0){
+	   	 for(int i = 0; i < tP.size(); i++){
+	   		 model.addElement(tP.get(i));
+	   	 }
+	   	 jList1.setModel(model);
+   	 }
+   	
+   }
 
     // Variables declaration - do not modify                     
     private javax.swing.JButton jButton1;
@@ -124,5 +145,6 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
     private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
+    private ArrayList<Task> projectTasks;
     // End of variables declaration                   
 }
