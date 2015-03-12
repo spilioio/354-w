@@ -129,6 +129,13 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         buttonGANTT.setFocusable(false);
         buttonGANTT.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         buttonGANTT.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        buttonGANTT.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent evt){
+        		Project temp = (Project)jList1.getSelectedValue();
+        		//temp.GANNTTAnalysis();
+        	}
+        });
+        
         jToolBar1.add(buttonGANTT);
 
         jRadioButton1.setText("All Projects");
