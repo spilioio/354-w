@@ -1,9 +1,11 @@
 package GANTTChart;
 
+import java.awt.Color;
 import java.awt.event.*;
 
 import javax.swing.*;
 
+import GUI.BrowseProjectsWindow;
 import core.*;
 
 public class GanttNode {
@@ -30,10 +32,12 @@ public class GanttNode {
 	 */
 	public JPanel buildGANTTContainer(Task task){
 		JPanel panel = new JPanel();
-		JLabel label = new JLabel(task.getName());
+		JButton label = new JButton(task.getName());
 		label.setLocation(panel.getWidth()/2, panel.getHeight()/2);
+		label.addActionListener(new nodeListener());
+		label.setBorder(null);
+		label.setBackground(Color.GRAY);
 		panel.add(label);
-		panel.addFocusListener(new nodeListener());
 		return panel;
 	}
 
@@ -58,23 +62,12 @@ public class GanttNode {
 	 * @author Destin
 	 * An inner class to handle the case where a user clicks on a task in order to see the details of that task displayed.
 	 */
-	public class nodeListener implements FocusListener{
+	public class nodeListener implements ActionListener{
 
 		public void actionPerformed(ActionEvent event) {
 			//TODO: Hook this method up properly
 			//task.displayTask();
-		}
-
-		@Override
-		public void focusGained(FocusEvent arg0) {
-			// TODO Auto-generated method stub
-			//task.displayTask();
-		}
-
-		@Override
-		public void focusLost(FocusEvent arg0) {
-			// TODO Auto-generated method stub
-			
+			System.out.println(task.getDescription());
 		}
 		
 	}

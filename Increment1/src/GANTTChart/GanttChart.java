@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
+import GUI.BrowseProjectsWindow;
 import GUI.MainWindow;
 import core.*;
 
@@ -77,7 +78,10 @@ public class GanttChart {
 		mainFrame.pack();
 		
 		
-		Task[] taskList = (Task[]) project.getTasks().toArray();
+		Task[] taskList = new Task[project.getTasks().size()];
+		for(int i = 0; i < project.getTasks().size(); i++){
+			taskList[i] = project.getTasks().get(i);
+		}
 		
 		return taskList;	
 	}
@@ -169,9 +173,9 @@ public class GanttChart {
 			ArrayList<Integer> tempList = taskList.get(i).getPrereq();
 			for(int j = 0; j < tempList.size(); j++){
 				if(j == taskList.size() - 1){
-					prereqList += tempList.get(j).toString();
+					prereqList += String.valueOf(tempList.get(j));
 				} else {
-					prereqList += tempList.get(j).toString() + ", ";
+					prereqList += String.valueOf(tempList.get(j)) + ", ";
 				}
 			}
 		}
