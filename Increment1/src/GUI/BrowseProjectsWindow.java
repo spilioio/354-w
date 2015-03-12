@@ -9,6 +9,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JList;
 
+import GANTTChart.GanttChart;
+
 import core.Driver;
 import core.Project;
 
@@ -132,7 +134,8 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         buttonGANTT.addActionListener(new ActionListener(){
         	public void actionPerformed(ActionEvent evt){
         		Project temp = (Project)jList1.getSelectedValue();
-        		//temp.GANNTTAnalysis();
+        		GanttChart chart = new GanttChart();
+        		chart.GANTTAnalysis(temp);
         	}
         });
         
