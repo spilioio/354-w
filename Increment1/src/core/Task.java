@@ -8,14 +8,13 @@ import java.util.ArrayList;
 
 public class Task
 {
-	private static int task_id = 100;
 	private String name, description, owner_id; 
-	private int start_time, end_time, project_id, is_done;
+	private int start_time, end_time, project_id, is_done, task_id;
 	private ArrayList<Integer> pre_reqs;
 	private ArrayList<User> members;
 	
 	
-	public Task(int task_idOLD, String name, String description, int start_time, int end_time, int project_id, String owner_id)
+	public Task(String name, String description, int start_time, int end_time, int project_id, String owner_id)
 	{
 		pre_reqs = new ArrayList<Integer>();
 		this.name = name;
@@ -33,17 +32,29 @@ public class Task
 	    	Class.forName("org.sqlite.JDBC");
 	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 	    	
-	    	// TODO automate id assignment according to DB contents.
+	    	// Check Database for the maximum task_id
 	    	Statement stmt = conn.createStatement();
-	    	ResultSet rs = stmt.executeQuery("SELECT * FROM tasks;");
-	   
-	    	int id = task_id;
-			while (rs.next()){
-				task_id++;
-			}
+	    	ResultSet rs = stmt.executeQuery("SELECT MAX(task_id) FROM tasks;");
+	    	
+	    	//if there is a maximum task_id meaning this is not the first task we are adding,
+	    	//we increment the task_id
+	    	if(rs.next()){
+	    		int id = rs.getInt(1);
+	    		id++;
+	    		this.task_id = id;
+	    	 	stmt.close();
+	    	 	
+	    	}
+	    	else{
+	    		//this only happens when there are no tasks in the database
+	    		this.task_id = 1;
+	    	 	stmt.close(); 
+	    	 	
+	    	}
+	    	
 
 			
-	    	stmt.executeUpdate("INSERT INTO tasks VALUES ("+id+ ", '"+name+"', '"+description+"', "+start_time+", "+end_time+", "+project_id+", '"+owner_id+"', "+is_done+");");
+	    	stmt.executeUpdate("INSERT INTO tasks VALUES ("+task_id+ ", '"+name+"', '"+description+"', "+start_time+", "+end_time+", "+project_id+", '"+owner_id+"', "+is_done+");");
 	    	stmt.close();
 			conn.close();
 	    }catch ( Exception e ) {

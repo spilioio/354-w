@@ -43,12 +43,12 @@ public class Driver
 	{
 		
 		//THIS IS FOR TESTING
-//		Project project = new Project("bob", "myProj", 1);
-//
-//		Task[] task = new Task[3];
-//	    task[0] = new Task(1, "CAT", "CATSSSS", 1, 5, 1, "bob");
-//	    task[1] = new Task(2, "DOG", "DOGS", 1, 8, 1, "bob");
-//	    task[2] = new Task(3, "Hamster", "Rodents", 5, 7, 1, "bob");
+		Project project = new Project("bob", "myProj", 1);
+
+		Task[] task = new Task[3];
+	    task[0] = new Task("CAT", "CATSSSS", 1, 5, 1, "bob");
+	    task[1] = new Task("DOG", "DOGS", 1, 8, 1, "bob");
+	    task[2] = new Task("Hamster", "Rodents", 5, 7, 1, "bob");
 		
 
 		// Initialize shared variables
@@ -454,7 +454,7 @@ public class Driver
 				 * userLoggedIn.getName());
 				 */
 				
-				currentTask = new Task(0, tName, tDesc, tStartTime, tEndTime,
+				currentTask = new Task(tName, tDesc, tStartTime, tEndTime,
 						currentProject.getId(), userLoggedIn.getName());
 				
 				System.out.println("");
@@ -765,7 +765,7 @@ public class Driver
 		int start = Integer.parseInt( JOptionPane.showInputDialog("enter the start time of the task(int)"));
 		int end = Integer.parseInt(JOptionPane.showInputDialog("Enter the end time of the task(int)"));
 		//Create a new task and add it to Database
-		new Task(0, name, desc, start, end, currentProject.getId(), userLoggedIn.getName());
+		new Task( name, desc, start, end, currentProject.getId(), userLoggedIn.getName());
 		
 	}
 	public static Project getCurrentProject(){

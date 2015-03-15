@@ -26,10 +26,10 @@ public class TaskTest {
 	@Before
 	public void Initialize(){
 		//task_id, name, description, start_time, end_time, project_id, owner_id
-		t1 = new Task(1, "1st Task", "Complete this before t3", 0, 2, 0, "b_jenkins");
-		t2 = new Task(2, "2nd Task", "Complete this before t3", 0, 3, 0, "b_jenkins");
-		t3 = new Task(3, "3rd Task", "Complete this after T1 and T2", 3, 5, 0, "b_jenkins");
-		t4 = new Task(4, "4th Task", "Illegal pre-req task of t3", 1, 4, 0, "b_jenkins");
+		t1 = new Task("1st Task", "Complete this before t3", 0, 2, 0, "b_jenkins");
+		t2 = new Task("2nd Task", "Complete this before t3", 0, 3, 0, "b_jenkins");
+		t3 = new Task("3rd Task", "Complete this after T1 and T2", 3, 5, 0, "b_jenkins");
+		t4 = new Task("4th Task", "Illegal pre-req task of t3", 1, 4, 0, "b_jenkins");
 		t3.addPrereq(1);
 		t3.addPrereq(2);
 	}

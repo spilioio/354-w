@@ -128,7 +128,7 @@ public class ProjectTest
 	public void testAddTask()
 	{
 		// ArrayList<Integer> preReq = new ArrayList<Integer>();
-		t1 = new Task(0, "a", "desc a", 1, 4, p1.getId(), "b_jenkins");
+		t1 = new Task( "a", "desc a", 1, 4, p1.getId(), "b_jenkins");
 		
 		/* test to see if the task was added to the DB */
 		try
@@ -249,9 +249,9 @@ public class ProjectTest
 		Task task0, task1, task2;
 		Project project0 = new Project("b_jenkins", "GANTT TEST PROJECT");
 		
-		task0 = new Task(0, "Task 0", "Complete this before Task 1", 0, 3, project0.getId(), "b_jenkins");
-		task1 = new Task(0, "Task 1", "Complete this before Task 2", 4, 6, project0.getId(), "b_jenkins");
-		task2 = new Task(0, "Task 2", "Final task", 8, 10, project0.getId(), "b_jenkins");
+		task0 = new Task("Task 0", "Complete this before Task 1", 0, 3, project0.getId(), "b_jenkins");
+		task1 = new Task("Task 1", "Complete this before Task 2", 4, 6, project0.getId(), "b_jenkins");
+		task2 = new Task("Task 2", "Final task", 8, 10, project0.getId(), "b_jenkins");
 		
 		Task[] taskCollection =  project0.GANTTAnalysis();
 		

@@ -278,8 +278,8 @@ public class User {
 	
 	public static void main(String[] args)
 	{
-		Task task = new Task(100, "CAT", "CATSSSS", 1, 5, 1, "f_lname");
-		Task task2 = new Task(100, "BBB", "CATSSSS", 1, 5, 1, "f_lname");
+		Task task = new Task("CAT", "CATSSSS", 1, 5, 1, "f_lname");
+		Task task2 = new Task("BBB", "CATSSSS", 1, 5, 1, "f_lname");
 
 		User user = new User("userName", "userPwd", "fname", "lname");
 		user.assignedTasks.add(task);

@@ -284,9 +284,9 @@ public class GanttChart {
 		Project project = new Project("bob", "myProj", 1);
 		
 		Task[] task = new Task[3];
-		task[0] = new Task(1, "CAT", "CATSSSS", 1, 5, 1, "bob");
-		task[1] = new Task(2, "DOG", "DOGS", 1, 8, 1, "bob");
-		task[2] = new Task(3, "Hamster", "Rodents", 5, 7, 1, "bob");
+		task[0] = new Task( "CAT", "CATSSSS", 1, 5, 1, "bob");
+		task[1] = new Task( "DOG", "DOGS", 1, 8, 1, "bob");
+		task[2] = new Task( "Hamster", "Rodents", 5, 7, 1, "bob");
 		task[2].setPreReqs(task[0]);
 		GanttChart chart = new GanttChart();
 		chart.GANTTAnalysis(project);
