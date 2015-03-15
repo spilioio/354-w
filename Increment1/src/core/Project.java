@@ -32,14 +32,24 @@ public class Project
 			Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT MAX(project_id) FROM projects;");
 			
-			ResultSet rs = stmt.executeQuery("SELECT * FROM projects;");
+			//if there is a maximum task_id meaning this is not the first task we are adding,
+	    	//we increment the task_id
+	    	if(rs.next()){
+	    		int id = rs.getInt(1);
+	    		id++;
+	    		this.project_id = id;
+	    	 	stmt.close();
+	    	 	
+	    	}
+	    	else{
+	    		//this only happens when there are no Projects in the database
+	    		this.project_id = 1;
+	    	 	stmt.close(); 
+	    	 	
+	    	}
 			
-			int id = 0;
-			while (rs.next())
-				id++;
-			
-			project_id = id;
 			this.project_name = project_name;
 			this.owner_id = owner_id;
 			this.ganttChart = new GanttChart();
