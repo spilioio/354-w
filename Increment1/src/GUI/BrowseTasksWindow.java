@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import GANTTChart.GanttChart;
 
@@ -53,9 +54,8 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
         projectTasks = Driver.getCurrentProject().getTasks();
         
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        
-        updateListDisplay(projectTasks);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);    
+        updateListDisplay();
 
        
         jScrollPane1.setViewportView(jList1);
@@ -74,7 +74,7 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
         		                                     
         		Driver.createTask();
         		projectTasks = Driver.getCurrentProject().getTasks();
-        		updateListDisplay(projectTasks);
+        		updateListDisplay();
       	  }
         });
 
@@ -83,12 +83,33 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButton2);
+        jButton2.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent evt) {
+        
+		        projectTasks = Driver.getCurrentProject().getTasks();
+				updateListDisplay();
+        	}
+        });
 
+        //Delete Task Button
         jButton3.setText("Delete Task");
         jButton3.setFocusable(false);
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButton3);
+        jButton3.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent evt) {
+        		int dialogButton = JOptionPane.YES_NO_OPTION;
+        		int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this task?", "Confirm Delete",dialogButton);
+        		if(dialogResult==0){
+	        		Task temp = (Task)jList1.getSelectedValue();
+	        		temp.deleteTask();
+			        projectTasks = Driver.getCurrentProject().getTasks();
+			        updateListDisplay();
+        		}
+				
+        	}
+        });
         
         //Jbutton display GANTT Chart
         buttonGANTT.setText("Display GANTT Chart");
@@ -157,12 +178,11 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
         });
     }
     
-    public void updateListDisplay(ArrayList<Task> tP){
-    	
+    public void updateListDisplay(){
    	 final DefaultListModel model = new DefaultListModel();
-   	 if(tP.size() != 0){
-	   	 for(int i = 0; i < tP.size(); i++){
-	   		 model.addElement(tP.get(i));
+   	 if(projectTasks.size() != 0){
+	   	 for(int i = 0; i < projectTasks.size(); i++){
+	   		 model.addElement(projectTasks.get(i));
 	   	 }
 	   	 jList1.setModel(model);
    	 }

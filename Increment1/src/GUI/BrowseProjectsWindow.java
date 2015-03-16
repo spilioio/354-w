@@ -134,6 +134,8 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         		  //Yes I want to delete
         			Project temp = (Project)jList1.getSelectedValue();
         			temp.delProj();
+        			currentDisplay = Driver.getAllProjects();
+            		updateListDisplay();
         		}
         	}
         }); 
