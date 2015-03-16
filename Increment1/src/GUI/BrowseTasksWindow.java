@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 
+import GANTTChart.GanttChart;
+
 import core.Driver;
 import core.Project;
 import core.Task;
@@ -47,6 +49,7 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        buttonGANTT = new javax.swing.JButton();
         projectTasks = Driver.getCurrentProject().getTasks();
         
 
@@ -64,6 +67,7 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButton1);
+        
         //JButton1 Action Create Task
         jButton1.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent evt) {
@@ -85,6 +89,20 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButton3);
+        
+        //Jbutton display GANTT Chart
+        buttonGANTT.setText("Display GANTT Chart");
+        buttonGANTT.setFocusable(false);
+        buttonGANTT.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        buttonGANTT.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        buttonGANTT.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent evt){
+        		Project temp = Driver.getCurrentProject();
+        		GanttChart chart = new GanttChart();
+        		chart.GANTTAnalysis(temp);
+        	}
+        });
+        jToolBar1.add(buttonGANTT);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -151,7 +169,8 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
    	
    }
 
-    // Variables declaration - do not modify                     
+    // Variables declaration - do not modify 
+    private javax.swing.JButton buttonGANTT;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

@@ -619,13 +619,8 @@ public class Driver
 				//and loop back to LoginVerificationWindow
 				if(!pwd.equals(rs.getString("user_pwd")))
 				{
-					//TODO: Make a Failed Login Window and query the user for a new log in
-					System.out.println("");
-					System.out.println("INVALID PASSWORD!");
-					System.out.println("");
-					
-					
-					
+					JOptionPane.showMessageDialog(null, "Invalid Password");
+
 					// Close variables
 					rs.close();
 					stmt.close();
@@ -645,8 +640,6 @@ public class Driver
 				
 				// unto main management screen
 				browseProjectsFlow();
-				//BrowseProjectsWindow browseProjects = new BrowseProjectsWindow();
-				//browseProjects.setVisible(true);
 				
 				// Close variables
 				rs.close();

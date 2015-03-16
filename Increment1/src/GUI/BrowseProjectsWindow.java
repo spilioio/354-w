@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 
 import GANTTChart.GanttChart;
 
@@ -58,7 +59,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         bg.add(jRadioButton2);
         bg.add(jRadioButton3);
         jRadioButton1.setSelected(true);
-        allProjects = Driver.getAllProjects();
+        currentDisplay = Driver.getAllProjects();
 
         
 
@@ -67,7 +68,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         
         
 
-        updateListDisplay(allProjects);
+        updateListDisplay();
        
        
         jScrollPane1.setViewportView(jList1);
@@ -92,18 +93,18 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         			frame = frame.getParent(); 
         		while (!(frame instanceof JFrame));                                      
         		((JFrame) frame).dispose();
-        		Driver.createProject(); 
+        		Driver.createProject();
+        		currentDisplay = Driver.getAllProjects();
+        		updateListDisplay();
       	  }
         });
         jToolBar1.add(jButton1);
         
-
+        //Jbutton2 Open Project
         jButton2.setText("Open Project");
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        
-        
         jButton2.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent evt) {
         		Container frame = jButton2.getParent();
@@ -112,7 +113,6 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         			frame = frame.getParent(); 
         		while (!(frame instanceof JFrame));                                      
         		((JFrame) frame).dispose();
-        		//TODO get project object from selected list item
         		Project temp = (Project)jList1.getSelectedValue();
         		Driver.setCurrentProject(temp);
         		Driver.openProject(temp); 
@@ -121,11 +121,25 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         
         jToolBar1.add(jButton2);
 
+        //Jbutton3 Delete Project
         jButton3.setText("Delete Project");
         jButton3.setFocusable(false);
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton3.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent evt){
+        		int dialogButton = JOptionPane.YES_NO_OPTION;
+        		int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this project?", "Confirm Delete",dialogButton);
+        		if(dialogResult==0){
+        		  //Yes I want to delete
+        			Project temp = (Project)jList1.getSelectedValue();
+        			temp.delProj();
+        		}
+        	}
+        }); 
         jToolBar1.add(jButton3);
+        
+        
         
         buttonGANTT.setText("Display GANTT Chart");
         buttonGANTT.setFocusable(false);
@@ -137,18 +151,32 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         		GanttChart chart = new GanttChart();
         		chart.GANTTAnalysis(temp);
         	}
-        });
-        
+        }); 
         jToolBar1.add(buttonGANTT);
-
+        
+        //Display all projects
         jRadioButton1.setText("All Projects");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	currentDisplay = Driver.getAllProjects();
+                updateListDisplay();
+            }
+        });
 
+        //display only the Current User's projects
         jRadioButton2.setText("My Projects");
+        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	currentDisplay = Driver.getAllUserProjects();
+                updateListDisplay();
+            }
+        });
 
         jRadioButton3.setText("ID");
         jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton3ActionPerformed(evt);
+                
+                	
             }
         });
 
@@ -229,12 +257,11 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
     	bP.setVisible(true);
     	
     }
-    public void updateListDisplay(ArrayList<Project> aP){
-    	
+    public void updateListDisplay(){
     	 final DefaultListModel model = new DefaultListModel();
-    	 if (aP.size() != 0){
-	    	 for(int i = 0; i < aP.size(); i++){
-	    		 model.addElement(aP.get(i));
+    	 if (currentDisplay.size() != 0){
+	    	 for(int i = 0; i < currentDisplay.size(); i++){
+	    		 model.addElement(currentDisplay.get(i));
 	    	 }
 	    	 jList1.setModel(model);
     	 }
@@ -255,6 +282,9 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.ButtonGroup bg;
-    private ArrayList<Project> allProjects;
-    // End of variables declaration                   
+    private ArrayList<Project> currentDisplay;
+    // End of variables declaration
+    
+ 
 }
+
