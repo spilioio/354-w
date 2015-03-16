@@ -49,6 +49,7 @@ public class GanttChart {
 	 * Creates the GANTT Chart for a given project, returns a taskList for the JUnit test
 	 */
 	public Task[] GANTTAnalysis(Project project){
+		taskArray = project.getTasks();
 		if(taskArray.size() > 0){
 			mainFrame = new JFrame("GANTT CHART for " + project.getName());
 			
@@ -82,8 +83,7 @@ public class GanttChart {
 			Task[] taskList = new Task[project.getTasks().size()];
 			for(int i = 0; i < project.getTasks().size(); i++){
 				taskList[i] = project.getTasks().get(i);
-			}
-			
+			}	
 			return taskList;
 		} else {
 			return null;
