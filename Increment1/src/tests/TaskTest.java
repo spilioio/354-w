@@ -176,7 +176,6 @@ public class TaskTest {
 		//The task t4 should not be added as a pre-requisite of Task 3 because it has illegal start_time and end_time (overlaps with start and end time of t3)
 		
 		// This method should actually fail, but it doesn't
-		// TODO: add fail clauses to addPrereq(int)  method in Task.java
 		t3.addPrereq(t4.getId());
 		
 		

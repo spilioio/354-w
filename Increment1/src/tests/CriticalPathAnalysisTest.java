@@ -14,7 +14,7 @@ public class CriticalPathAnalysisTest {
 	
 
 	
-	public void OrganizeProjectTest()
+	public void OrganizeProjectTest1()
 	{
 		ProjectManager pm;
 		Project p1;
@@ -25,7 +25,7 @@ public class CriticalPathAnalysisTest {
 		
 		
 		//Create a Project
-		p1 = new Project("b_jenkins", "Critical Path Test");
+		p1 = new Project("b_jenkins", "Critical Path Test1");
 		/*
 		 *All these tasks have a duration of 5 days.(0 startTime 5 endTime)
 		 *the start time and end Time should be rearranged once we have assigned dependencies
@@ -131,12 +131,109 @@ public class CriticalPathAnalysisTest {
 		//delete the project from database
 		p1.delProj();
 	}
+
+	
+	//This Scenario Tests a Linear Dependency between 3 tasks
+	@Test
+	public void organizeProjectTest2()
+	{
+		ProjectManager pm;
+		Project p1;
+		
+		pm = new ProjectManager();
+		
+		pm.delAllProjects();
+		
+		
+		//Create a Project
+		p1 = new Project("b_jenkins", "Critical Path Test2");
+		
+		Task t1 = new Task("Task1", "must be completed before Task 2 ", 0, 5, p1.getId(), "b_jenkins");
+		Task t2 = new Task("Task2", "must be completed before Task 3", 0, 5, p1.getId(), "b_jenkins" );
+		Task t3 = new Task("Task3", "Last task in the project", 0, 5, p1.getId(), "b_jenkins" );
+		
+		t3.addPrereq(t2.getId());
+		t2.addPrereq(t1.getId());
+		//t1 should start first and has no pre requisites
+		
+		p1.organize();
+		
+		assertEquals(t1.getEarlyStart(), 0);
+		assertEquals(t1.getEarlyFinish(), 5);
+		assertEquals(t1.getLateStart(), 0);
+		assertEquals(t1.getLateFinish(), 5);
+		assertEquals(t1.getFloat(), 0);
+		
+		assertEquals(t2.getEarlyStart(), 6);
+		assertEquals(t2.getEarlyFinish(), 10);
+		assertEquals(t2.getLateStart(), 6);
+		assertEquals(t2.getLateFinish(), 10);
+		assertEquals(t2.getFloat(), 0);
+		
+		assertEquals(t3.getEarlyStart(), 11);
+		assertEquals(t3.getEarlyFinish(), 15);
+		assertEquals(t3.getLateStart(), 11);
+		assertEquals(t3.getLateFinish(), 15);
+		assertEquals(t3.getFloat(), 0);
+		
+		p1.delProj();
+	}
+	
+	//This tests the scenario where 3 tasks have no dependencies between each other but task 4 depends on all the other 3
+	//The critical path in this case should be set to the task with the longest duration
+	@Test
+	public void organizeProjectTest3()
+	{
+		ProjectManager pm;
+		Project p1;
+		
+		pm = new ProjectManager();
+		
+		pm.delAllProjects();
+		
+		
+		//Create a Project
+		p1 = new Project("b_jenkins", "Critical Path Test2");
+		
+		Task t1 = new Task("Task1", "must be completed before Task 4", 0, 5, p1.getId(), "b_jenkins");
+		Task t2 = new Task("Task2", "must be completed before Task 4", 0, 10, p1.getId(), "b_jenkins" );
+		Task t3 = new Task("Task3", "must be completed before Task 4", 0, 7, p1.getId(), "b_jenkins" );
+		Task t4 = new Task("Task4", "Last Task to be completed", 0, 5, p1.getId(), "b_jenkins");
+		
+		t4.addPrereq(t1.getId());
+		t4.addPrereq(t2.getId());
+		t4.addPrereq(t3.getId());
+		
+		p1.organize();
+		
+		assertEquals(t1.getEarlyStart(), 0);
+		assertEquals(t1.getEarlyFinish(), 5);
+		assertEquals(t1.getLateStart(), 6);
+		assertEquals(t1.getLateFinish(), 10);
+		assertEquals(t1.getFloat(), 5);
+		
+		assertEquals(t2.getEarlyStart(), 0);
+		assertEquals(t2.getEarlyFinish(), 10);
+		assertEquals(t2.getLateStart(), 0);
+		assertEquals(t2.getLateFinish(), 10);
+		assertEquals(t2.getFloat(), 0);
+		
+		assertEquals(t2.getEarlyStart(), 11);
+		assertEquals(t2.getEarlyFinish(), 15);
+		assertEquals(t2.getLateStart(), 11);
+		assertEquals(t2.getLateFinish(), 15);
+		assertEquals(t2.getFloat(), 0);
+		
+		p1.delProj();
+	}
+	
 	
 	
 	//This test should check if the Tasks within the project have circular dependencies
 	//In this case an exception should be thrown to indicate that the project's task prereqs are incorrect
-	@Test(expected= CircularityException.class)
-	public void CircularPathTest(){
+	@Test(expected = CircularityException.class)
+	public void CircularPathTest()
+	{
 		
 		ProjectManager pm2;
 		Project p2;
@@ -159,8 +256,7 @@ public class CriticalPathAnalysisTest {
 		//this prereq makes the project circular which should not be allowed
 		t1.addPrereq(t4.getId());
 		
-		//the organize() method should throw a custom exception to indicate the project is circular
-		p2.organize();
+		//the organize() method should throw a custom exception to indicate the project has a circular dependency
 		
 		p2.delProj();
 	}
@@ -211,7 +307,7 @@ public class CriticalPathAnalysisTest {
 		//Task 1 has no prerequisites and should be the first to start
 		
 		
-		//Get the critical Path of the project
+		//Get the name of the tasks in critical Path of the project
 		ArrayList<String> criticalPath = p1.criticalPath();
 		
 		
