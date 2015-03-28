@@ -342,7 +342,7 @@ public class Project
 		 */
 	}
 
-	public tests.ArrayList<String> criticalPath() {
+	public ArrayList<String> criticalPath() {
 		// TODO Auto-generated method stub
 		
 		/*
