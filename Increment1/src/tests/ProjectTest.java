@@ -274,6 +274,76 @@ public class ProjectTest
 		assertEquals(taskCollection[0].getEndTime(), 10);
 	}
 	
+	/*
+	 * -Create a project
+	 * -Add a series of interdependent Tasks to the project
+	 * -Organize the project with organize() which should set the proper dates
+	 * 
+	 * -perform a PERTAnalysis() on the project to set the expectedDate,standardDeviation, MostLikelyDuration, PessimisticDuration, OptimisticDuration
+	 *  of the each task(these are projected values for the END of each Task)
+	 *  
+	 * -test will predict expected start date and standard deviation of each task and the 
+	 * 	project's START and END times and assertEquals on each value returned by PERTAnalysis()
+	 */
+	@Test
+	public void testPERTAnalysis()
+	{
+		//This is a very simple project other tests will try more complicated ones
+		ProjectManager pm;
+		Project p1;
+		
+		pm = new ProjectManager();
+		
+		pm.delAllProjects();
+		
+		
+		//Create a Project
+		p1 = new Project("b_jenkins", "testPERTAnalysis");
+		
+		Task t1 = new Task("Task1", "must be completed before Task 2 ", 0, 5, p1.getId(), "b_jenkins");
+		Task t2 = new Task("Task2", "must be completed before Task 3", 0, 5, p1.getId(), "b_jenkins" );
+		Task t3 = new Task("Task3", "Last task in the project", 0, 5, p1.getId(), "b_jenkins" );
+		
+		
+		//add task prerequisite
+		t3.addPrereq(t2.getId());
+		t2.addPrereq(t1.getId());
+		//t1 should start first and has no prerequisites
+		
+		p1.organize();
+		
+		//perform PERT analysis on the project this should gives new assigned new variables to
+		//our tasks needed to perform the PERTAnalysis
+		p1.PERTAnalysis();
+		
+		
+		//Assertions regarding early finish/start dates because
+		//PERT requires these values to be right
+		assertEquals(t1.getEarlyStart(), 0);
+		assertEquals(t1.getEarlyFinish(), 5);
+		assertEquals(t1.getLateStart(), 0);
+		assertEquals(t1.getLateFinish(), 5);
+		assertEquals(t1.getFloat(), 0);
+		
+		assertEquals(t2.getEarlyStart(), 6);
+		assertEquals(t2.getEarlyFinish(), 10);
+		assertEquals(t2.getLateStart(), 6);
+		assertEquals(t2.getLateFinish(), 10);
+		assertEquals(t2.getFloat(), 0);
+		
+		assertEquals(t3.getEarlyStart(), 11);
+		assertEquals(t3.getEarlyFinish(), 15);
+		assertEquals(t3.getLateStart(), 11);
+		assertEquals(t3.getLateFinish(), 15);
+		assertEquals(t3.getFloat(), 0);
+		
+		//Assertions regarding PERT Values
+		
+		
+		
+		
+	}
+	
 	@AfterClass
 	public static void end()
 	{

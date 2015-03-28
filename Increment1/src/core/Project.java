@@ -321,5 +321,36 @@ public class Project
 		String project = new String("- ID# " + project_id + " - Name: " + project_name + " - Owner: " + owner_id);
 		return project;					
 	}
+
+	public void PERTAnalysis() {
+		// TODO Auto-generated method stub
+		
+		/*
+		 * I think we should set the pessimistic and optimistic estimates for the tasks
+		 * to +/- 15% of their duration because there are no other guidelines on how to calculate them
+		 */
+		
+	}
+
+	public void organize() {
+		// TODO Auto-generated method stub
+		
+		/*
+		 * this should do a forward pass and a backward pass and set appropriate 
+		 * values: EarlyStart, EarlyFinish, LateStart, LateFinish
+		 * 
+		 */
+	}
+
+	public tests.ArrayList<String> criticalPath() {
+		// TODO Auto-generated method stub
+		
+		/*
+		 * This should find all the tasks in the project that have a float of 0
+		 * and return an Arraylist<String> containing the Task names
+		 */
+		return null;
+	}
+
 	
 }

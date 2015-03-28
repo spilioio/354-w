@@ -154,7 +154,7 @@ public class CriticalPathAnalysisTest {
 		
 		t3.addPrereq(t2.getId());
 		t2.addPrereq(t1.getId());
-		//t1 should start first and has no pre requisites
+		//t1 should start first and has no prerequisites
 		
 		p1.organize();
 		
@@ -193,7 +193,7 @@ public class CriticalPathAnalysisTest {
 		
 		
 		//Create a Project
-		p1 = new Project("b_jenkins", "Critical Path Test2");
+		p1 = new Project("b_jenkins", "Critical Path Test3");
 		
 		Task t1 = new Task("Task1", "must be completed before Task 4", 0, 5, p1.getId(), "b_jenkins");
 		Task t2 = new Task("Task2", "must be completed before Task 4", 0, 10, p1.getId(), "b_jenkins" );
