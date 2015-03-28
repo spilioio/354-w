@@ -127,6 +127,9 @@ public class CriticalPathAnalysisTest {
 		assertEquals(t8.getLateStart(), 21);
 		assertEquals(t8.getLateFinish(), 25);
 		assertEquals(t8.getFloat(), 0);
+		
+		//delete the project from database
+		p1.delProj();
 	}
 	
 	
@@ -158,6 +161,68 @@ public class CriticalPathAnalysisTest {
 		
 		//the organize() method should throw a custom exception to indicate the project is circular
 		p2.organize();
+		
+		p2.delProj();
+	}
+	
+	public void CriticalPathTest(){
+		
+		ProjectManager pm;
+		Project p1;
+		
+		pm = new ProjectManager();
+		
+		pm.delAllProjects();
+		
+		
+		//Create a Project
+		p1 = new Project("b_jenkins", "Critical Path Test");
+		/*
+		 *All these tasks have a duration of 5 days.(0 startTime 5 endTime)
+		 *the start time and end Time should be rearranged once we have assigned dependencies
+		 *and called forward pass
+		 */
+		Task t1 = new Task("Task1", "must be completed before Task 2 and Task 3", 0, 5, p1.getId(), "b_jenkins");
+		Task t2 = new Task("Task2", "must be completed before Task 4 and Task 5", 0, 5, p1.getId(), "b_jenkins" );
+		Task t3 = new Task("Task3", "must be completed before Task 7", 0, 5, p1.getId(), "b_jenkins" );
+		Task t4 = new Task("Task4", "must be completed before Task 6", 0, 5, p1.getId(), "b_jenkins" );
+		Task t5 = new Task("Task5", "must be completed before Task 6", 0, 5, p1.getId(), "b_jenkins" );
+		Task t6 = new Task("Task6", "must be completed before Task 8", 0, 5, p1.getId(), "b_jenkins" );
+		Task t7 = new Task("Task7", "must be completed before Task 8", 0, 5, p1.getId(), "b_jenkins" );
+		Task t8 = new Task("Task8", "Last Task to be completed", 0, 5, p1.getId(), "b_jenkins" );
+		
+		//adding interdependencies to the tasks we created
+		t8.addPrereq(t6.getId());
+		t8.addPrereq(t7.getId());
+		
+		t7.addPrereq(t3.getId());
+		
+		t6.addPrereq(t5.getId());
+		t6.addPrereq(t4.getId());
+		
+		t5.addPrereq(t2.getId());
+		
+		t4.addPrereq(t2.getId());
+		
+		t3.addPrereq(t1.getId());
+		
+		t2.addPrereq(t1.getId());
+		
+		//Task 1 has no prerequisites and should be the first to start
+		
+		
+		//Get the critical Path of the project
+		ArrayList<String> criticalPath = p1.criticalPath();
+		
+		
+		//Check if the returned List of task names are in order and 
+		//represent the projects critical path (all tasks with a float of 0 are in the critical path)
+		assertEquals(criticalPath.get(0), "Task1");
+		assertEquals(criticalPath.get(1), "Task2");
+		assertEquals(criticalPath.get(2), "Task4");
+		assertEquals(criticalPath.get(3), "Task5");
+		assertEquals(criticalPath.get(4), "Task6");
+		assertEquals(criticalPath.get(5), "Task8");
 	}
 	
 	
