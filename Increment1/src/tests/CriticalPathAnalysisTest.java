@@ -319,6 +319,8 @@ public class CriticalPathAnalysisTest {
 		assertEquals(criticalPath.get(3), "Task5");
 		assertEquals(criticalPath.get(4), "Task6");
 		assertEquals(criticalPath.get(5), "Task8");
+		
+		p1.delProj();
 	}
 	
 	

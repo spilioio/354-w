@@ -352,5 +352,17 @@ public class Project
 		return null;
 	}
 
+	public double EarnedValueAnalysis() {
+		// TODO Auto-generated method stub
+		
+		/*
+		 * This should calculate the earned value of the project using a new project variable called currentDay
+		 * if a task a is started its value should be 50% of its completed cost.  So for a task with 100.00$ of total value
+		 * the task is worth 0$ if the current day is before the tasks start day.  50$ if the current day is anywhere in in between
+		 * the tasks start and end days. and 100$ if the current day is after the tasks end day
+		 */
+		return 0;
+	}
+
 	
 }
