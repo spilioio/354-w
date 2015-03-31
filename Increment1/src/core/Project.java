@@ -342,20 +342,15 @@ public class Project
 		 * 
 		 */
 		
-		ArrayList<Task> taskList = this.getTasks(); // problem here; fetchAllPreReqs() in Task.java is not fetching anything
+		ArrayList<Task> taskList = this.getTasks(); 
 		Task lastTask;
-		int numPrereqs = 0;
+		int latestFinish = 0;
+		
 		
 		for ( Task t : taskList )
 		{
 			ArrayList<Integer> prereqs = t.getPrereq();
-			
-			if ( prereqs.size() > numPrereqs )
-			{
-				numPrereqs = prereqs.size();
-				lastTask = t;
-			}
-			
+						
 			int earlyStart = -1;
 			int earlyFinish = -1;
 			int start = 0;
@@ -363,11 +358,15 @@ public class Project
 			
 			for ( int i : prereqs )
 			{
-				start = this.getTask(i).getStartTime();
+				start = this.getTask(i).getEndTime() + 1;
 				if ( start > earlyStart )
 					earlyStart = start;
 				
 				finish = earlyStart + this.getTask(i).getEndTime() - this.getTask(i).getStartTime();
+				
+				if ( this.getTask(i).getStartTime() == 0 )
+					finish -= 1;
+				
 				if ( finish > earlyFinish )
 					earlyFinish = finish;
 			}
@@ -377,14 +376,31 @@ public class Project
 				t.setStartTime(earlyStart);
 				t.setEndTime(earlyFinish);
 			}
+			
+			if ( earlyFinish > latestFinish )
+			{
+				latestFinish = earlyFinish;
+				lastTask = t;
+			}
 		}
 		
 	}
 	
 	public Task getTask(int taskId) {
-		for ( Task t : this.getTasks() )
+		ArrayList<Task> tasks = this.getTasks();
+		for ( Task t : tasks )
 		{
 			if ( t.getId() == taskId )
+				return t;
+		}
+		return null;
+	}
+	
+	public Task getTask(Task task) {
+		ArrayList<Task> tasks = this.getTasks();
+		for ( Task t : tasks )
+		{
+			if ( t.getId() == task.getId() )
 				return t;
 		}
 		return null;

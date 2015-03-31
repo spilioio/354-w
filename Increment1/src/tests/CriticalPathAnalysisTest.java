@@ -159,24 +159,24 @@ public class CriticalPathAnalysisTest {
 		//t1 should start first and has no prerequisites
 		
 		p1.organize();
+	
+		assertEquals(p1.getTask(t1).getEarlyStart(), 0);
+		assertEquals(p1.getTask(t1).getEarlyFinish(), 5);
+		assertEquals(p1.getTask(t1).getLateStart(), 0);
+		assertEquals(p1.getTask(t1).getLateFinish(), 5);
+		assertEquals(p1.getTask(t1).getFloat(), 0);
 		
-		assertEquals(t1.getEarlyStart(), 0);
-		assertEquals(t1.getEarlyFinish(), 5);
-		assertEquals(t1.getLateStart(), 0);
-		assertEquals(t1.getLateFinish(), 5);
-		assertEquals(t1.getFloat(), 0);
+		assertEquals(p1.getTask(t2).getEarlyStart(), 6);
+		assertEquals(p1.getTask(t2).getEarlyFinish(), 10);
+		assertEquals(p1.getTask(t2).getLateStart(), 6);
+		assertEquals(p1.getTask(t2).getLateFinish(), 10);
+		assertEquals(p1.getTask(t2).getFloat(), 0);
 		
-		assertEquals(t2.getEarlyStart(), 6);
-		assertEquals(t2.getEarlyFinish(), 10);
-		assertEquals(t2.getLateStart(), 6);
-		assertEquals(t2.getLateFinish(), 10);
-		assertEquals(t2.getFloat(), 0);
-		
-		assertEquals(t3.getEarlyStart(), 11);
-		assertEquals(t3.getEarlyFinish(), 15);
-		assertEquals(t3.getLateStart(), 11);
-		assertEquals(t3.getLateFinish(), 15);
-		assertEquals(t3.getFloat(), 0);
+		assertEquals(p1.getTask(t3).getEarlyStart(), 11);
+		assertEquals(p1.getTask(t3).getEarlyFinish(), 15);
+		assertEquals(p1.getTask(t3).getLateStart(), 11);
+		assertEquals(p1.getTask(t3).getLateFinish(), 15);
+		assertEquals(p1.getTask(t3).getFloat(), 0);
 		
 		p1.delProj();
 	}

@@ -369,7 +369,7 @@ public class Task
 	}
 
 	public void setStartTime(int time) {
-		this.end_time = time;
+		this.start_time = time;
 		
 		Connection conn = null;
 	    try {
