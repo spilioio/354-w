@@ -253,6 +253,7 @@ public class Project
 			
 			while (rs.next())
 			{
+				//System.out.println("task_id:"+rs.getInt("task_id")+" "+rs.getString("task_name"));
 				a.add(new Task(rs.getInt("task_id"), rs.getString("task_name"),
 						rs.getString("description"), rs.getInt("start_time"), rs.getInt("end_time"), rs
 								.getInt("project_id"), rs.getString("user_id"), rs.getInt("is_done")));
@@ -369,7 +370,6 @@ public class Project
 				finish = earlyStart + this.getTask(i).getEndTime() - this.getTask(i).getStartTime();
 				if ( finish > earlyFinish )
 					earlyFinish = finish;
-				
 			}
 			
 			if ( prereqs.size() != 0 )

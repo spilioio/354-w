@@ -69,8 +69,8 @@ public class Task
 			int project_id, String owner_id,
 			int is_done)
 	{
-		task_idOLD = task_id;
-		task_id++;
+		task_id = task_idOLD;
+		//task_id++;
 		this.name = name;
 		this.description = description;
 		this.start_time = start_time;
@@ -137,6 +137,16 @@ public class Task
 	    	conn = DriverManager.getConnection("jdbc:sqlite:COMP354");
 	    	Statement stmt = conn.createStatement();
 	    	stmt.executeUpdate("INSERT INTO precedence VALUES ("+task_id+ ", "+pre_req+", "+project_id+");");
+	    	
+	    	/*ResultSet rs = stmt
+					.executeQuery("SELECT * FROM precedence WHERE task_id = "
+							+ Integer.toString(task_id) + " AND project_id = "+project_id+";");
+	    	
+	    	while (rs.next())
+			{
+	    		System.out.println(rs.getInt("task_id") + " " + rs.getInt("pre_req") + " " + rs.getInt("project_id"));
+			}*/
+	    	
 			stmt.close();
 			conn.close();
 	    }catch ( Exception e ) {
