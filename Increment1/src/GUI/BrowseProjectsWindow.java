@@ -50,6 +50,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        criticalPathButton = new javax.swing.JButton();
         buttonGANTT = new javax.swing.JButton();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
@@ -155,6 +156,30 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         	}
         }); 
         jToolBar1.add(buttonGANTT);
+        
+        
+      //CriticalPathButton
+        criticalPathButton.setText("CriticalPath Analysis");
+        criticalPathButton.setFocusable(false);
+        criticalPathButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        criticalPathButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        
+
+        //CriticalPathActionPerformed
+        criticalPathButton.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent evt){
+        		Project selectedProject = (Project)jList1.getSelectedValue();
+        		if(selectedProject != null){
+	        		ArrayList<String> temp = selectedProject.criticalPath();
+	        		StringBuilder sb = new StringBuilder();
+	        		for(String s : temp ){
+	        			sb.append(s);
+	        		}
+	        		JOptionPane.showMessageDialog(null, sb.toString());
+        		}
+        	}
+        }); 
+        jToolBar1.add(criticalPathButton);
         
         //Display all projects
         jRadioButton1.setText("All Projects");
@@ -277,6 +302,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton buttonGANTT;
+    private javax.swing.JButton criticalPathButton;
     private javax.swing.JList jList1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;

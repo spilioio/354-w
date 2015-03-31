@@ -51,6 +51,7 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         buttonGANTT = new javax.swing.JButton();
+        criticalPathButton = new javax.swing.JButton();
         projectTasks = Driver.getCurrentProject().getTasks();
         
 
@@ -124,6 +125,26 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
         	}
         });
         jToolBar1.add(buttonGANTT);
+        
+        //CriticalPathButton
+        criticalPathButton.setText("CriticalPath Analysis");
+        criticalPathButton.setFocusable(false);
+        criticalPathButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        criticalPathButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        
+
+        //CriticalPathActionPerformed
+        criticalPathButton.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent evt){
+        		ArrayList<String> temp = Driver.getCurrentProject().criticalPath();
+        		StringBuilder sb = new StringBuilder();
+        		for(String s : temp ){
+        			sb.append(s);
+        		}
+        		JOptionPane.showMessageDialog(null, sb.toString());		
+        	}
+        }); 
+        jToolBar1.add(criticalPathButton);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -190,6 +211,7 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
    }
 
     // Variables declaration - do not modify 
+    private javax.swing.JButton criticalPathButton;
     private javax.swing.JButton buttonGANTT;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
