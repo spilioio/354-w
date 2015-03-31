@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 package GUI;
 
 import java.util.*;
@@ -46,7 +46,7 @@ public class baseForm {
 	    }
 
 }
-=======
+=======*/
 package GUI;
 
 import java.util.*;
@@ -94,4 +94,4 @@ public class baseForm {
 	    }
 
 }
->>>>>>> origin/master
+//>>>>>>> origin/master

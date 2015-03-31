@@ -340,6 +340,54 @@ public class Project
 		 * values: EarlyStart, EarlyFinish, LateStart, LateFinish
 		 * 
 		 */
+		
+		ArrayList<Task> taskList = this.getTasks(); // problem here; fetchAllPreReqs() in Task.java is not fetching anything
+		Task lastTask;
+		int numPrereqs = 0;
+		
+		for ( Task t : taskList )
+		{
+			ArrayList<Integer> prereqs = t.getPrereq();
+			
+			if ( prereqs.size() > numPrereqs )
+			{
+				numPrereqs = prereqs.size();
+				lastTask = t;
+			}
+			
+			int earlyStart = -1;
+			int earlyFinish = -1;
+			int start = 0;
+			int finish = 0;
+			
+			for ( int i : prereqs )
+			{
+				start = this.getTask(i).getStartTime();
+				if ( start > earlyStart )
+					earlyStart = start;
+				
+				finish = earlyStart + this.getTask(i).getEndTime() - this.getTask(i).getStartTime();
+				if ( finish > earlyFinish )
+					earlyFinish = finish;
+				
+			}
+			
+			if ( prereqs.size() != 0 )
+			{
+				t.setStartTime(earlyStart);
+				t.setEndTime(earlyFinish);
+			}
+		}
+		
+	}
+	
+	public Task getTask(int taskId) {
+		for ( Task t : this.getTasks() )
+		{
+			if ( t.getId() == taskId )
+				return t;
+		}
+		return null;
 	}
 
 	public ArrayList<String> criticalPath() {

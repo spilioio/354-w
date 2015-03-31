@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Task
 {
 	private String name, description, owner_id; 
-	private int start_time, end_time, project_id, is_done, task_id;
+	private int start_time, end_time, project_id, is_done, task_id, late_start, late_finish, tfloat;
 	private ArrayList<Integer> pre_reqs;
 	private ArrayList<User> members;
 	
@@ -289,6 +289,28 @@ public class Task
 		return task_id;
 	}
 	
+	public int getLateStart()
+	{
+		return late_start;
+	}
+	
+	public int getLateFinish()
+	{
+		return late_finish;
+	}
+	
+	public int getEarlyStart() {
+		return getStartTime();
+	}
+	
+	public int getEarlyFinish() {
+		return getEndTime();
+	}
+	
+	public int getFloat() {
+		return tfloat;
+	}
+	
 	public boolean equals(Object otherTask)
 	{
 		Task t = (Task)otherTask;
@@ -301,6 +323,18 @@ public class Task
 		String task = new String("ID:" + task_id + "   Task Name: " + name + "  Description: " +
 				"  StartTime :" + start_time + "  End Time: " + end_time + "  Owner: " + owner_id);
 		return task;
+	}
+	
+	public void setLateStart(int time) {
+		this.late_start = time;
+	}
+	
+	public void setLateFinish(int time) {
+		this.late_finish = time;
+	}
+	
+	public void setFloat(int time) {
+		this.tfloat = time;
 	}
 
 	public void setEndTime(int time) {	
@@ -368,5 +402,5 @@ public class Task
 		this.pre_reqs.add(task.getId());
 
 	}
-	
+
 }
