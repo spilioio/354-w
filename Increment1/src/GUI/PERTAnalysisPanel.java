@@ -9,12 +9,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+
 public class PERTAnalysisPanel extends BaseDetailPanel {
 	
 private Project currentProject;
 	
 	private static JLabel taskName = new JLabel("Task Name");
-	private static JLabel description = new JLabel("Description");
 	private static JLabel precedent = new JLabel("Precedent Tasks");
 	private static  JLabel optimistic = new JLabel("Optimistic Completion Time");
 	private static  JLabel mostLikely = new JLabel("Most Likely Completion Time");
@@ -34,7 +34,7 @@ private Project currentProject;
     
     public void populatePERTHeader(){
         this.addBodyHeader(taskName);
-        this.addBodyHeader(description);
+
         this.addBodyHeader(precedent);
         this.addBodyHeader(optimistic);
         this.addBodyHeader(mostLikely);
@@ -49,7 +49,11 @@ private Project currentProject;
     		
     		//loop to get the list of prereqs for each task and turn it into a string
     		StringBuilder sb = new StringBuilder();
+    		
     		ArrayList<Integer> prereq = t.getPrereq(); 
+    		if(prereq.size() == 0){
+    			sb.append("No Prerequisite");
+    		}
     		for(Integer i : prereq)
     		{
     			sb.append(i.toString());
@@ -57,16 +61,15 @@ private Project currentProject;
     		}
     		
 	        this.addBodyDetails(new JLabel(t.getName()));
-	        this.addBodyDetails(new JLabel(t.getDescription()));
 	        
 	        //prereqs
 	        this.addBodyDetails(new JLabel("" + sb.toString()));
 	    
-//	        this.addBodyDetails(new JLabel("" + t.getOptimisticEstimate()));
-//	        this.addBodyDetails(new JLabel("" + t.getMostLikelyEstimate()));
-//	        this.addBodyDetails(new JLabel("" + t.getPessimisticEstimate()));
-//	        this.addBodyDetails(new JLabel("" + t.getExpectedEstimate()));
-//	        this.addBodyDetails(new JLabel("" + t.getStandardDeviation()));
+	        this.addBodyDetails(new JLabel("3"/* + t.getOptimisticEstimate()*/));
+	        this.addBodyDetails(new JLabel("3"/*+ t.getMostLikelyEstimate()*/));
+	        this.addBodyDetails(new JLabel("3"/* + t.getPessimisticEstimate()*/));
+	        this.addBodyDetails(new JLabel("3"/* + t.getExpectedEstimate()*/));
+	        this.addBodyDetails(new JLabel("3"/*+ t.getStandardDeviation()*/));
     	}
     }
     
@@ -78,6 +81,7 @@ private Project currentProject;
         this.buildBody();
         this.buildFooter();
         this.buildMain();
+
     }
     
     public JPanel displayPERTPanel(){
@@ -89,7 +93,7 @@ private Project currentProject;
     	
     	Project p1;
 		//Create a Project
-		p1 = new Project("b_jenkins", "Critical Path Test2");
+		p1 = new Project("b_jenkins", "PERT WINDOW TEST");
 				
 		Task t1 = new Task("Task1", "must be completed before Task 2 ", 0, 5, p1.getId(), "b_jenkins");
 		Task t2 = new Task("Task2", "must be completed before Task 3", 0, 5, p1.getId(), "b_jenkins" );
@@ -103,6 +107,7 @@ private Project currentProject;
     	PERTtest.setVisible(true);
     	PERTAnalysisPanel PERTPanel = new PERTAnalysisPanel(p1);
     	PERTtest.add(PERTPanel.displayPERTPanel());
+    	PERTtest.pack();
 
     }
     

@@ -88,7 +88,7 @@ public class BaseDetailPanel extends Component{
 		}
 		
 		bodyConstraints.gridx = 1;
-		bodyConstraints.gridy = 2;
+		bodyConstraints.gridy++;
 		
 		// Add the detailLabels
 		for(int i = 0; i < this.bodyDetailLabels.size(); i++){
@@ -132,7 +132,7 @@ public class BaseDetailPanel extends Component{
 		this.mainPanel.add(this.headerPanel);
 		this.mainPanel.add(this.bodyPanel);
 		this.mainPanel.add(this.footerPanel);
-		
+		this.assembleMainPanel();
 		this.mainPanel.setVisible(true);
 	}
 	
