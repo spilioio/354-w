@@ -341,13 +341,19 @@ public class Project
 		 * I think we should set the pessimistic and optimistic estimates for the tasks
 		 * to +/- 15% of their duration because there are no other guidelines on how to calculate them
 		 */
-		return null;
+		//pessimistic is late_finish
+		//optimistic is early_finish
+		double pertAnalysis = 0;
+		this.organize();
+		
+		for ( Task t : allTasks )
+			pertAnalysis += t.getPERTEstimate();
+		
+		return pertAnalysis;
 		
 	}
 
-	public void organize() {
-		// TODO Auto-generated method stub
-		
+	public void organize() {	
 		/*
 		 * this should do a forward pass and a backward pass and set appropriate 
 		 * values: EarlyStart, EarlyFinish, LateStart, LateFinish
@@ -468,8 +474,6 @@ public class Project
 	}
 
 	public ArrayList<String> criticalPath() {
-		// TODO Auto-generated method stub
-		
 		/*
 		 * This should find all the tasks in the project that have a float of 0
 		 * and return an Arraylist<String> containing the Task names
@@ -501,6 +505,15 @@ public class Project
 			criticalPath.add(entry.getKey());
 		}
 		
+		for ( String s : criticalPath )
+		{
+			for ( Task t : allTasks )
+			{
+				if ( s == t.getName() )
+					theCriticalPath.add(t);
+			}
+		}
+		
 		return criticalPath;
 	}
 	
@@ -520,11 +533,20 @@ public class Project
 	public void addTask(Task task) {
 		// TODO Auto-generated method stub
 		this.organize();
+		for ( Task t : allTasks )
+		{
+			if ( t.getId() == task.getId() )
+			{
+				t.setOptimisticEstimate(task.getOptimisticEstimate());
+				t.setLikelyEstimate(task.getLikelyEstimate());
+				t.setPessimisticEstimate(task.getPessimisticEstimate());
+			}
+		}
 	}
 
 	public ArrayList<Task> getCriticalPath() {
-		// TODO Auto-generated method stub
-		return null;
+		this.criticalPath();
+		return theCriticalPath;
 	}
 
 	public double PERTVariance() {

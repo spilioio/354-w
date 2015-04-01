@@ -21,33 +21,33 @@ public class TestProjectPERT {
 		pm.delAllProjects();
 		
 		project = new Project("b_jenkins", "testProject", 999);
-		task = new Task("test_task", "taskTester", 10, 15, 1, "b_jenkins");
+		task = new Task("test_task", "taskTester", 10, 15, 999, "b_jenkins");
 		
 		task.setOptimisticEstimate(5);
 		task.setLikelyEstimate(6);
 		task.setPessimisticEstimate(7);
 		
-		task2 = new Task("test_task", "taskTester", 15, 20, 1, "b_jenkins");
+		task2 = new Task("test_task", "taskTester", 15, 20, 999, "b_jenkins");
 					
 		task2.setOptimisticEstimate(5);
 		task2.setLikelyEstimate(6);
 		task2.setPessimisticEstimate(7);
 		
-		task2 = new Task("test_task", "taskTester", 14, 19, 1, "b_jenkins");
+		task2 = new Task("test_task", "taskTester", 14, 19, 999, "b_jenkins");
 						
-		task3.setOptimisticEstimate(5);
-		task3.setLikelyEstimate(6);
-		task3.setPessimisticEstimate(7);
+//		task3.setOptimisticEstimate(5);
+//		task3.setLikelyEstimate(6);
+//		task3.setPessimisticEstimate(7);
 		
 		project.addTask(task);
 		project.addTask(task2);
-		project.addTask(task3);
+//		project.addTask(task3);
 	}
 	
 	public void teardownTestEnvironment(){
 		task.deleteTask();
 		task2.deleteTask();
-		task3.deleteTask();
+//		task3.deleteTask();
 		project.delProj();
 	}
 	
@@ -60,7 +60,7 @@ public class TestProjectPERT {
 			expected += project.getTasks().get(i).getPERTEstimate();
 		}
 		pertAnalysis = project.PERTAnalysis();
-		assertEquals(expected, pertAnalysis);
+		assertTrue(expected == pertAnalysis);
 
 		this.teardownTestEnvironment();
 	}
@@ -74,7 +74,7 @@ public class TestProjectPERT {
 			expected += project.getCriticalPath().get(i).getPERTVariance();
 		}
 		pertVariance = project.PERTVariance();
-		assertEquals(expected, pertVariance);
+		assertTrue(expected == pertVariance);
 		this.teardownTestEnvironment();
 	}
 	
@@ -84,7 +84,7 @@ public class TestProjectPERT {
 		this.setupTestEvironment();
 		double expected = Math.sqrt(project.PERTVariance()), pertSd;
 		pertSd = project.PERTStandardDeviation();
-		assertEquals(expected, pertSd);
+		assertTrue(expected == pertSd);
 		this.teardownTestEnvironment();
 	}
 	

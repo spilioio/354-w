@@ -1,8 +1,7 @@
 package tests;
-import junit.*;
 import core.*;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.*;
 
@@ -25,6 +24,7 @@ public class TestTaskPERT {
 		task.deleteTask();
 	}
 	
+	@Test
 	public void testGetPERTEstimate(){
 		// getPERTEstimate must return a double
 		
@@ -32,23 +32,25 @@ public class TestTaskPERT {
 		
 		double expected = ((5+4*6+7) / 6);
 		
-		assertEquals(expected,task.getPERTEstimate());
+		assertTrue(expected == task.getPERTEstimate());
 		
 		this.teardownTestEnvironment();
 	}
 	
+	@Test
 	public void testGetPERTVariance(){
 		// getPERTVariance must return a double
 
 		this.setupTestEvironment();
 		
 		double expected = (7 - 5)^2 / 36;
-		
-		assertEquals(expected, task.getPERTVariance());
+
+		assertTrue(expected == task.getPERTVariance());
 		
 		this.teardownTestEnvironment();
 	}
 	
+	@Test
 	public void testGetOptimisitcEstimate(){
 		
 		this.setupTestEvironment();
@@ -57,12 +59,14 @@ public class TestTaskPERT {
 		
 	}
 	
+	@Test
 	public void testGetLikelyEstimate(){
 		this.setupTestEvironment();
 		assertEquals(6, task.getLikelyEstimate());
 		this.teardownTestEnvironment();
 	}
 	
+	@Test
 	public void testGetPessimistic(){
 		this.setupTestEvironment();
 		assertEquals(7, task.getPessimisticEstimate());

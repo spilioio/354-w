@@ -455,9 +455,10 @@ public class Task
 	}
 
 	public double getPERTEstimate() {
+		// (ShortestTime + 4(LikelyTime) + LongestTime) / 6
 		if ( pertEstimate == -1 )
 		{
-			
+			pertEstimate = (optimistic + 4 * likely + pessimistic) / 6;
 		}
 		
 		return pertEstimate;
@@ -466,7 +467,7 @@ public class Task
 	public double getPERTVariance() {
 		if ( pertVariance == -1 )
 		{
-			
+			pertVariance = (pessimistic - optimistic)^2 / 36;
 		}
 		
 		return pertVariance;
