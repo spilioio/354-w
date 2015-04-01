@@ -352,6 +352,7 @@ public class Project
 		 * 
 		 */
 		
+		//Forward Pass
 		ArrayList<Task> taskList = this.getTasks(); 
 		Task lastTask = taskList.get(0);
 		int latestFinish = 0;
@@ -394,7 +395,7 @@ public class Project
 			}
 		}
 		
-
+		//set late finish and late start of the latest task
 		for ( Task t : allTasks )
 		{
 			if ( t.getId() == lastTask.getId() )

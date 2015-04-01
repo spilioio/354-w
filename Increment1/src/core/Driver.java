@@ -679,4 +679,12 @@ public class Driver
 		currentProject = p;
 		
 	}
+	
+	public static Task getCurrentTask() {
+		return currentTask;
+	}
+	
+	public static void setCurrentTask(Task t) {
+		currentTask = t;
+	}
 }
