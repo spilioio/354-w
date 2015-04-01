@@ -21,6 +21,9 @@ public class BaseDetailPanel extends Component{
 	protected ArrayList<JLabel> bodyDetailLabels;
 	
 	protected GridBagLayout headerLayout = new GridBagLayout();
+	protected GridBagLayout bodyLayout = new GridBagLayout();
+	protected GridBagLayout footerLayout = new GridBagLayout();
+
 	
 	protected Dimension mainDim = new Dimension(500, 500);
 	protected Dimension headerFooterDim = new Dimension(100, 500);
@@ -31,9 +34,9 @@ public class BaseDetailPanel extends Component{
 	
 	public void initialize(){
 		this.mainPanel = new JPanel();
-		this.headerPanel = new JPanel();
-		this.bodyPanel = new JPanel();
-		this.footerPanel = new JPanel();
+		this.headerPanel = new JPanel(headerLayout);
+		this.bodyPanel = new JPanel(bodyLayout);
+		this.footerPanel = new JPanel(footerLayout);
 		this.headerButtons = new ArrayList<JButton>();
 		this.footerButtons = new ArrayList<JButton>();
 		this.headerLabels = new ArrayList<JLabel>();
@@ -88,17 +91,18 @@ public class BaseDetailPanel extends Component{
 		}
 		
 		bodyConstraints.gridx = 1;
-		bodyConstraints.gridy++;
+		bodyConstraints.gridy = 2;
 		
 		// Add the detailLabels
+		int flag = 1;
 		for(int i = 0; i < this.bodyDetailLabels.size(); i++){
-			int flag = 0;
-			if(flag == 0){
+			
+			if(flag % 2 == 0){
 				this.bodyDetailLabels.get(i).setBackground(Color.GRAY);
 			} else {
 				this.bodyDetailLabels.get(i).setBackground(Color.DARK_GRAY);
 			}
-			
+						
 			this.bodyPanel.add(this.bodyDetailLabels.get(i), bodyConstraints);
 			bodyConstraints.gridx++;
 			if((i + 1) % labelCount == 0){
