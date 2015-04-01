@@ -24,6 +24,7 @@ public class Project
 	private int project_id;
 	private GanttChart ganttChart;
 	private ArrayList<Task> allTasks;
+	private ArrayList<Task> theCriticalPath = new ArrayList<Task>();
 	
 	public Project(String owner_id, String project_name)
 	{
@@ -333,13 +334,14 @@ public class Project
 		return project;					
 	}
 
-	public void PERTAnalysis() {
+	public Double PERTAnalysis() {
 		// TODO Auto-generated method stub
 		
 		/*
 		 * I think we should set the pessimistic and optimistic estimates for the tasks
 		 * to +/- 15% of their duration because there are no other guidelines on how to calculate them
 		 */
+		return null;
 		
 	}
 
@@ -512,6 +514,26 @@ public class Project
 		 * the task is worth 0$ if the current day is before the tasks start day.  50$ if the current day is anywhere in in between
 		 * the tasks start and end days. and 100$ if the current day is after the tasks end day
 		 */
+		return 0;
+	}
+
+	public void addTask(Task task) {
+		// TODO Auto-generated method stub
+		this.organize();
+	}
+
+	public ArrayList<Task> getCriticalPath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public double PERTVariance() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public double PERTStandardDeviation() {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 	

@@ -10,6 +10,8 @@ public class Task
 {
 	private String name, description, owner_id; 
 	private int start_time, end_time, project_id, is_done, task_id, late_start, late_finish, tfloat, duration;
+	private int optimistic, likely, pessimistic;
+	private double pertEstimate, pertVariance;
 	private ArrayList<Integer> pre_reqs;
 	private ArrayList<User> members;
 	
@@ -67,6 +69,9 @@ public class Task
 	     late_finish = -1;
 	     tfloat = -1;
 	     duration = -1;
+	     
+	     pertEstimate = -1;
+	     pertVariance = -1;
 	}
 	
 	/** Used to create a task object without automatically adding it to DB */
@@ -88,6 +93,9 @@ public class Task
 	    late_finish = -1;
 	    tfloat = -1;
 	    duration = -1;
+	    
+	    pertEstimate = -1;
+	    pertVariance = -1;
 		
 		fetchAllPreReqs();
 	}
@@ -429,6 +437,51 @@ public class Task
 	public void setPreReqs(Task task){
 		this.pre_reqs.add(task.getId());
 
+	}
+
+	public void setOptimisticEstimate(int i) {
+		optimistic = i;
+		
+	}
+
+	public void setLikelyEstimate(int i) {
+		likely = i;
+		
+	}
+
+	public void setPessimisticEstimate(int i) {
+		pessimistic = i;
+		
+	}
+
+	public double getPERTEstimate() {
+		if ( pertEstimate == -1 )
+		{
+			
+		}
+		
+		return pertEstimate;
+	}
+
+	public double getPERTVariance() {
+		if ( pertVariance == -1 )
+		{
+			
+		}
+		
+		return pertVariance;
+	}
+
+	public int getOptimisticEstimate() {
+		return optimistic;
+	}
+
+	public int getLikelyEstimate() {
+		return likely;
+	}
+
+	public int getPessimisticEstimate() {
+		return pessimistic;
 	}
 
 }

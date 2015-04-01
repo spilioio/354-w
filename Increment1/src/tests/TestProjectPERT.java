@@ -1,4 +1,4 @@
-package testPERTAnalysis;
+package tests;
 
 import junit.*;
 import core.*;
@@ -16,6 +16,10 @@ public class TestProjectPERT {
 	// (ShortestTime + 4(LikelyTime) + LongestTime) / 6
 	
 	public void setupTestEvironment(){
+		ProjectManager pm = new ProjectManager();
+		
+		pm.delAllProjects();
+		
 		project = new Project("b_jenkins", "testProject", 999);
 		task = new Task("test_task", "taskTester", 10, 15, 1, "b_jenkins");
 		
@@ -47,33 +51,40 @@ public class TestProjectPERT {
 		project.delProj();
 	}
 	
+	@Test
 	public void testPERTAnalysis(){
 		// PERTAnalysis should return the sum of the project's task PERT Estimates
 		this.setupTestEvironment();
-		double expected;
+		double expected = 0, pertAnalysis;
 		for(int i = 0; i < project.getTasks().size(); i++){
 			expected += project.getTasks().get(i).getPERTEstimate();
 		}
-		assertEquals(expected, project.PERTAnalysis());
+		pertAnalysis = project.PERTAnalysis();
+		assertEquals(expected, pertAnalysis);
+
 		this.teardownTestEnvironment();
 	}
 	
+	@Test
 	public void testPERTVariance(){
 		// PERTVariance should return the sum of the variances of the project's critical path tasks
 		this.setupTestEvironment();
-		double expected;
+		double expected = 0, pertVariance;
 		for(int i = 0; i < project.getCriticalPath().size(); i++){
 			expected += project.getCriticalPath().get(i).getPERTVariance();
 		}
-		assertEquals(expected, project.PERTVariance());
+		pertVariance = project.PERTVariance();
+		assertEquals(expected, pertVariance);
 		this.teardownTestEnvironment();
 	}
 	
+	@Test
 	public void testPERTStandardDeviation(){
 		// PERTStandardDeviation should return the square root of the project's variance (calculated by PERTVariance)
 		this.setupTestEvironment();
-		double expected = Math.sqrt(project.PERTVariance());
-		assertEquals(expected, project.PERTStandardDeviation());
+		double expected = Math.sqrt(project.PERTVariance()), pertSd;
+		pertSd = project.PERTStandardDeviation();
+		assertEquals(expected, pertSd);
 		this.teardownTestEnvironment();
 	}
 	
