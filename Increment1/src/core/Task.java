@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Task
 {
 	private String name, description, owner_id; 
-	private int start_time, end_time, project_id, is_done, task_id, late_start, late_finish, tfloat;
+	private int start_time, end_time, project_id, is_done, task_id, late_start, late_finish, tfloat, duration;
 	private ArrayList<Integer> pre_reqs;
 	private ArrayList<User> members;
 	
@@ -62,6 +62,11 @@ public class Task
 	        System.exit(0);
 	     }
 	     System.out.println("Task created successfully");
+	     
+	     late_start = -1;
+	     late_finish = -1;
+	     tfloat = -1;
+	     duration = -1;
 	}
 	
 	/** Used to create a task object without automatically adding it to DB */
@@ -78,6 +83,11 @@ public class Task
 		this.project_id = project_id;
 		this.owner_id = owner_id;
 		this.is_done = is_done;
+		
+		late_start = -1;
+	    late_finish = -1;
+	    tfloat = -1;
+	    duration = -1;
 		
 		fetchAllPreReqs();
 	}
@@ -284,6 +294,10 @@ public class Task
 		return this.end_time;
 	}
 	
+	public int getDuration(){
+		return this.duration;
+	}
+	
 	public int getProjectID()
 	{
 		return this.project_id;
@@ -345,6 +359,10 @@ public class Task
 	
 	public void setFloat(int time) {
 		this.tfloat = time;
+	}
+	
+	public void setDuration(int time) {
+		this.duration = time;
 	}
 
 	public void setEndTime(int time) {	

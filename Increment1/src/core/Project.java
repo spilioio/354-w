@@ -5,6 +5,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Comparator;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import GANTTChart.*;
 
@@ -16,6 +23,7 @@ public class Project
 	private String owner_id, project_name;
 	private int project_id;
 	private GanttChart ganttChart;
+	private ArrayList<Task> allTasks;
 	
 	public Project(String owner_id, String project_name)
 	{
@@ -70,7 +78,6 @@ public class Project
 			System.exit(0);
 		}
 		System.out.println("Project created successfully");
-		
 	}
 	
 	/** Use this to instantiate a project from the DB */
@@ -123,6 +130,7 @@ public class Project
 			System.exit(0);
 		}
 		System.out.println("Project created successfully");
+		
 	}
 	
 	/*public void setId(int id)
@@ -271,6 +279,8 @@ public class Project
 			System.exit(0);
 		}
 		System.out.println("All tasks successfully fetched");
+		
+		this.allTasks = a;
 		return a;
 	}
 	
@@ -343,8 +353,9 @@ public class Project
 		 */
 		
 		ArrayList<Task> taskList = this.getTasks(); 
-		Task lastTask;
+		Task lastTask = taskList.get(0);
 		int latestFinish = 0;
+		int latestStart = 0;
 		
 		
 		for ( Task t : taskList )
@@ -362,10 +373,7 @@ public class Project
 				if ( start > earlyStart )
 					earlyStart = start;
 				
-				finish = earlyStart + this.getTask(i).getEndTime() - this.getTask(i).getStartTime();
-				
-				if ( this.getTask(i).getStartTime() == 0 )
-					finish -= 1;
+				finish = earlyStart + t.getEndTime() - t.getStartTime() - 1;
 				
 				if ( finish > earlyFinish )
 					earlyFinish = finish;
@@ -377,18 +385,69 @@ public class Project
 				t.setEndTime(earlyFinish);
 			}
 			
+			
 			if ( earlyFinish > latestFinish )
 			{
 				latestFinish = earlyFinish;
+				latestStart = earlyStart;
 				lastTask = t;
 			}
 		}
 		
+
+		for ( Task t : allTasks )
+		{
+			if ( t.getId() == lastTask.getId() )
+			{
+				t.setLateFinish(latestFinish);
+				t.setLateStart(latestStart);
+				break;
+			}
+		}
+		
+		Task cTask = lastTask;
+		backwardPass(cTask);
+	}
+	
+	private Task backwardPass(Task cTask)
+	{
+		Task task = this.getTask(cTask);
+		if ( cTask.getStartTime() != 0 )
+		{
+			ArrayList<Integer> prereqs = cTask.getPrereq();
+			
+			int duration = cTask.getEndTime() - cTask.getStartTime() + 1;
+			int lateStart = cTask.getLateFinish() - duration;
+			int tfloat = cTask.getLateFinish() - cTask.getEarlyFinish();
+			int lateFinish = cTask.getLateFinish();
+			
+			for ( int i : prereqs )
+			{
+				Task pTask = this.getTask(i);
+				
+				if ( pTask.getLateFinish() < 0 )
+					pTask.setLateFinish(lateStart);
+			}
+						
+			
+			task.setDuration(duration);
+			task.setLateFinish(lateFinish);
+			task.setLateStart(lateStart);
+			task.setFloat(tfloat);
+			
+			for ( int i : prereqs )
+				backwardPass(this.getTask(i));
+		}
+		
+		task.setDuration(task.getEndTime() - task.getStartTime());
+		task.setLateStart(task.getLateFinish() - task.getDuration());
+		task.setFloat(task.getLateFinish() - task.getEarlyFinish());
+		
+		return null;
 	}
 	
 	public Task getTask(int taskId) {
-		ArrayList<Task> tasks = this.getTasks();
-		for ( Task t : tasks )
+		for ( Task t : allTasks )
 		{
 			if ( t.getId() == taskId )
 				return t;
@@ -397,8 +456,7 @@ public class Project
 	}
 	
 	public Task getTask(Task task) {
-		ArrayList<Task> tasks = this.getTasks();
-		for ( Task t : tasks )
+		for ( Task t : allTasks )
 		{
 			if ( t.getId() == task.getId() )
 				return t;
@@ -413,8 +471,36 @@ public class Project
 		 * This should find all the tasks in the project that have a float of 0
 		 * and return an Arraylist<String> containing the Task names
 		 */
-		return null;
+		this.organize();
+		Map<String, Integer> PATH = new HashMap<String, Integer>();
+		ArrayList<String> criticalPath = new ArrayList<String>();
+		
+		Comparator<Map.Entry<String, Integer>> byMapValues = new Comparator<Map.Entry<String, Integer>>() {
+	        @Override
+	        public int compare(Map.Entry<String, Integer> left, Map.Entry<String, Integer> right) {
+	            return left.getValue().compareTo(right.getValue());
+	        }
+	    };
+		
+	    List<Map.Entry<String, Integer>> path = new ArrayList<Map.Entry<String, Integer>>();
+	    
+		for ( Task t : allTasks )
+		{
+			if ( t.getFloat() == 0 )
+				PATH.put(t.getName(), t.getLateFinish());
+		}
+		
+		path.addAll(PATH.entrySet());
+		
+		Collections.sort(path, byMapValues);
+		
+		for ( Entry<String, Integer> entry : path ) {
+			criticalPath.add(entry.getKey());
+		}
+		
+		return criticalPath;
 	}
+	
 
 	public double EarnedValueAnalysis() {
 		// TODO Auto-generated method stub
@@ -427,6 +513,8 @@ public class Project
 		 */
 		return 0;
 	}
+	
+	
 
 	
 }
