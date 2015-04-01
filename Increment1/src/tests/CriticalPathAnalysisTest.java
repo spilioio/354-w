@@ -235,37 +235,37 @@ public class CriticalPathAnalysisTest {
 	
 	//This test should check if the Tasks within the project have circular dependencies
 	//In this case an exception should be thrown to indicate that the project's task prereqs are incorrect
-	@Test(expected = CircularityException.class)
-	public void CircularPathTest() throws CircularityException
-	{
-		
-		ProjectManager pm2;
-		Project p2;
-		
-		pm2 = new ProjectManager();
-		
-		pm2.delAllProjects();
-		
-		p2 = new Project("b_jenkins", "CircularPathTest");
-		
-		Task t1 = new Task("Task1", "must be completed before Task 2 and Task 3", 0, 5, p2.getId(), "b_jenkins");
-		Task t2 = new Task("Task2", "must be completed before Task 4 and Task 5", 0, 5, p2.getId(), "b_jenkins" );
-		Task t3 = new Task("Task3", "must be completed before Task 7", 0, 5, p2.getId(), "b_jenkins" );
-		Task t4 = new Task("Task4", "must be completed before Task 6", 0, 5, p2.getId(), "b_jenkins" );
-		
-		t2.addPrereq(t1.getId());
-		t3.addPrereq(t2.getId());
-		t4.addPrereq(t3.getId());
-		
-		//this prereq makes the project circular which should not be allowed
-		t1.addPrereq(t4.getId());
-		
-		//the organize() method should throw a custom exception to indicate the project has a circular dependency
-		
-		p2.delProj();
-		
-		throw new CircularityException();
-	}
+//	@Test(expected = CircularityException.class)
+//	public void CircularPathTest() throws CircularityException
+//	{
+//		
+//		ProjectManager pm2;
+//		Project p2;
+//		
+//		pm2 = new ProjectManager();
+//		
+//		pm2.delAllProjects();
+//		
+//		p2 = new Project("b_jenkins", "CircularPathTest");
+//		
+//		Task t1 = new Task("Task1", "must be completed before Task 2 and Task 3", 0, 5, p2.getId(), "b_jenkins");
+//		Task t2 = new Task("Task2", "must be completed before Task 4 and Task 5", 0, 5, p2.getId(), "b_jenkins" );
+//		Task t3 = new Task("Task3", "must be completed before Task 7", 0, 5, p2.getId(), "b_jenkins" );
+//		Task t4 = new Task("Task4", "must be completed before Task 6", 0, 5, p2.getId(), "b_jenkins" );
+//		
+//		t2.addPrereq(t1.getId());
+//		t3.addPrereq(t2.getId());
+//		t4.addPrereq(t3.getId());
+//		
+//		//this prereq makes the project circular which should not be allowed
+//		t1.addPrereq(t4.getId());
+//		
+//		//the organize() method should throw a custom exception to indicate the project has a circular dependency
+//		
+//		p2.delProj();
+//		
+//		throw new CircularityException();
+//	}
 	
 	@Test
 	public void CriticalPathTest(){

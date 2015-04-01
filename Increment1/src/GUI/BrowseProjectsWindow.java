@@ -174,6 +174,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
 	        		StringBuilder sb = new StringBuilder();
 	        		for(String s : temp ){
 	        			sb.append(s);
+	        			sb.append(", ");
 	        		}
 	        		JOptionPane.showMessageDialog(null, sb.toString());
         		}

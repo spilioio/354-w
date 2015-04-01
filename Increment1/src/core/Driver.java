@@ -41,14 +41,44 @@ public class Driver
 	
 	public static void main(String[] args)
 	{
+		//START TEST CODE REMOVE LATER
 		
-//		//THIS IS FOR TESTING
-//		Project project = new Project("bob", "myProj", 1);
-//
-//		Task[] task = new Task[3];
-//	    task[0] = new Task("CAT", "CATSSSS", 1, 5, 1, "bob");
-//	    task[1] = new Task("DOG", "DOGS", 1, 8, 1, "bob");
-//	    task[2] = new Task("Hamster", "Rodents", 5, 7, 1, "bob");
+
+//		//Create a Project
+//		Project p1 = new Project("b_jenkins", "Critical Path Test1");
+//		
+//		Task t1 = new Task("Task1", "must be completed before Task 2 and Task 3", 0, 5, p1.getId(), "b_jenkins");
+//		Task t2 = new Task("Task2", "must be completed before Task 4 and Task 5", 0, 5, p1.getId(), "b_jenkins" );
+//		Task t3 = new Task("Task3", "must be completed before Task 7", 0, 5, p1.getId(), "b_jenkins" );
+//		Task t4 = new Task("Task4", "must be completed before Task 6", 0, 5, p1.getId(), "b_jenkins" );
+//		Task t5 = new Task("Task5", "must be completed before Task 6", 0, 5, p1.getId(), "b_jenkins" );
+//		Task t6 = new Task("Task6", "must be completed before Task 8", 0, 5, p1.getId(), "b_jenkins" );
+//		Task t7 = new Task("Task7", "must be completed before Task 8", 0, 5, p1.getId(), "b_jenkins" );
+//		Task t8 = new Task("Task8", "Last Task to be completed", 0, 5, p1.getId(), "b_jenkins" );
+//		
+//		//adding interdependencies to the tasks we created
+//		t8.addPrereq(t6.getId());
+//		t8.addPrereq(t7.getId());
+//		
+//		t7.addPrereq(t3.getId());
+//		
+//		t6.addPrereq(t5.getId());
+//		t6.addPrereq(t4.getId());
+//		
+//		t5.addPrereq(t2.getId());
+//		
+//		t4.addPrereq(t2.getId());
+//		
+//		t3.addPrereq(t1.getId());
+//		
+//		t2.addPrereq(t1.getId());
+		
+		//Task 1 has no prerequisites and should be the first to start
+		
+		//END TEST CODE HERE
+		
+		
+		
 		
 
 		// Initialize shared variables
