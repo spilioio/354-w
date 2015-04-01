@@ -29,6 +29,18 @@ public class BaseDetailPanel extends Component{
 	protected Dimension buttonDim = new Dimension(20, 40);
 	protected Dimension labelDim = new Dimension(20, 40);
 	
+	public void initialize(){
+		this.mainPanel = new JPanel();
+		this.headerPanel = new JPanel();
+		this.bodyPanel = new JPanel();
+		this.footerPanel = new JPanel();
+		this.headerButtons = new ArrayList<JButton>();
+		this.footerButtons = new ArrayList<JButton>();
+		this.headerLabels = new ArrayList<JLabel>();
+		this.bodyHeaderLabels = new ArrayList<JLabel>();
+		this.bodyDetailLabels = new ArrayList<JLabel>();
+	}
+	
 	public void assembleMainPanel(){
 		this.mainPanel.add(headerPanel);
 		this.mainPanel.add(bodyPanel);

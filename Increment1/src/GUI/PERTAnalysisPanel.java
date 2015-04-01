@@ -23,8 +23,7 @@ private Project currentProject;
 	private static JLabel StandardDeviation = new JLabel("Standard Deviation");
 	
 	public PERTAnalysisPanel(Project p){
-		currentProject = p;
-					
+		currentProject = p;		
 	}
 	
 	
@@ -72,6 +71,7 @@ private Project currentProject;
     }
     
     public void buildPERTPanel(){
+    	this.initialize();
         this.populatePERTHeader();
         this.populatePERTDetails();
         this.buildHeader();
