@@ -51,10 +51,11 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         criticalPathButton = new javax.swing.JButton();
+        PERTButton = new javax.swing.JButton();
         buttonGANTT = new javax.swing.JButton();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        jRadioButton3 = new javax.swing.JRadioButton(); 
         bg = new javax.swing.ButtonGroup();
         bg.add(jRadioButton1);
         bg.add(jRadioButton2);
@@ -182,6 +183,26 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         }); 
         jToolBar1.add(criticalPathButton);
         
+        //PERT ANALYSIS BUTTON
+        PERTButton.setText("Display PERT Values");
+        PERTButton.setFocusable(false);
+        PERTButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        PERTButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        PERTButton.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent evt){
+        		Project temp = (Project)jList1.getSelectedValue();
+        		JFrame PERTtest = new JFrame("PERT Values");
+            	PERTtest.setVisible(true);
+            	PERTAnalysisPanel PERTPanel = new PERTAnalysisPanel(temp);
+            	PERTtest.add(PERTPanel.displayPERTPanel());
+            	PERTtest.pack();
+        		
+        	}
+        }); 
+        jToolBar1.add(PERTButton);
+        
+        
+        
         //Display all projects
         jRadioButton1.setText("All Projects");
         jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -298,7 +319,8 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
     }
     
 
-    // Variables declaration - do not modify                     
+    // Variables declaration - do not modify  
+    private javax.swing.JButton PERTButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

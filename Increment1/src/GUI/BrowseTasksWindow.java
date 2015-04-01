@@ -50,6 +50,7 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        PERTButton = new javax.swing.JButton();
         buttonGANTT = new javax.swing.JButton();
         criticalPathButton = new javax.swing.JButton();
         projectTasks = Driver.getCurrentProject().getTasks();
@@ -162,6 +163,25 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
         	}
         }); 
         jToolBar1.add(criticalPathButton);
+        
+        //PERT ANALYSIS BUTTON
+        PERTButton.setText("Display PERT Values");
+        PERTButton.setFocusable(false);
+        PERTButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        PERTButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        PERTButton.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent evt){
+        		
+        		Project temp = Driver.getCurrentProject();
+        		JFrame PERTtest = new JFrame("PERT Values");
+            	PERTtest.setVisible(true);
+            	PERTAnalysisPanel PERTPanel = new PERTAnalysisPanel(temp);
+            	PERTtest.add(PERTPanel.displayPERTPanel());
+            	PERTtest.pack();
+        		
+        	}
+        }); 
+        jToolBar1.add(PERTButton);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -233,6 +253,7 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton PERTButton;
     private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
