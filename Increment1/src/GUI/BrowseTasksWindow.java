@@ -79,16 +79,32 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
       	  }
         });
 
-        jButton2.setText("Edit Task");
+        jButton2.setText("Add Prerequisite");
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButton2);
         jButton2.addActionListener(new ActionListener() {
+        	
+        	//ACTION PERFORMED
         	public void actionPerformed(ActionEvent evt) {
-        
-		        projectTasks = Driver.getCurrentProject().getTasks();
-				updateListDisplay();
+        		
+        		Task temp = (Task)jList1.getSelectedValue();
+        		
+        		if (temp != null){
+	        		JFrame frame = new JFrame("Add Prerequisite");
+	        		String name =  JOptionPane.showInputDialog("Enter the Name of the task that precedes this one:");
+	        		
+	        		for( Task t : projectTasks){
+	        			if(name.equalsIgnoreCase(t.getName())){
+	        				temp.addPrereq(t.getId());
+	        			}
+	        		}
+	        		
+	        
+			        projectTasks = Driver.getCurrentProject().getTasks();
+					updateListDisplay();
+        		}
         	}
         });
 
