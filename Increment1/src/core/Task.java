@@ -10,7 +10,7 @@ public class Task
 {
 	private String name, description, owner_id; 
 	private int start_time, end_time, project_id, is_done, task_id, late_start, late_finish, tfloat, duration;
-	private int optimistic, likely, pessimistic;
+	private double optimistic, likely, pessimistic;
 	private double pertEstimate, pertVariance;
 	private ArrayList<Integer> pre_reqs;
 	private ArrayList<User> members;
@@ -439,18 +439,18 @@ public class Task
 
 	}
 
-	public void setOptimisticEstimate(int i) {
-		optimistic = i;
+	public void setOptimisticEstimate(double d) {
+		optimistic = d;
 		
 	}
 
-	public void setLikelyEstimate(int i) {
-		likely = i;
+	public void setLikelyEstimate(double d) {
+		likely = d;
 		
 	}
 
-	public void setPessimisticEstimate(int i) {
-		pessimistic = i;
+	public void setPessimisticEstimate(double d) {
+		pessimistic = d;
 		
 	}
 
@@ -467,22 +467,42 @@ public class Task
 	public double getPERTVariance() {
 		if ( pertVariance == -1 )
 		{
-			pertVariance = (pessimistic - optimistic)^2 / 36;
+			pertVariance = Math.pow(pessimistic - optimistic, 2) / 36;
 		}
 		
 		return pertVariance;
 	}
+	
+	public void setPERTEstimate() {
+		// (ShortestTime + 4(LikelyTime) + LongestTime) / 6
+		if ( pertEstimate == -1 )
+		{
+			pertEstimate = (optimistic + 4 * likely + pessimistic) / 6;
+		}
+	}
 
-	public int getOptimisticEstimate() {
+	public void setPERTVariance() {
+		if ( pertVariance == -1 )
+		{
+			pertVariance = Math.pow(pessimistic - optimistic, 2) / 36;
+		}
+	}
+
+	public double getOptimisticEstimate() {
 		return optimistic;
 	}
 
-	public int getLikelyEstimate() {
+	public double getLikelyEstimate() {
 		return likely;
 	}
 
-	public int getPessimisticEstimate() {
+	public double getPessimisticEstimate() {
 		return pessimistic;
+	}
+
+	public double getStandardDeviation() {
+		
+		return Math.sqrt(pertVariance);
 	}
 
 }

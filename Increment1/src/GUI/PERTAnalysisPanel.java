@@ -1,5 +1,6 @@
 package GUI;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import core.Project;
@@ -44,7 +45,8 @@ private Project currentProject;
     }
     
     public void populatePERTDetails(){
-    	ArrayList<Task> Tasks =  currentProject.getTasks();
+    	ArrayList<Task> Tasks =  currentProject.organize();
+    	DecimalFormat numberFormat = new DecimalFormat("#.00");
     	for(Task t : Tasks){
     		
     		//loop to get the list of prereqs for each task and turn it into a string
@@ -65,11 +67,11 @@ private Project currentProject;
 	        //prereqs
 	        this.addBodyDetails(new JLabel("" + sb.toString()));
 	    
-	        this.addBodyDetails(new JLabel("3"/* + t.getOptimisticEstimate()*/));
-	        this.addBodyDetails(new JLabel("3"/*+ t.getMostLikelyEstimate()*/));
-	        this.addBodyDetails(new JLabel("3"/* + t.getPessimisticEstimate()*/));
-	        this.addBodyDetails(new JLabel("3"/* + t.getExpectedEstimate()*/));
-	        this.addBodyDetails(new JLabel("3"/*+ t.getStandardDeviation()*/));
+	        this.addBodyDetails(new JLabel("" + numberFormat.format(t.getOptimisticEstimate())));
+	        this.addBodyDetails(new JLabel(""+ numberFormat.format(t.getLikelyEstimate())));
+	        this.addBodyDetails(new JLabel("" + numberFormat.format(t.getPessimisticEstimate())));
+	        this.addBodyDetails(new JLabel("" + numberFormat.format(t.getPERTEstimate())));
+	        this.addBodyDetails(new JLabel(""+ numberFormat.format(t.getStandardDeviation())));
     	}
     }
     

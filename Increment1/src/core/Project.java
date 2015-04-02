@@ -353,7 +353,7 @@ public class Project
 		
 	}
 
-	public void organize() {	
+	public ArrayList<Task> organize() {	
 		/*
 		 * this should do a forward pass and a backward pass and set appropriate 
 		 * values: EarlyStart, EarlyFinish, LateStart, LateFinish
@@ -419,9 +419,25 @@ public class Project
 		
 		Task cTask = lastTask;
 		backwardPass(cTask);
+		
+		setPertValues();
+		
+		return allTasks;
 	}
 	
-	private Task backwardPass(Task cTask)
+	private void setPertValues() 
+	{
+		for ( Task t : allTasks )
+		{
+			t.setOptimisticEstimate(t.getDuration()*1.15);
+			t.setPessimisticEstimate(t.getDuration()*0.85);
+			t.setLikelyEstimate((t.getOptimisticEstimate() + t.getPessimisticEstimate())/2);
+			t.setPERTEstimate();
+			t.setPERTVariance();
+		}
+	}
+	
+	private void backwardPass(Task cTask)
 	{
 		Task task = this.getTask(cTask);
 		if ( cTask.getStartTime() != 0 )
@@ -458,8 +474,7 @@ public class Project
 		task.setDuration(task.getEndTime() - task.getStartTime());
 		task.setLateStart(task.getLateFinish() - task.getDuration());
 		task.setFloat(task.getLateFinish() - task.getEarlyFinish());
-		
-		return null;
+
 	}
 	
 	public Task getTask(int taskId) {
@@ -538,7 +553,6 @@ public class Project
 	}
 
 	public void addTask(Task task) {
-		// TODO Auto-generated method stub
 		this.organize();
 		for ( Task t : allTasks )
 		{
@@ -557,13 +571,16 @@ public class Project
 	}
 
 	public double PERTVariance() {
-		// TODO Auto-generated method stub
-		return 0;
+		double variance = 0;
+		
+		for ( Task t : theCriticalPath )
+			variance += t.getPERTVariance();
+		
+		return variance;
 	}
 
 	public double PERTStandardDeviation() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Math.sqrt(PERTVariance());
 	}
 	
 	

@@ -1,5 +1,7 @@
 package tests;
 
+import java.util.ArrayList;
+
 import junit.*;
 import core.*;
 
@@ -38,7 +40,7 @@ public class TestProjectPERT {
 //		task3.setOptimisticEstimate(5);
 //		task3.setLikelyEstimate(6);
 //		task3.setPessimisticEstimate(7);
-		
+		task2.addPrereq(task.getId());
 		project.addTask(task);
 		project.addTask(task2);
 //		project.addTask(task3);
@@ -56,10 +58,14 @@ public class TestProjectPERT {
 		// PERTAnalysis should return the sum of the project's task PERT Estimates
 		this.setupTestEvironment();
 		double expected = 0, pertAnalysis;
-		for(int i = 0; i < project.getTasks().size(); i++){
-			expected += project.getTasks().get(i).getPERTEstimate();
+		
+		ArrayList<Task> tasks = project.organize();
+		
+		for(Task t : tasks){
+			expected += t.getPERTEstimate();
 		}
 		pertAnalysis = project.PERTAnalysis();
+		System.out.println(expected+" "+pertAnalysis);
 		assertTrue(expected == pertAnalysis);
 
 		this.teardownTestEnvironment();
@@ -70,9 +76,13 @@ public class TestProjectPERT {
 		// PERTVariance should return the sum of the variances of the project's critical path tasks
 		this.setupTestEvironment();
 		double expected = 0, pertVariance;
-		for(int i = 0; i < project.getCriticalPath().size(); i++){
-			expected += project.getCriticalPath().get(i).getPERTVariance();
+		ArrayList<Task> criticalPath = project.getCriticalPath();
+		
+		
+		for(Task t : criticalPath){
+			expected += t.getPERTVariance();
 		}
+		
 		pertVariance = project.PERTVariance();
 		assertTrue(expected == pertVariance);
 		this.teardownTestEnvironment();

@@ -15,9 +15,9 @@ public class TestTaskPERT {
 	public void setupTestEvironment(){
 		task = new Task("test_task", "taskTester", 10, 15, 1, "b_jenkins");
 			
-		task.setOptimisticEstimate(5);
-		task.setLikelyEstimate(6);
-		task.setPessimisticEstimate(7);
+		task.setOptimisticEstimate(5*1.15);
+		task.setPessimisticEstimate(5*0.85);
+		task.setLikelyEstimate((task.getOptimisticEstimate() + task.getPessimisticEstimate())/2);
 	}
 	
 	public void teardownTestEnvironment(){
@@ -30,7 +30,7 @@ public class TestTaskPERT {
 		
 		this.setupTestEvironment();
 		
-		double expected = ((5+4*6+7) / 6);
+		double expected = (task.getOptimisticEstimate() + 4 * task.getLikelyEstimate() + task.getPessimisticEstimate()) / 6;
 		
 		assertTrue(expected == task.getPERTEstimate());
 		
@@ -43,7 +43,7 @@ public class TestTaskPERT {
 
 		this.setupTestEvironment();
 		
-		double expected = (7 - 5)^2 / 36;
+		double expected = Math.pow(task.getPessimisticEstimate() - task.getOptimisticEstimate(), 2) / 36;
 
 		assertTrue(expected == task.getPERTVariance());
 		
@@ -54,7 +54,8 @@ public class TestTaskPERT {
 	public void testGetOptimisitcEstimate(){
 		
 		this.setupTestEvironment();
-		assertEquals(5, task.getOptimisticEstimate());
+		//System.out.println(task.getOptimisticEstimate());
+		assertTrue(5*1.15 == task.getOptimisticEstimate());
 		this.teardownTestEnvironment();
 		
 	}
@@ -62,14 +63,16 @@ public class TestTaskPERT {
 	@Test
 	public void testGetLikelyEstimate(){
 		this.setupTestEvironment();
-		assertEquals(6, task.getLikelyEstimate());
+		//System.out.println(task.getLikelyEstimate());
+		assertTrue((task.getOptimisticEstimate() + task.getPessimisticEstimate())/2 == task.getLikelyEstimate());
 		this.teardownTestEnvironment();
 	}
 	
 	@Test
 	public void testGetPessimistic(){
 		this.setupTestEvironment();
-		assertEquals(7, task.getPessimisticEstimate());
+		//System.out.println(task.getPessimisticEstimate());
+		assertTrue(5*0.85 == task.getPessimisticEstimate());
 		this.teardownTestEnvironment();
 	}
 
