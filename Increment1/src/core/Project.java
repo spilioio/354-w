@@ -430,8 +430,8 @@ public class Project
 	{
 		for ( Task t : allTasks )
 		{
-			t.setOptimisticEstimate(t.getDuration()*1.15);
-			t.setPessimisticEstimate(t.getDuration()*0.85);
+			t.setOptimisticEstimate(t.getDuration()*0.85);
+			t.setPessimisticEstimate(t.getDuration()*1.15);
 			t.setLikelyEstimate((t.getOptimisticEstimate() + t.getPessimisticEstimate())/2);
 			t.setPERTEstimate();
 			t.setPERTVariance();
