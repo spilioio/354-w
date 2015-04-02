@@ -102,7 +102,7 @@ public class BrowseTasksWindow extends javax.swing.JFrame {
 	        			}
 	        		}
 	        		
-	        
+	        		Driver.getCurrentProject().organize();
 			        projectTasks = Driver.getCurrentProject().getTasks();
 					updateListDisplay();
         		}

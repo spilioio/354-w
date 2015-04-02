@@ -382,7 +382,10 @@ public class Project
 				if ( start > earlyStart )
 					earlyStart = start;
 				
-				finish = earlyStart + t.getEndTime() - t.getStartTime() - 1;
+				finish = earlyStart + t.getEndTime() - t.getStartTime();
+				
+				if ( t.getStartTime() == 0 )
+					finish--;
 				
 				if ( finish > earlyFinish )
 					earlyFinish = finish;

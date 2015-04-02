@@ -700,6 +700,7 @@ public class Driver
 		int end = Integer.parseInt(JOptionPane.showInputDialog("Enter the end time of the task(int)"));
 		//Create a new task and add it to Database
 		new Task( name, desc, start, end, currentProject.getId(), userLoggedIn.getName());
+		currentProject.organize();
 		
 	}
 	public static Project getCurrentProject(){
