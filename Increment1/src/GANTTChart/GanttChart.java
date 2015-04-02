@@ -49,7 +49,7 @@ public class GanttChart {
 	 * Creates the GANTT Chart for a given project, returns a taskList for the JUnit test
 	 */
 	public Task[] GANTTAnalysis(Project project){
-		taskArray = project.getTasks();
+		taskArray = project.organize();
 		if(taskArray.size() > 0){
 			mainFrame = new JFrame("GANTT CHART for " + project.getName());
 			
@@ -79,10 +79,10 @@ public class GanttChart {
 			mainFrame.setVisible(true);
 			mainFrame.pack();
 			
-			
-			Task[] taskList = new Task[project.getTasks().size()];
-			for(int i = 0; i < project.getTasks().size(); i++){
-				taskList[i] = project.getTasks().get(i);
+			ArrayList<Task> temp = project.organize();
+			Task[] taskList = new Task[project.organize().size()];
+			for(int i = 0; i < temp.size(); i++){
+				taskList[i] = temp.get(i);
 			}	
 			return taskList;
 		} else {
@@ -105,7 +105,7 @@ public class GanttChart {
 		JPanel headerPanel = new JPanel();
 		JPanel footerPanel = new JPanel();
 		
-		GridLayout footerLayout = new GridLayout(project.getTasks().size(), 4);
+		GridLayout footerLayout = new GridLayout(project.organize().size(), 4);
 		GridLayout headerLayout = new GridLayout(1, 4);
 		headerPanel.setLayout(headerLayout);
 		footerPanel.setLayout(footerLayout);
@@ -137,7 +137,7 @@ public class GanttChart {
 		}
 		
 		// Populate the details panel with data
-		taskArray = project.getTasks();
+		taskArray = project.organize();
 		for(int i = 0; i < taskArray.size(); i++){
 			Task currentTask = taskArray.get(i);
 			nodeArray.add(new GanttNode(currentTask));
@@ -259,7 +259,7 @@ public class GanttChart {
 	 */
 	public int getProjectLength(Project project){
 		// Gets a list of tasks associated with the project
-		ArrayList<Task> taskList = project.getTasks();
+		ArrayList<Task> taskList = project.organize();
 		
 		// Sets two initial values for the upcoming search
 		int min = taskList.get(1).getStartTime();

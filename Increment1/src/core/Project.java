@@ -22,6 +22,7 @@ public class Project
 {
 	private String owner_id, project_name;
 	private int project_id;
+	private double totalCost;
 	private GanttChart ganttChart;
 	private ArrayList<Task> allTasks;
 	private ArrayList<Task> theCriticalPath = new ArrayList<Task>();
@@ -540,8 +541,7 @@ public class Project
 	}
 	
 
-	public double EarnedValueAnalysis() {
-		// TODO Auto-generated method stub
+	public double EarnedValueAnalysis(int day) {
 		
 		/*
 		 * This should calculate the earned value of the project using a new project variable called currentDay
@@ -549,7 +549,25 @@ public class Project
 		 * the task is worth 0$ if the current day is before the tasks start day.  50$ if the current day is anywhere in in between
 		 * the tasks start and end days. and 100$ if the current day is after the tasks end day
 		 */
-		return 0;
+		ArrayList<Task> projTasks = this.organize();
+		double tCost = 0;
+		double earnedValue = 0;
+		double thisCost;
+		for(Task t : projTasks){
+			thisCost = t.getCost();
+			//if the day passed is later than the projects early finish date
+			//meaning the project is complete we add the total cost of the Task to earned Value
+			if(day > t.getEarlyFinish()){
+				earnedValue += thisCost;
+			}
+			//if the task is started but not complete use 50% of its value
+			if(day > t.getEarlyStart()){
+				earnedValue += 0.50 * thisCost;
+			}
+			tCost += thisCost;
+		}
+		this.totalCost = tCost;
+		return earnedValue;
 	}
 
 	public void addTask(Task task) {
@@ -582,6 +600,13 @@ public class Project
 	public double PERTStandardDeviation() {
 		return Math.sqrt(PERTVariance());
 	}
+	public void setTotalCost(double tC){
+		totalCost = tC;
+	}
+	public double getTotalCost(){
+		return this.totalCost;
+	}
+
 	
 	
 

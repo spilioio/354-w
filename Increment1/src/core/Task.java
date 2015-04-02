@@ -6,12 +6,15 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 public class Task
 {
 	private String name, description, owner_id; 
 	private int start_time, end_time, project_id, is_done, task_id, late_start, late_finish, tfloat, duration;
 	private double optimistic, likely, pessimistic;
 	private double pertEstimate, pertVariance;
+	private double cost;
 	private ArrayList<Integer> pre_reqs;
 	private ArrayList<User> members;
 	
@@ -19,6 +22,7 @@ public class Task
 	public Task(String name, String description, int start_time, int end_time, int project_id, String owner_id)
 	{
 		pre_reqs = new ArrayList<Integer>();
+		this.cost = 0;
 		this.name = name;
 		this.description = description;
 		this.start_time = start_time;
@@ -503,6 +507,18 @@ public class Task
 	public double getStandardDeviation() {
 		
 		return Math.sqrt(pertVariance);
+	}
+	public void setCost(double c){
+		cost = c;
+	}
+	public double getCost(){
+		if( cost == 0){
+		String cost =  JOptionPane.showInputDialog("Enter the Cost of this Task:" + this.getName());
+		return Double.parseDouble(cost);
+		}
+		else{
+			return this.cost;
+		}
 	}
 
 }

@@ -50,6 +50,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        EarnedV = new javax.swing.JButton();
         criticalPathButton = new javax.swing.JButton();
         PERTButton = new javax.swing.JButton();
         buttonGANTT = new javax.swing.JButton();
@@ -201,6 +202,27 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
         }); 
         jToolBar1.add(PERTButton);
         
+        //EARNED VALUE BUTTON
+        EarnedV.setText("Earned Value Analysis");
+        EarnedV.setFocusable(false);
+        EarnedV.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        EarnedV.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        EarnedV.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent evt){
+        		Project temp = (Project)jList1.getSelectedValue();
+        		int day =  Integer.parseInt(JOptionPane.showInputDialog("Enter the Day you want to estimate Earned Value For:"));
+        		double earnedValue = temp.EarnedValueAnalysis(day);
+        		
+        		JOptionPane.showMessageDialog(null, "On day" + day +
+        				"the project's earned Value will be" +
+        				" equal to: " + earnedValue + "$, of the Project's Total cost:"
+        				+ temp.getTotalCost());
+
+        		
+        	}
+        }); 
+        jToolBar1.add(EarnedV);
+        
         
         
         //Display all projects
@@ -325,6 +347,7 @@ public class BrowseProjectsWindow extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton buttonGANTT;
+    private javax.swing.JButton EarnedV;
     private javax.swing.JButton criticalPathButton;
     private javax.swing.JList jList1;
     private javax.swing.JRadioButton jRadioButton1;
