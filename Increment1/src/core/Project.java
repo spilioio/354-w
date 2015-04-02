@@ -428,7 +428,11 @@ public class Project
 		{
 			ArrayList<Integer> prereqs = cTask.getPrereq();
 			
-			int duration = cTask.getEndTime() - cTask.getStartTime() + 1;
+			int duration = cTask.getEndTime() - cTask.getStartTime();
+			
+			if ( cTask.getStartTime() != 0 )
+				duration++;
+			
 			int lateStart = cTask.getLateFinish() - duration;
 			int tfloat = cTask.getLateFinish() - cTask.getEarlyFinish();
 			int lateFinish = cTask.getLateFinish();
